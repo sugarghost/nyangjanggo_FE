@@ -26,6 +26,7 @@ interface IProps {
   cardType?: CardType;
   cardTitle?: string;
   cardDesc?: string;
+  cardImg?: string;
   cardExpiration?: string;
   className?: string;
   backgroundColor?: string;
@@ -36,12 +37,18 @@ interface IProps {
 }
 
 function Card(props: IProps) {
-  const { onClick, styleCustom, cardTitle, cardDesc, className }: IProps =
-    props;
+  const {
+    onClick,
+    styleCustom,
+    cardTitle,
+    cardDesc,
+    cardImg,
+    className,
+  }: IProps = props;
 
   return (
-    <>
-      <CardWrapper
+    <CardContainer onClick={onClick}>
+      <CardImgWrapper
         className={className}
         styleCustom={styleCustom}
         onClick={onClick}
@@ -49,23 +56,17 @@ function Card(props: IProps) {
         hoverColor={COLOR_V2.PRIMARY5}
         activeColor={COLOR_V2.PRIMARY_ACTIVE}
         disabledColor={COLOR_V2.PRIMARY_DISABLED}
-      >
-        <CardContentWrapper>
-          <CardTitleWrapper styleCustom={styleCustom}>
-            {cardTitle}
-          </CardTitleWrapper>
-          <CardDescWrapper styleCustom={styleCustom}>
-            {cardDesc}
-          </CardDescWrapper>
-        </CardContentWrapper>
-      </CardWrapper>
-    </>
+        src={cardImg}
+      />
+      <CardTitleWrapper styleCustom={styleCustom}>{cardTitle}</CardTitleWrapper>
+      <CardDescWrapper styleCustom={styleCustom}>{cardDesc}</CardDescWrapper>
+    </CardContainer>
   );
 }
 
 export default Card;
 
-const CardWrapper = styled.div<any>`
+const CardContainer = styled.div<any>`
   background-color: ${(props) => props.styleCustom?.background ?? ""};
   color: ${(props) => props.styleCustom?.color ?? ""};
   border-radius: 8px;
@@ -80,9 +81,34 @@ const CardWrapper = styled.div<any>`
   width: ${(props) => props.styleCustom?.width ?? ""};
   height: ${(props) => props.styleCustom?.height ?? ""};
   margin: ${(props) => props.styleCustom?.margin ?? ""};
+  display: flex;
+  flex-direction: column;
 
   @media screen and (max-width: 680px) {
-    width: 100%;
+  }
+
+  &:hover {
+    background-color: ${(props) => props.styleCustom?.hoverColor ?? ""};
+  }
+  &:active {
+    background-color: ${(props) => props.styleCustom?.activeColor ?? ""};
+  }
+  &:disabled {
+    background-color: ${(props) => props.styleCustom?.disabledColor ?? ""};
+  }
+`;
+
+const CardImgWrapper = styled.img<any>`
+  border-radius: 8px;
+  width: ${(props) => props.styleCustom?.width ?? ""};
+  height: ${(props) => props.styleCustom?.height ?? ""};
+  margin: ${(props) => props.styleCustom?.margin ?? ""};
+  object-fit: fit;
+  cursor: pointer;
+
+  @media screen and (max-width: 680px) {
+    width: 165px;
+    height: 165px;
   }
 
   &:hover {
@@ -110,10 +136,11 @@ const CardTitleWrapper = styled.div<any>`
   align-items: center;
   text-align: center;
   letter-spacing: -0.02em;
+  margin: 5px 0 0 0;
 `;
 
 const CardDescWrapper = styled.div<any>`
-  margin-top: 16px;
+  margin-top: 5px;
   font-weight: 400;
   font-size: 12px;
   line-height: 90%;
