@@ -8,6 +8,7 @@ import Header from "./containers/Header";
 import MainPage from "./pages/MainPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
+import RecipeRegisterPage from "./pages/RecipeRegisterPage";
 
 const queryClient = new QueryClient();
 function App() {
@@ -24,6 +25,7 @@ function App() {
             <Route path="/myPage" element={<MainPage />} />
             <Route path="/signInPage" element={<SignInPage />} />
             <Route path="/signUpPage" element={<SignUpPage />} />
+            <Route path="/recipeRegisterPage" element={<RecipeRegisterPage />} />
           </Routes>
           {/* </div>
             </div>
