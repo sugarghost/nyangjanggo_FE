@@ -4,13 +4,24 @@ import styled from "styled-components";
 import Button from "../components/Botton";
 import InputV2 from "../components/InputV2";
 import Textarea from "../components/Textarea";
+import { registerRecipe } from "../apis/RegisterApi";
 
 const RecipeRegisterPage = () => {
   const [mainImage, setMainImage] = useState(
     "https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg"
   );
 
-  const [registerStep, setRegisterStep] = useState(2);
+  const handleOnClickRegister = (e: React.MouseEvent) => {
+    if (registerStep === 1) {
+      setRegisterStep(2);
+    } else if (registerStep === 2) {
+      registerRecipe("TODO 레시피 데이터 넣기");
+    }
+  };
+
+
+
+  const [registerStep, setRegisterStep] = useState(1);
 
   return (
     <>
@@ -33,9 +44,6 @@ const RecipeRegisterPage = () => {
                   onChange={() => {}}
                   styleCustom={{ width: "100%", margin: "20px 0 0 0" }}
                 />
-                <Button styleCustom={{ margin: "10px 0 0 0" }}>
-                  <div>등록하기</div>
-                </Button>
               </>
             ) : (
               <>
@@ -82,11 +90,14 @@ const RecipeRegisterPage = () => {
                     </IngredientInfoWrapper>
                   </RecipeInfoWrapper>
                 </IngredientsWrapper>
-                <Button styleCustom={{ margin: "10px 0 0 0" }}>
-                  <div>등록하기</div>
-                </Button>
               </>
             )}
+            <Button
+              onClick={handleOnClickRegister}
+              styleCustom={{ margin: "10px 0 0 0" }}
+            >
+              <div>등록하기</div>
+            </Button>
           </div>
         </div>
       </div>
