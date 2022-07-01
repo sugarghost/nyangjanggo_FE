@@ -2,9 +2,6 @@ import React, { Suspense, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
-import Button from "../components/Botton";
-import InputV2 from "../components/Input";
-
 const MainPage = ({}) => {
   useEffect(() => {}, []);
   const wholeTextArray = [

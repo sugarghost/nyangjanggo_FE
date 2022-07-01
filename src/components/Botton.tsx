@@ -67,23 +67,23 @@ function Button(props: IProps) {
 export default Button;
 
 const ButtonWrapper = styled.button<any>`
-  background-color: ${(props) => props.styleCustom.background};
-  color: ${(props) => props.styleCustom.color ?? "white"};
-  border-radius: ${(props) => props.styleCustom.borderRadius ?? "8px"};
-  padding: ${(props) => props.styleCustom.padding ?? "0 16px"};
+  background-color: ${(props) => props.styleCustom?.background ?? "grey"};
+  color: ${(props) => props.styleCustom?.color ?? "white"};
+  border-radius: ${(props) => props.styleCustom?.borderRadius ?? "8px"};
+  padding: ${(props) => props.styleCustom?.padding ?? "0 16px"};
   order: 2;
   display: ${(props) => (props.isIcon ? "flex" : "block")};
   flex-grow: 0;
   font-style: normal;
   font-weight: 600;
-  font-size: ${(props) => props.styleCustom.fontSize ?? "18px"};
+  font-size: ${(props) => props.styleCustom?.fontSize ?? "18px"};
   line-height: ${(props) => props.styleCustom?.lineHeight ?? "22px"};
   align-items: center;
   text-align: center;
   letter-spacing: -0.02em;
   box-shadow: ${(props) => props.styleCustom?.boxShadow ?? ""};
   width: ${(props) =>
-    props.styleCustom?.width ? props.styleCustom?.width : ""};
+    props.styleCustom?.width ? props.styleCustom?.width : "100%"};
   height: ${(props) =>
     props.styleCustom.height ? props.styleCustom?.height : "50px"};
   margin: ${(props) =>
