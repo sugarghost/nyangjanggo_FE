@@ -8,6 +8,7 @@ import Header from "./containers/Header";
 import MainPage from "./pages/MainPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
+import TestPage,{BoardPost} from "./pages/TestPage";
 
 const queryClient = new QueryClient();
 function App() {
@@ -22,6 +23,8 @@ function App() {
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/myPage" element={<MainPage />} />
+            <Route path="/test" element={<TestPage />} />
+            <Route path="/testBoradPost" element={<BoardPost />} />
             <Route path="/signInPage" element={<SignInPage />} />
             <Route path="/signUpPage" element={<SignUpPage />} />
           </Routes>
