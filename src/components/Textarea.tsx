@@ -44,7 +44,7 @@ interface IProps {
   emailSendSuccess?: boolean;
   setEmailSendSuccess?: React.Dispatch<React.SetStateAction<boolean>>;
   autoComplete?: string;
-  row?: number;
+  rows?: number;
 }
 
 const Textarea = (props: IProps) => {
@@ -61,6 +61,7 @@ const Textarea = (props: IProps) => {
     validationCheck,
     inputType,
     autoComplete = "off",
+    rows
   }: IProps = props;
 
   const [validationErorr, setValidationErorr] = useState(false);
@@ -91,6 +92,7 @@ const Textarea = (props: IProps) => {
             validationErorr={validationErorr}
             autocomplete={autoComplete}
             disabled={disabled}
+            rows={rows}
           />
         </InputOuter>
       </FlexContainer>
@@ -120,7 +122,7 @@ const InputLable = styled.label<any>`
   text-align: left;
 `;
 
-const InputWrapper = styled.input<any>`
+const InputWrapper = styled.textarea<any>`
   display: flex;
   flex-direction: row;
   justify-content: center;
