@@ -111,3 +111,4 @@ const IconWrapper = styled.img`
   object-fit: fit;
   margin-right: 4px;
 `;
+
