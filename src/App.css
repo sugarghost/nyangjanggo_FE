@@ -1,3 +1,27 @@
 .App {
   text-align: center;
 }
+
+.img-render {
+  object-fit: fit;
+  image-rendering: auto;
+}
+
+.box-shadow {
+  box-shadow: 0px 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0px 6px 16px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);
+}
+
+.position-center {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.text-aling-left {
+  text-align: left;
+}
+
+.min-width-400 {
+  min-width: 400px;
+}

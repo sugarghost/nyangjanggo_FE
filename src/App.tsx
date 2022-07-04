@@ -6,8 +6,11 @@ import "./App.css";
 import Footer from "./containers/Footer";
 import Header from "./containers/Header";
 import MainPage from "./pages/MainPage";
+import RecipeRegisterPage from "./pages/RecipeRegisterPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
+import MyPage from "./pages/mypage/MyPage";
+import MyRefrigeratorPage from "./pages/mypage/MyRefrigeratorPage";
 
 const queryClient = new QueryClient();
 function App() {
@@ -21,9 +24,17 @@ function App() {
               <div className="max-w-md mx-auto my-10 w-full"> */}
           <Routes>
             <Route path="/" element={<MainPage />} />
-            <Route path="/myPage" element={<MainPage />} />
+            <Route path="/myPage" element={<MyPage />} />
+            <Route
+              path="/myRefrigeratorPage"
+              element={<MyRefrigeratorPage />}
+            />
             <Route path="/signInPage" element={<SignInPage />} />
             <Route path="/signUpPage" element={<SignUpPage />} />
+            <Route
+              path="/recipeRegisterPage"
+              element={<RecipeRegisterPage />}
+            />
           </Routes>
           {/* </div>
             </div>
