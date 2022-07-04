@@ -150,7 +150,8 @@ const RecipeRegisterPage = () => {
     const { name, value } = e.target;
 
     const list = [...resourceList];
-    list[index].resources[subIndex][name] = value;
+    if (name == "resourceName" || name == "amount")
+      list[index].resources[subIndex][name] = value;
 
     setResourceList(list);
   };
