@@ -19,10 +19,13 @@ interface IProps {
   disabled?: boolean;
   styleCustom?: Record<string, string>;
   placeholder?: string;
-  validationMessage: string;
+  validationMessage?: string;
   inputLabel?: string;
-  value: string;
-  onChange: (e: React.KeyboardEvent, validationErorr?: boolean) => void;
+  value?: string;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    validationErorr?: boolean
+  ) => void;
   onClickClearValue?: (e: MouseEvent) => void;
   validationCheck?: boolean;
   loginType?: boolean;
@@ -64,7 +67,7 @@ const InputV2 = (props: IProps) => {
 
   const [validationErorr, setValidationErorr] = useState(false);
 
-  const onChangeInput = (e: React.KeyboardEvent) => {
+  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e, validationErorr);
   };
 

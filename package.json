@@ -41,5 +41,7 @@
   },
   "msw": {
     "workerDirectory": "public"
-  }
+  },
+  
+  "proxy": "http://3.35.233.99"
 }

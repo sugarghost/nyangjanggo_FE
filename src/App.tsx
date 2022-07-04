@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useLayoutEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -9,11 +9,23 @@ import MainPage from "./pages/MainPage";
 import RecipeRegisterPage from "./pages/RecipeRegisterPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
+import TestPage from "./pages/TestPage";
 import MyPage from "./pages/mypage/MyPage";
 import MyRefrigeratorPage from "./pages/mypage/MyRefrigeratorPage";
 
 const queryClient = new QueryClient();
+
 function App() {
+  useLayoutEffect(() => {
+    const access_token = window.location.href.split("token=")[1];
+
+    if (access_token) {
+      localStorage.clear();
+      localStorage.setItem("token", access_token);
+      window.location.replace("/");
+    }
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
@@ -24,6 +36,7 @@ function App() {
               <div className="max-w-md mx-auto my-10 w-full"> */}
           <Routes>
             <Route path="/" element={<MainPage />} />
+            <Route path="/test" element={<TestPage />} />
             <Route path="/myPage" element={<MyPage />} />
             <Route
               path="/myRefrigeratorPage"
