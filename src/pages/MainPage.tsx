@@ -1,9 +1,11 @@
 import React, { Suspense, useEffect, useState } from "react";
+import { useParams } from "react-router";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
 const MainPage = ({}) => {
-  useEffect(() => {}, []);
+  
+
   const wholeTextArray = [
     "양파",
     "바나나",

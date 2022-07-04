@@ -13,7 +13,7 @@ const getToken = (tokenName: string) => {
   }
 };
 
-const axiosInstance = axios.create();
+export const axiosInstance = axios.create();
 
 axiosInstance.defaults.validateStatus = (status) => status < 400;
 axiosInstance.defaults.baseURL = PRODUCTION
