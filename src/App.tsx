@@ -9,7 +9,7 @@ import MainPage from "./pages/MainPage";
 import RecipeRegisterPage from "./pages/RecipeRegisterPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
-import TestPage, { BoardPost, AddElementTestPage } from "./pages/TestPage";
+import TestPage from "./pages/TestPage";
 
 const queryClient = new QueryClient();
 function App() {

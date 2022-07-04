@@ -54,7 +54,7 @@ const RecipeRegisterPage = () => {
 
   const queryClient = useQueryClient();
   // 레시피 정보 등록 파트
-  const [boardId, setBoardId] = useState<number>(2);
+  const [boardId, setBoardId] = useState<number>(15);
 
   const mainImageRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState<string>("");
@@ -148,23 +148,22 @@ const RecipeRegisterPage = () => {
     subIndex: number
   ) => {
     const { name, value } = e.target;
+
     const list = [...resourceList];
-    list[index]["resources"][subIndex][name] = value;
+    list[index].resources[subIndex][name] = value;
+
     setResourceList(list);
   };
 
   const handleResourceRemove = (index: number, subIndex: number) => {
     const list = [...resourceList];
-    list[index]["resources"].splice(subIndex, 1);
+    list[index].resources.splice(subIndex, 1);
     setResourceList(list);
   };
 
   const handleResourceAdd = (index: number) => {
     const list = [...resourceList];
-    list[index]["resources"] = [
-      ...list[index]["resources"],
-      { resourceName: "", amount: "" },
-    ];
+    list[index].resources.push({ resourceName: "", amount: "" });
     setResourceList(list);
   };
 
@@ -184,7 +183,6 @@ const RecipeRegisterPage = () => {
       boardId: boardId,
       resourceRequestDtoList: [],
     };
-
     resourceList.map((categorys, index) =>
       categorys.resources.map(
         (resource, subIndex) =>
@@ -198,11 +196,12 @@ const RecipeRegisterPage = () => {
           ])
       )
     );
+    console.log(resourceRequestDtoTemplate);
     postStep2mutation.mutate(resourceRequestDtoTemplate);
   };
 
   // 조리 과정 파트
-  const stepRefList = useRef<null | HTMLInputElement[]>([]);
+  const stepRefList = useRef<any[]>([]);
   const [stepList, setStepList] = useState<StepPostFormFileds[]>([
     {
       stepNum: 1,
@@ -255,7 +254,9 @@ const RecipeRegisterPage = () => {
   const postStep3mutation = useMutation(
     (addData: FormData) => postStep3Api(addData),
     {
-      onSuccess: (res) => {},
+      onSuccess: (res) => {
+        console.log(res);
+      },
       onError: () => {},
     }
   );
