@@ -32,7 +32,7 @@ authInstance.defaults.timeout = 30000;
 authInstance.interceptors.request.use((config) => {
   const token = getToken("userToken");
   if (token) {
-    config.headers = { "X-AUTH-TOKEN": `${token}` };
+    config.headers = { "Access-Token": `${token}` };
   }
   try {
     return config;

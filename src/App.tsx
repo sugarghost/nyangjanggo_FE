@@ -9,7 +9,7 @@ import MainPage from "./pages/MainPage";
 import RecipeRegisterPage from "./pages/RecipeRegisterPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
-import TestPage, { BoardPost } from "./pages/TestPage";
+import TestPage, { BoardPost, AddElementTestPage } from "./pages/TestPage";
 
 const queryClient = new QueryClient();
 function App() {
@@ -25,6 +25,7 @@ function App() {
             <Route path="/" element={<MainPage />} />
             <Route path="/myPage" element={<MainPage />} />
             <Route path="/test" element={<TestPage />} />
+            <Route path="/addElementTest" element={<AddElementTestPage />} />
             <Route path="/testBoradPost" element={<BoardPost />} />
             <Route path="/signInPage" element={<SignInPage />} />
             <Route path="/signUpPage" element={<SignUpPage />} />
