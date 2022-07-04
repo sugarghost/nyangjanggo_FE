@@ -9,12 +9,9 @@ import MainPage from "./pages/MainPage";
 import RecipeRegisterPage from "./pages/RecipeRegisterPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
-<<<<<<< HEAD
 import TestPage from "./pages/TestPage";
-=======
 import MyPage from "./pages/mypage/MyPage";
 import MyRefrigeratorPage from "./pages/mypage/MyRefrigeratorPage";
->>>>>>> dev
 
 const queryClient = new QueryClient();
 function App() {
@@ -28,16 +25,12 @@ function App() {
               <div className="max-w-md mx-auto my-10 w-full"> */}
           <Routes>
             <Route path="/" element={<MainPage />} />
-<<<<<<< HEAD
-            <Route path="/myPage" element={<MainPage />} />
             <Route path="/test" element={<TestPage />} />
-=======
             <Route path="/myPage" element={<MyPage />} />
             <Route
               path="/myRefrigeratorPage"
               element={<MyRefrigeratorPage />}
             />
->>>>>>> dev
             <Route path="/signInPage" element={<SignInPage />} />
             <Route path="/signUpPage" element={<SignUpPage />} />
             <Route
