@@ -3,6 +3,7 @@ import { FieldValues, useForm, useFieldArray } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import styled from "styled-components";
 
+import { registerRecipe } from "../apis/RegisterApi";
 import boardPostApi from "../apis/useBoradtApi";
 import Button from "../components/Botton";
 import Figure from "../components/Figure";
@@ -51,7 +52,6 @@ const RecipeRegisterPage = () => {
 
   // 레시피 정보 등록, 재료 등록, 조리 과정 등록 페이지를 나누기 위한 상태값
   const [registerStep, setRegisterStep] = useState(2);
-
   const queryClient = useQueryClient();
   // 레시피 정보 등록 파트
   const [boardId, setBoardId] = useState<number>(15);

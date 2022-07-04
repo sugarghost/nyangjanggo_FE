@@ -21,3 +21,7 @@
 .text-aling-left {
   text-align: left;
 }
+
+.min-width-400 {
+  min-width: 400px;
+}
