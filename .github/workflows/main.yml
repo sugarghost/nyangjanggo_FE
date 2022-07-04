@@ -1,15 +1,15 @@
 name: React build
 on: 
-  push:                               # master Branch에서 push 이벤트가 일어났을 때만 실행
+  push:                               # main Branch에서 push 이벤트가 일어났을 때만 실행
     branches:
-      - master
-      
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout source code.   # 레포지토리 체크아웃
-        uses: actions/checkout@master
+        uses: actions/checkout@main
 
       - name: Cache node modules      # node modules 캐싱
         uses: actions/cache@v1
@@ -20,12 +20,12 @@ jobs:
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
       - name: Install Dependencies    # 의존 파일 설치
-        run: yarn install
+        run: npm install
 
       - name: Build                   # React Build
         env:
           CI: ""
-        run: yarn build
+        run: npm run build
         
       - name: Deploy                  # S3에 배포하기
         env:
@@ -35,4 +35,4 @@ jobs:
           aws s3 cp \
             --recursive \
             --region ap-northeast-2 \
-            build s3://nyangjanggo.com
+            dist s3://nyangjanggo.com
