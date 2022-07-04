@@ -50,7 +50,7 @@ const RecipeRegisterPage = () => {
   );
 
   // 레시피 정보 등록, 재료 등록, 조리 과정 등록 페이지를 나누기 위한 상태값
-  const [registerStep, setRegisterStep] = useState(3);
+  const [registerStep, setRegisterStep] = useState(2);
 
   const queryClient = useQueryClient();
   // 레시피 정보 등록 파트
@@ -339,7 +339,7 @@ const RecipeRegisterPage = () => {
                 </RegisterTitle>
                 <div style={{ position: "relative" }}>
                   {resourceList.map((categorys, index) => (
-                    <>
+                    <div key={index}>
                       <IngredientsWrapper className="box-shadow">
                         <IngredientTitle>
                           <input
@@ -356,7 +356,7 @@ const RecipeRegisterPage = () => {
                           </button>
                         </IngredientTitle>
                         {categorys.resources.map((resource, subIndex) => (
-                          <>
+                          <div key={index + "_" + subIndex}>
                             <IngredientInfoWrapper>
                               <div className="float-left">
                                 <input
@@ -391,7 +391,7 @@ const RecipeRegisterPage = () => {
                               </div>
                               <div className="float-right"></div>
                             </IngredientInfoWrapper>
-                          </>
+                          </div>
                         ))}
 
                         <Button
@@ -405,7 +405,7 @@ const RecipeRegisterPage = () => {
                           <span>재료 추가</span>
                         </Button>
                       </IngredientsWrapper>
-                    </>
+                    </div>
                   ))}
 
                   <Button
@@ -426,7 +426,7 @@ const RecipeRegisterPage = () => {
                 </RegisterTitle>
                 <IngredientsWrapper className="box-shadow">
                   {stepList.map((field, index) => (
-                    <>
+                    <div key={index}>
                       <IngredientTitle>
                         조리과정 {index + 1}
                         <button onClick={(e) => handleStepRemove(index)}>
@@ -458,7 +458,7 @@ const RecipeRegisterPage = () => {
                           ></textarea>
                         </IngredientInfoWrapper>
                       </RecipeInfoWrapper>
-                    </>
+                    </div>
                   ))}
                 </IngredientsWrapper>
                 <Button

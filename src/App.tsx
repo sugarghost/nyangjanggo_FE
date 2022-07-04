@@ -25,8 +25,6 @@ function App() {
             <Route path="/" element={<MainPage />} />
             <Route path="/myPage" element={<MainPage />} />
             <Route path="/test" element={<TestPage />} />
-            <Route path="/addElementTest" element={<AddElementTestPage />} />
-            <Route path="/testBoradPost" element={<BoardPost />} />
             <Route path="/signInPage" element={<SignInPage />} />
             <Route path="/signUpPage" element={<SignUpPage />} />
             <Route
