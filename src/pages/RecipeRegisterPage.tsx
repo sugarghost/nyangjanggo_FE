@@ -306,12 +306,9 @@ const RecipeRegisterPage = () => {
               <>
                 <MainImgWrapperLabel>요리 메인 페이지</MainImgWrapperLabel>
 
-                <Figure
+                <RegisterImage
                   className="img-render"
-                  key={mainImageUrl}
-                  alt={mainImageUrl}
                   src={mainImageUrl}
-                  width="80%"
                   onClick={mainImageClick}
                 />
 
@@ -523,6 +520,11 @@ const RegisterTitle = styled.div<any>`
   width: 100%;
   font-weight: bold;
   margin: ${(props) => props.margin ?? "0"};
+`;
+
+const RegisterImage = styled.img`
+  width: 100%;
+  border-radius: 8px;
 `;
 
 const IngredientsWrapper = styled.div`
