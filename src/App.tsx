@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useLayoutEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -14,7 +14,18 @@ import MyPage from "./pages/mypage/MyPage";
 import MyRefrigeratorPage from "./pages/mypage/MyRefrigeratorPage";
 
 const queryClient = new QueryClient();
+
 function App() {
+  useLayoutEffect(() => {
+    const access_token = window.location.href.split("token=")[1];
+
+    if (access_token) {
+      localStorage.clear();
+      localStorage.setItem("token", access_token);
+      window.location.replace("/");
+    }
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>

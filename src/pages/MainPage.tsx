@@ -1,5 +1,6 @@
 import React, { Suspense, useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
+import { useParams } from "react-router";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
@@ -12,9 +13,6 @@ export type Pageable = {
 };
 
 const MainPage = ({}) => {
-  useEffect(() => {}, []);
-  // 게시글 조회 타입
-
   // 검색창 파트
   const wholeTextArray = [
     "양파",
