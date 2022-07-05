@@ -1,9 +1,21 @@
 import React, { Suspense, useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
+import boardPostApi from "../apis/useBoardApi";
+
+export type Pageable = {
+  page: Number;
+  size: Number;
+  sort: string;
+};
+
 const MainPage = ({}) => {
   useEffect(() => {}, []);
+  // 게시글 조회 타입
+
+  // 검색창 파트
   const wholeTextArray = [
     "양파",
     "바나나",
@@ -19,7 +31,6 @@ const MainPage = ({}) => {
   const [isSearchedValue, setIsSearchedValue] = useState<boolean>(false);
   const [searchedList, setSearchedList] = useState(wholeTextArray);
   const [searchedItemIndex, setSearchedItemIndex] = useState(-1);
-
   const changeSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
     setIsSearchedValue(true);
@@ -68,6 +79,35 @@ const MainPage = ({}) => {
 
   useEffect(showSearchedList, [searchValue]);
 
+  // 게시글 목록 파트
+
+  const [boardType, setBoardType] = useState<string>("date");
+  const [page, setPage] = useState<number>(0);
+  const [size, setSize] = useState<number>(5);
+  const [posts, setPosts] = useState([]);
+  const getPostsByDateApi = boardPostApi.getPostsByDate;
+
+  const getPostsByDatemutation = useMutation(
+    (addData: Pageable) => getPostsByDateApi(addData),
+    {
+      onSuccess: (res) => {
+        console.log(res);
+        setPosts(res.data);
+      },
+      onError: () => {},
+    }
+  );
+
+  const getPosts = () => {
+    if (boardType == "date")
+      getPostsByDatemutation.mutate({
+        page: page,
+        size: size,
+        sort: "createdAt,desc",
+      });
+  };
+
+  useEffect(getPosts, []);
   return (
     <>
       {/* Suspense를 사용하면 컴포넌트가 렌더링되기 전까지 기다릴 수 있습니다 */}
@@ -108,22 +148,26 @@ const MainPage = ({}) => {
             )}
           </WholeBox>
         </div>
+        <hr />
+
+        <hr />
       </Suspense>
     </>
   );
 };
 
-const activeBorderRadius = "16px 16px 0 0";
-const inactiveBorderRadius = "16px 16px 16px 16px";
+const activeBorderRadius = "1vw 1vw 0 0";
+const inactiveBorderRadius = "1vw 1vw 1vw 1vw";
 
 const WholeBox = styled.div`
-  padding: 10px;
+  padding: 1vw;
+  width: 90vw;
 `;
 
 const InputBox = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 16px;
+  padding: 1vw;
   border: 1px solid rgba(0, 0, 0, 0.3);
   z-index: 3;
 
@@ -149,7 +193,7 @@ const DeleteButton = styled.div`
 const DropDownBox = styled.ul`
   display: block;
   margin: 0 auto;
-  padding: 8px 0;
+  padding: 0.5vw 0;
   background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-top: none;
@@ -160,7 +204,7 @@ const DropDownBox = styled.ul`
 `;
 
 const DropDownItem = styled.li`
-  padding: 0 16px;
+  padding: 0 1vw;
 
   &.selected {
     background-color: lightgray;

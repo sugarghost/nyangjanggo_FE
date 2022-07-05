@@ -3,6 +3,7 @@ import { FieldValues } from "react-hook-form";
 import { authInstance } from "./axiosInstance";
 
 const board = "/board";
+const boards = "/boards";
 const step = "/step";
 
 export type ResourcePostTemplate = {
@@ -14,6 +15,12 @@ export type ResourcePostTemplate = {
       category: string;
     }
   ];
+};
+
+export type Pageable = {
+  page: Number;
+  size: Number;
+  sort: string;
 };
 
 export default {
@@ -42,6 +49,17 @@ export default {
     const res = await authInstance.post(`${board}${step}/3`, payload, {
       headers: { "Content-Type": "multipart/form-data" },
     });
+    return res;
+  },
+
+  async getPostsByDate(payload: Pageable) {
+    const res = await authInstance.post(
+      `${boards}?page=${payload.page}&size=${payload.size}&sort=${payload.sort}`,
+      payload,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
     return res;
   },
 };
