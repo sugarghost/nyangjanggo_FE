@@ -1,6 +1,7 @@
 import React, { Suspense, useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useParams } from "react-router";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
@@ -10,6 +11,20 @@ export type Pageable = {
   page: Number;
   size: Number;
   sort: string;
+};
+
+export type PostContent = {
+  boardId: number;
+  commentCount: number;
+  content: string;
+  createdAt: string;
+  goodCount: number;
+  mainImg: string;
+  modifiedAt: string;
+  nickname: string;
+  subTitle: string;
+  title: string;
+  userImg: string;
 };
 
 const MainPage = ({}) => {
@@ -82,15 +97,17 @@ const MainPage = ({}) => {
   const [boardType, setBoardType] = useState<string>("date");
   const [page, setPage] = useState<number>(0);
   const [size, setSize] = useState<number>(5);
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<PostContent[]>([]);
   const getPostsByDateApi = boardPostApi.getPostsByDate;
+  const location = useLocation();
+  const state = location.state;
 
   const getPostsByDatemutation = useMutation(
     (addData: Pageable) => getPostsByDateApi(addData),
     {
       onSuccess: (res) => {
         console.log(res);
-        setPosts(res.data);
+        setPosts(res.data.content);
       },
       onError: () => {},
     }
@@ -110,45 +127,67 @@ const MainPage = ({}) => {
     <>
       {/* Suspense를 사용하면 컴포넌트가 렌더링되기 전까지 기다릴 수 있습니다 */}
       <Suspense fallback={<div>로딩중입니다.</div>}>
-        <div className="m-4">
-          <WholeBox>
-            <InputBox>
-              <Input
-                type="text"
-                value={searchValue}
-                onChange={changeSearchValue}
-                onKeyUp={handleDropDownKey}
-              />
-              <DeleteButton onClick={() => setSearchValue("")}>
-                &times;
-              </DeleteButton>
-            </InputBox>
-            {isSearchedValue && (
-              <DropDownBox>
-                {searchedList.length === 0 && (
-                  <DropDownItem>해당하는 단어가 없습니다</DropDownItem>
-                )}
-                {searchedList.map((searchedItem, searchedIndex) => {
-                  return (
-                    <DropDownItem
-                      key={searchedIndex}
-                      onClick={() => clickDropDownItem(searchedItem)}
-                      onMouseOver={() => setSearchedItemIndex(searchedIndex)}
-                      className={
-                        searchedItemIndex === searchedIndex ? "selected" : ""
-                      }
-                    >
-                      {searchedItem}
-                    </DropDownItem>
-                  );
-                })}
-              </DropDownBox>
-            )}
-          </WholeBox>
+        <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
+          <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
+            <div className="max-w-md mx-auto w-full">
+              <div className="m-4">
+                <WholeBox>
+                  <InputBox>
+                    <Input
+                      type="text"
+                      value={searchValue}
+                      onChange={changeSearchValue}
+                      onKeyUp={handleDropDownKey}
+                    />
+                    <DeleteButton onClick={() => setSearchValue("")}>
+                      &times;
+                    </DeleteButton>
+                  </InputBox>
+                  {isSearchedValue && (
+                    <DropDownBox>
+                      {searchedList.length === 0 && (
+                        <DropDownItem>해당하는 단어가 없습니다</DropDownItem>
+                      )}
+                      {searchedList.map((searchedItem, searchedIndex) => {
+                        return (
+                          <DropDownItem
+                            key={searchedIndex}
+                            onClick={() => clickDropDownItem(searchedItem)}
+                            onMouseOver={() =>
+                              setSearchedItemIndex(searchedIndex)
+                            }
+                            className={
+                              searchedItemIndex === searchedIndex
+                                ? "selected"
+                                : ""
+                            }
+                          >
+                            {searchedItem}
+                          </DropDownItem>
+                        );
+                      })}
+                    </DropDownBox>
+                  )}
+                </WholeBox>
+              </div>
+              <hr />
+              {posts.map((post, index) => (
+                <div key={index} className="flex my-2">
+                  <img src={post.mainImg} className="w-2/5"></img>
+                  <div className="w-full">
+                    <p>{post.title}</p>
+                    <p>{post.subTitle}</p>
+                    <div>
+                      <img className="w-70px" src={post.userImg}></img> [
+                      {post.nickname}] 좋아요: {post.goodCount}
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <hr />
+            </div>
+          </div>
         </div>
-        <hr />
-
-        <hr />
       </Suspense>
     </>
   );

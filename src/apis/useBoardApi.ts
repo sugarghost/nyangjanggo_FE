@@ -1,6 +1,6 @@
 import { FieldValues } from "react-hook-form";
 
-import { authInstance } from "./axiosInstance";
+import { authInstance, axiosInstance } from "./axiosInstance";
 
 const board = "/board";
 const boards = "/boards";
@@ -53,12 +53,8 @@ export default {
   },
 
   async getPostsByDate(payload: Pageable) {
-    const res = await authInstance.post(
-      `${boards}?page=${payload.page}&size=${payload.size}&sort=${payload.sort}`,
-      payload,
-      {
-        headers: { "Content-Type": "application/json" },
-      }
+    const res = await axiosInstance.get(
+      `${boards}?page=${payload.page}&size=${payload.size}&sort=${payload.sort}`
     );
     return res;
   },
