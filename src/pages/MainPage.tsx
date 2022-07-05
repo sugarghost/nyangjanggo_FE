@@ -38,6 +38,8 @@ const MainPage = () => {
   // 공통 처리
   const location = useLocation();
   const state = location.state;
+  const navigate = useNavigate();
+
   // 게시글 목록 전처리
 
   const [boardType, setBoardType] = useState<string>("date");
@@ -45,7 +47,6 @@ const MainPage = () => {
     size: 5,
     sort: "createdAt,desc",
   });
-  const [load, setLoad] = useState<boolean>(true);
 
   const preventRef = useRef(true);
   const obsRef = useRef(null);
@@ -76,28 +77,34 @@ const MainPage = () => {
         sort: "createdAt,desc",
       });
   };
+  // 무한 스크롤을 위해 특정 요소가 보이는지 판별하기 위한 Intersection Observer
   const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
+    // 타겟이 보이는 경우 fetchNextPage를 실행해 다음 페이지 데이터를 가져옴
     isIntersecting && fetchNextPage();
   };
   const { setTarget } = useIntersectionObserver({ onIntersect });
 
+  // 서버와 통신하기 위한 axios를 실행하는 함수로, 리턴 값을 무한 스크롤에서 활용하기 위해 재가공
   const fetchPostList = async (pageParam: any) => {
-    console.log("pageParam", pageParam);
+    // 추후에 다른 모드(좋아요 정렬 등)를 지원 시 재 사용성을 높이기 위해 선언
     const paramTemplate = {
       page: pageParam,
       size: 5,
       sort: axiosParam.sort,
     };
+    // API가 명확하지 않은 시점이라 getPostsByDate라는 함수로 호출 중
+    // 나중에 API가 정리되면, 한개에 기능에 sort 를 기반으로 정렬 로직이 좀 달라질 예정
     const res = await boardPostApi.getPostsByDate(paramTemplate);
-    setLoad(false);
     const { content, last } = res.data;
-    console.log("res", res);
-    console.log("pageParam", pageParam);
+    // 페이지 번호를 증가시키는 용도로 사용 될 nextPage는 기존 pageParam(페이지 넘버)에 +1을 해줌
     return { content, nextPage: pageParam + 1, last };
   };
 
+  // 무한 스크롤을 위해 useInfiniteQuery를 사용함,
   const { data, status, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
     "infinitePosts",
+    // pageParam(페이지 번호)를 파라미터로 axios 실행을 위한 fetchPostList를 실행
+    // 페이지 번호는 getNextPageParam을 통해 1씩 증가하다가 마지막 도달 시 undefined로 작동을 멈춤
     async ({ pageParam = 0 }) => await fetchPostList(pageParam),
     {
       getNextPageParam: (lastPage, pages) => {
@@ -106,6 +113,10 @@ const MainPage = () => {
       },
     }
   );
+  // 상세 페이지 기능
+  const viewRecipeDetail = (boardId: number) => {
+    navigate("/recipeDetailPage", { state: { boardId } });
+  };
 
   // 검색창 기능
   const changeSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -151,6 +162,7 @@ const MainPage = () => {
 
   useEffect(showSearchedList, [searchValue]);
 
+  //
   return (
     <>
       {/* Suspense를 사용하면 컴포넌트가 렌더링되기 전까지 기다릴 수 있습니다 */}
@@ -201,8 +213,12 @@ const MainPage = () => {
               <hr />
               {data?.pages?.map((page, index) => (
                 <div key={index}>
-                  {page.content.map((content: any) => (
-                    <div className="flex my-2">
+                  {page.content.map((content: any, subIndex: number) => (
+                    <div
+                      className="flex my-2"
+                      onClick={(e) => viewRecipeDetail(content.boardId)}
+                      key={index + "_" + subIndex}
+                    >
                       <img src={content.mainImg} className="w-2/5"></img>
                       <div className="w-full">
                         <p>{content.title}</p>
@@ -222,7 +238,11 @@ const MainPage = () => {
                 </div>
               ))}
 
-              {load ? <div className="py-3 text-center">로딩 중</div> : <></>}
+              {status == "loading" ? (
+                <div className="py-3 text-center">로딩 중</div>
+              ) : (
+                <></>
+              )}
               <div ref={setTarget} className="py-3 text-center"></div>
               <hr />
             </div>
