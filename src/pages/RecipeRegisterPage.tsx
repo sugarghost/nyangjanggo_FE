@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "react-query";
 import styled from "styled-components";
 
 import { registerRecipe } from "../apis/RegisterApi";
-import boardPostApi from "../apis/useBoradtApi";
+import boardPostApi from "../apis/useBoardApi";
 import Button from "../components/Botton";
 import Figure from "../components/Figure";
 import InputV2 from "../components/InputV2";
@@ -51,11 +51,11 @@ const RecipeRegisterPage = () => {
   );
 
   // 레시피 정보 등록, 재료 등록, 조리 과정 등록 페이지를 나누기 위한 상태값
-  const [registerStep, setRegisterStep] = useState(2);
+  const [registerStep, setRegisterStep] = useState(3);
   const queryClient = useQueryClient();
-  // 레시피 정보 등록 파트
+  // step 1 이후 반환되는 boardId를 저장하고, step2->step1으로 이동 시 수정여부를 구분을 하기 위한 용도
   const [boardId, setBoardId] = useState<number>(15);
-
+  // 레시피 정보 등록 파트
   const mainImageRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState<string>("");
   const [subTitle, setSubTitle] = useState<string>("");
@@ -152,7 +152,6 @@ const RecipeRegisterPage = () => {
     const list = [...resourceList];
     if (name == "resourceName" || name == "amount")
       list[index].resources[subIndex][name] = value;
-
     setResourceList(list);
   };
 
@@ -201,6 +200,11 @@ const RecipeRegisterPage = () => {
     postStep2mutation.mutate(resourceRequestDtoTemplate);
   };
 
+  const resourcePreStepBtnClick = () => {
+    setRegisterStep(1);
+    window.scrollTo(0, 0);
+  };
+
   // 조리 과정 파트
   const stepRefList = useRef<any[]>([]);
   const [stepList, setStepList] = useState<StepPostFormFileds[]>([
@@ -208,7 +212,8 @@ const RecipeRegisterPage = () => {
       stepNum: 1,
       stepContent: "",
       image: File,
-      imgUrl: "",
+      imgUrl:
+        "https://cdn.pixabay.com/photo/2016/03/21/05/05/plus-1270001_960_720.png",
     },
   ]);
 
@@ -248,7 +253,13 @@ const RecipeRegisterPage = () => {
   const handleStepAdd = () => {
     setStepList([
       ...stepList,
-      { stepNum: 0, stepContent: "", image: File, imgUrl: "" },
+      {
+        stepNum: 0,
+        stepContent: "",
+        image: File,
+        imgUrl:
+          "https://cdn.pixabay.com/photo/2016/03/21/05/05/plus-1270001_960_720.png",
+      },
     ]);
   };
 
@@ -282,6 +293,10 @@ const RecipeRegisterPage = () => {
     });
   };
 
+  const stepPreStepBtnClick = () => {
+    setRegisterStep(2);
+    window.scrollTo(0, 0);
+  };
   return (
     <>
       <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
@@ -291,12 +306,9 @@ const RecipeRegisterPage = () => {
               <>
                 <MainImgWrapperLabel>요리 메인 페이지</MainImgWrapperLabel>
 
-                <Figure
+                <RegisterImage
                   className="img-render"
-                  key={mainImageUrl}
-                  alt={mainImageUrl}
                   src={mainImageUrl}
-                  width="80%"
                   onClick={mainImageClick}
                 />
 
@@ -412,6 +424,12 @@ const RecipeRegisterPage = () => {
 
                   <Button
                     styleCustom={{ margin: "10px 0 0 0" }}
+                    onClick={resourcePreStepBtnClick}
+                  >
+                    <div>되돌아가기</div>
+                  </Button>
+                  <Button
+                    styleCustom={{ margin: "10px 0 0 0" }}
                     onClick={resourceSaveBtnClick}
                   >
                     <div>등록하기</div>
@@ -465,6 +483,12 @@ const RecipeRegisterPage = () => {
                 </IngredientsWrapper>
                 <Button
                   styleCustom={{ margin: "10px 0 0 0" }}
+                  onClick={stepPreStepBtnClick}
+                >
+                  <div>되돌아가기</div>
+                </Button>
+                <Button
+                  styleCustom={{ margin: "10px 0 0 0" }}
                   onClick={stepSaveBtnClick}
                 >
                   <div>등록하기</div>
@@ -496,6 +520,11 @@ const RegisterTitle = styled.div<any>`
   width: 100%;
   font-weight: bold;
   margin: ${(props) => props.margin ?? "0"};
+`;
+
+const RegisterImage = styled.img`
+  width: 100%;
+  border-radius: 8px;
 `;
 
 const IngredientsWrapper = styled.div`
