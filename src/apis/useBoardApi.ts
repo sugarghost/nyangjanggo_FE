@@ -54,7 +54,7 @@ export default {
 
   async getPostsByDate(payload: Pageable) {
     const res = await axiosInstance.get(
-      `${boards}?page=${payload.page}&size=${payload.size}&sort=${payload.sort}`
+      `${boards}?&page=${payload.page}&page=${payload.page}&size=${payload.size}&sort=${payload.sort}`
     );
     return res;
   },

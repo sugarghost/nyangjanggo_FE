@@ -1,11 +1,18 @@
-import React, { Suspense, useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import React, {
+  Suspense,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+} from "react";
+import { useInfiniteQuery, useQuery } from "react-query";
 import { useParams } from "react-router";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
 import boardPostApi from "../apis/useBoardApi";
+import useIntersectionObserver from "../hook/intersectionObserver";
 
 export type Pageable = {
   page: Number;
@@ -27,8 +34,23 @@ export type PostContent = {
   userImg: string;
 };
 
-const MainPage = ({}) => {
-  // 검색창 파트
+const MainPage = () => {
+  // 공통 처리
+  const location = useLocation();
+  const state = location.state;
+  // 게시글 목록 전처리
+
+  const [boardType, setBoardType] = useState<string>("date");
+  const [axiosParam, setAxiosParam] = useState<any>({
+    size: 5,
+    sort: "createdAt,desc",
+  });
+  const [load, setLoad] = useState<boolean>(true);
+
+  const preventRef = useRef(true);
+  const obsRef = useRef(null);
+
+  // 검색어 전처리
   const wholeTextArray = [
     "양파",
     "바나나",
@@ -44,6 +66,48 @@ const MainPage = ({}) => {
   const [isSearchedValue, setIsSearchedValue] = useState<boolean>(false);
   const [searchedList, setSearchedList] = useState(wholeTextArray);
   const [searchedItemIndex, setSearchedItemIndex] = useState(-1);
+
+  // 게시글 목록 기능
+  const chagneMode = () => {
+    if (boardType == "date")
+      setAxiosParam({
+        page: 0,
+        size: 5,
+        sort: "createdAt,desc",
+      });
+  };
+  const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
+    isIntersecting && fetchNextPage();
+  };
+  const { setTarget } = useIntersectionObserver({ onIntersect });
+
+  const fetchPostList = async (pageParam: any) => {
+    console.log("pageParam", pageParam);
+    const paramTemplate = {
+      page: pageParam,
+      size: 5,
+      sort: axiosParam.sort,
+    };
+    const res = await boardPostApi.getPostsByDate(paramTemplate);
+    setLoad(false);
+    const { content, last } = res.data;
+    console.log("res", res);
+    console.log("pageParam", pageParam);
+    return { content, nextPage: pageParam + 1, last };
+  };
+
+  const { data, status, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
+    "infinitePosts",
+    async ({ pageParam = 0 }) => await fetchPostList(pageParam),
+    {
+      getNextPageParam: (lastPage, pages) => {
+        if (!lastPage.last) return lastPage.nextPage;
+        return undefined;
+      },
+    }
+  );
+
+  // 검색창 기능
   const changeSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
     setIsSearchedValue(true);
@@ -59,11 +123,6 @@ const MainPage = ({}) => {
       );
       setSearchedList(choosenTextList);
     }
-  };
-
-  const changesearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
-    setIsSearchedValue(true);
   };
 
   const clickDropDownItem = (clickedItem: any) => {
@@ -92,37 +151,6 @@ const MainPage = ({}) => {
 
   useEffect(showSearchedList, [searchValue]);
 
-  // 게시글 목록 파트
-
-  const [boardType, setBoardType] = useState<string>("date");
-  const [page, setPage] = useState<number>(0);
-  const [size, setSize] = useState<number>(5);
-  const [posts, setPosts] = useState<PostContent[]>([]);
-  const getPostsByDateApi = boardPostApi.getPostsByDate;
-  const location = useLocation();
-  const state = location.state;
-
-  const getPostsByDatemutation = useMutation(
-    (addData: Pageable) => getPostsByDateApi(addData),
-    {
-      onSuccess: (res) => {
-        console.log(res);
-        setPosts(res.data.content);
-      },
-      onError: () => {},
-    }
-  );
-
-  const getPosts = () => {
-    if (boardType == "date")
-      getPostsByDatemutation.mutate({
-        page: page,
-        size: size,
-        sort: "createdAt,desc",
-      });
-  };
-
-  useEffect(getPosts, []);
   return (
     <>
       {/* Suspense를 사용하면 컴포넌트가 렌더링되기 전까지 기다릴 수 있습니다 */}
@@ -171,19 +199,31 @@ const MainPage = ({}) => {
                 </WholeBox>
               </div>
               <hr />
-              {posts.map((post, index) => (
-                <div key={index} className="flex my-2">
-                  <img src={post.mainImg} className="w-2/5"></img>
-                  <div className="w-full">
-                    <p>{post.title}</p>
-                    <p>{post.subTitle}</p>
-                    <div>
-                      <img className="w-70px" src={post.userImg}></img> [
-                      {post.nickname}] 좋아요: {post.goodCount}
+              {data?.pages?.map((page, index) => (
+                <div key={index}>
+                  {page.content.map((content: any) => (
+                    <div className="flex my-2">
+                      <img src={content.mainImg} className="w-2/5"></img>
+                      <div className="w-full">
+                        <p>{content.title}</p>
+                        <p>{content.subTitle}</p>
+                        <div className="flex">
+                          <img
+                            className="w-40px h-40px place-self-center rounded-full m-1"
+                            src={content.userImg}
+                          ></img>{" "}
+                          <div>
+                            <p>{content.nickname}</p>좋아요: {content.goodCount}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
               ))}
+
+              {load ? <div className="py-3 text-center">로딩 중</div> : <></>}
+              <div ref={setTarget} className="py-3 text-center"></div>
               <hr />
             </div>
           </div>
