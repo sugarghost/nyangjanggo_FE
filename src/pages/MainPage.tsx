@@ -36,8 +36,6 @@ export type PostContent = {
 
 const MainPage = () => {
   // 공통 처리
-  const location = useLocation();
-  const state = location.state;
   const navigate = useNavigate();
 
   // 게시글 목록 전처리

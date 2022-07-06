@@ -16,13 +16,17 @@ export type StepPostFormFileds = {
   image: any;
   imgUrl: string;
 };
-
+// 이슈 #15번 string을 인덱스로 사용시 발생한 오류에 대해 해결을 고민한 흔적
+// 결국 기존 방법 if 체제를 유지함(기능 개발에 집중)
+export type Status = "resourceName" | "amount";
 export type ResourcePostFileds = {
   category: string;
   resources: [
     {
-      resourceName: string;
-      amount: string;
+      [key in Status]: string;
+      //[amount:string]:string
+      //resourceName: string;
+      //amount: string;
     }
   ];
 };
@@ -51,10 +55,10 @@ const RecipeRegisterPage = () => {
   );
 
   // 레시피 정보 등록, 재료 등록, 조리 과정 등록 페이지를 나누기 위한 상태값
-  const [registerStep, setRegisterStep] = useState(3);
+  const [registerStep, setRegisterStep] = useState(1);
   const queryClient = useQueryClient();
   // step 1 이후 반환되는 boardId를 저장하고, step2->step1으로 이동 시 수정여부를 구분을 하기 위한 용도
-  const [boardId, setBoardId] = useState<number>(15);
+  const [boardId, setBoardId] = useState<number>();
   // 레시피 정보 등록 파트
   const mainImageRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState<string>("");
@@ -148,10 +152,12 @@ const RecipeRegisterPage = () => {
     subIndex: number
   ) => {
     const { name, value } = e.target;
+    const nameString: string = e.target.name;
 
     const list = [...resourceList];
     if (name == "resourceName" || name == "amount")
       list[index].resources[subIndex][name] = value;
+    //list[index].resources[subIndex][nameString] = value;
     setResourceList(list);
   };
 
