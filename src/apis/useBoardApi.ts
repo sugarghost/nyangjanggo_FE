@@ -58,4 +58,8 @@ export default {
     );
     return res;
   },
+  async getPostDetail(boardId: number) {
+    const res = await axiosInstance.get(`${boards}/${boardId}`);
+    return res;
+  },
 };

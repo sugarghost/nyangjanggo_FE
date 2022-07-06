@@ -6,6 +6,7 @@ import "./App.css";
 import Footer from "./containers/Footer";
 import Header from "./containers/Header";
 import MainPage from "./pages/MainPage";
+import RecipeDetailPage from "./pages/RecipeDetailPage";
 import RecipeRegisterPage from "./pages/RecipeRegisterPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
@@ -44,6 +45,7 @@ function App() {
             />
             <Route path="/signInPage" element={<SignInPage />} />
             <Route path="/signUpPage" element={<SignUpPage />} />
+            <Route path="/recipeDetailPage" element={<RecipeDetailPage />} />
             <Route
               path="/recipeRegisterPage"
               element={<RecipeRegisterPage />}
