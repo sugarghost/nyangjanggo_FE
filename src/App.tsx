@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { Suspense, useEffect, useLayoutEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -13,6 +14,7 @@ import SignUpPage from "./pages/SignUpPage";
 import TestPage from "./pages/TestPage";
 import MyPage from "./pages/mypage/MyPage";
 import MyRefrigeratorPage from "./pages/mypage/MyRefrigeratorPage";
+import PrivateRoutes from "./utils/privateRoutes";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +25,7 @@ function App() {
     if (access_token) {
       localStorage.clear();
       localStorage.setItem("token", access_token);
+      axios.defaults.headers.common["accessToken"] = access_token;
       window.location.replace("/");
     }
   }, []);
@@ -38,18 +41,23 @@ function App() {
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/test" element={<TestPage />} />
-            <Route path="/myPage" element={<MyPage />} />
-            <Route
-              path="/myRefrigeratorPage"
-              element={<MyRefrigeratorPage />}
-            />
+
             <Route path="/signInPage" element={<SignInPage />} />
             <Route path="/signUpPage" element={<SignUpPage />} />
             <Route path="/recipeDetailPage" element={<RecipeDetailPage />} />
-            <Route
-              path="/recipeRegisterPage"
-              element={<RecipeRegisterPage />}
-            />
+
+            {/* 로그인이 필요한 페이지 */}
+            <Route element={<PrivateRoutes authentication={true} />}>
+              <Route
+                path="/recipeRegisterPage"
+                element={<RecipeRegisterPage />}
+              />
+              <Route path="/myPage" element={<MyPage />} />
+              <Route
+                path="/myRefrigeratorPage"
+                element={<MyRefrigeratorPage />}
+              />
+            </Route>
           </Routes>
           {/* </div>
             </div>
