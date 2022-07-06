@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import Calendar from "../../components/mypage/Calendar";
 
 const MyRefrigeratorPage = () => {
   const [profileImage, setProfileImage] = useState(
@@ -14,10 +15,11 @@ const MyRefrigeratorPage = () => {
             <OptionsWrapper className="min-width-400">
               <IngredientsBox className="">
                 <div>
-                  06/01 <span style={{margin: "0 0 0 20px"}}>달걀(6개)</span>
+                  06/01 <span style={{ margin: "0 0 0 20px" }}>달걀(6개)</span>
                 </div>
                 <div>10일 남음</div>
               </IngredientsBox>
+              <Calendar/>
             </OptionsWrapper>
           </div>
         </div>
