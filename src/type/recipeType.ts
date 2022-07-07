@@ -20,3 +20,16 @@ export type StepList = {
   content: string;
   imageLink: string;
 };
+
+// 레시피 재료 추가 단계에서 사용함
+export type Resource = {
+  resourceName: string;
+  amount: string;
+};
+export type Category = {
+  name: string;
+  resource: Resource[];
+};
+export type ResourceFormData = {
+  categories: Category[];
+};

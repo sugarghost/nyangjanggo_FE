@@ -1,5 +1,10 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { FieldValues, useForm, useFieldArray } from "react-hook-form";
+import {
+  FieldValues,
+  useForm,
+  useFieldArray,
+  FormProvider,
+} from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
@@ -10,6 +15,8 @@ import Button from "../components/Botton";
 import Figure from "../components/Figure";
 import InputV2 from "../components/InputV2";
 import Textarea from "../components/Textarea";
+import Category from "../components/recipe/Category";
+import { ResourceFormData } from "../type/recipeType";
 import { Recipe, ResourceList, StepList } from "../type/recipeType";
 
 export type StepPostFormFileds = {
@@ -133,6 +140,7 @@ const RecipeRegisterPage = () => {
   const postRegistApi = recipeApi.postRegiste;
 
   //레시피 정보 등록 파트
+
   const onSaveMainImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
       const uploadFile = e.target.files[0];
@@ -183,6 +191,31 @@ const RecipeRegisterPage = () => {
   };
 
   // 재료 정보 파트
+  const resourceMethods = useForm<ResourceFormData>({
+    mode: "onChange",
+  });
+
+  const {
+    register: resourceRegister,
+    handleSubmit: resourceHandleSubmit,
+    control: resourceControl,
+  } = resourceMethods;
+  const {
+    fields: resourceFields,
+    append,
+    prepend,
+    remove,
+    swap,
+    move,
+    insert,
+  } = useFieldArray({
+    control: resourceControl,
+    name: "categories", // unique name for your Field Array
+  });
+
+  const onSubmitResource = resourceHandleSubmit((values) => {
+    console.log(JSON.stringify(values, null, 2));
+  });
 
   // 재료 분류가 수정 될 경우 실행
   const handleCategoryChange = (
@@ -253,7 +286,7 @@ const RecipeRegisterPage = () => {
   );
 
   // 재료 단계에서 저장 버튼 클릭 시 실행
-  const resourceSaveBtnClick = () => {
+  const resourceSaveBtnClick = (data: ResourcePostFileds[]) => {
     // 화면에서 그려주는 구조와 서버에서 받는 구조가 조금 다르기 때문에 별도의 list로 재정의
     let resourceRequestDtoTemplate: any = {
       boardId: boardId,
@@ -446,97 +479,120 @@ const RecipeRegisterPage = () => {
                 </Button>
               </>
             ) : registerStep === 2 ? (
-              <>
-                <RegisterTitle>
-                  <Button styleCustom={{}} onClick={handleCategoryAdd}>
-                    <span>재료 분류 추가</span>
-                  </Button>
-                </RegisterTitle>
-                <div style={{ position: "relative" }}>
-                  {resourceList.map((categorys, index) => (
-                    <div key={index}>
-                      <IngredientsWrapper className="box-shadow">
-                        <IngredientTitle>
-                          <input
-                            name="category"
-                            type="text"
-                            value={categorys.category}
-                            placeholder="재료 분류"
-                            onChange={(e) => handleCategoryChange(e, index)}
-                            required
-                          />
+              <FormProvider {...resourceMethods}>
+                <form onSubmit={onSubmitResource}>
+                  <RegisterTitle>
+                    <Button styleCustom={{}} onClick={() => append({})}>
+                      <span>재료 분류 추가</span>
+                    </Button>
+                  </RegisterTitle>
+                  <div style={{ position: "relative" }}>
+                    {resourceFields.map((item, index) => (
+                      <div key={index}>
+                        <Category
+                          name={item.name}
+                          index={index}
+                          onDelete={() => remove(index)}
+                        />
+                      </div>
+                    ))}
 
-                          <button onClick={(e) => handleCategoryRemove(index)}>
-                            <span>삭제</span>
-                          </button>
-                        </IngredientTitle>
-                        {categorys.resources.map((resource, subIndex) => (
-                          <div key={index + "_" + subIndex}>
-                            <IngredientInfoWrapper>
-                              <div className="float-left">
-                                <input
-                                  name="resourceName"
-                                  type="text"
-                                  value={resource.resourceName}
-                                  placeholder="재료명"
-                                  onChange={(e) =>
-                                    handleResourceChange(e, index, subIndex)
-                                  }
-                                  required
-                                />
+                    <button type="submit">
+                      <div>등록하기</div>
+                    </button>
+                  </div>
+                  {/* React Hook Form 적용을 위해 임시로 비활성화
+                  <RegisterTitle>
+                    <Button styleCustom={{}} onClick={handleCategoryAdd}>
+                      <span>재료 분류 추가</span>
+                    </Button>
+                  </RegisterTitle>
+                  <div style={{ position: "relative" }}>
+                    {resourceList.map((categorys, index) => (
+                      <div key={index}>
+                        <IngredientsWrapper className="box-shadow">
+                          <IngredientTitle>
+                            <input
+                              name="category"
+                              type="text"
+                              value={categorys.category}
+                              placeholder="재료 분류"
+                              onChange={(e) => handleCategoryChange(e, index)}
+                              required
+                            />
 
-                                <input
-                                  name="amount"
-                                  type="text"
-                                  value={resource.amount}
-                                  placeholder="재료량"
-                                  onChange={(e) =>
-                                    handleResourceChange(e, index, subIndex)
-                                  }
-                                  required
-                                />
+                            <button
+                              onClick={(e) => handleCategoryRemove(index)}
+                            >
+                              <span>삭제</span>
+                            </button>
+                          </IngredientTitle>
+                          {categorys.resources.map((resource, subIndex) => (
+                            <div key={index + "_" + subIndex}>
+                              <IngredientInfoWrapper>
+                                <div className="float-left">
+                                  <input
+                                    name="resourceName"
+                                    type="text"
+                                    value={resource.resourceName}
+                                    placeholder="재료명"
+                                    onChange={(e) =>
+                                      handleResourceChange(e, index, subIndex)
+                                    }
+                                    required
+                                  />
 
-                                <button
-                                  onClick={(e) =>
-                                    handleResourceRemove(index, subIndex)
-                                  }
-                                >
-                                  <span>삭제</span>
-                                </button>
-                              </div>
-                              <div className="float-right"></div>
-                            </IngredientInfoWrapper>
-                          </div>
-                        ))}
+                                  <input
+                                    name="amount"
+                                    type="text"
+                                    value={resource.amount}
+                                    placeholder="재료량"
+                                    onChange={(e) =>
+                                      handleResourceChange(e, index, subIndex)
+                                    }
+                                    required
+                                  />
 
-                        <Button
-                          styleCustom={{
-                            margin: "30px auto 0 auto",
-                            width: "40px",
-                            height: "40px",
-                          }}
-                          onClick={(e) => handleResourceAdd(index)}
-                        >
-                          <span>재료 추가</span>
-                        </Button>
-                      </IngredientsWrapper>
-                    </div>
-                  ))}
+                                  <button
+                                    onClick={(e) =>
+                                      handleResourceRemove(index, subIndex)
+                                    }
+                                  >
+                                    <span>삭제</span>
+                                  </button>
+                                </div>
+                                <div className="float-right"></div>
+                              </IngredientInfoWrapper>
+                            </div>
+                          ))}
 
-                  <Button
-                    styleCustom={{ margin: "10px 0 0 0" }}
-                    onClick={resourcePreStepBtnClick}
-                  >
-                    <div>되돌아가기</div>
-                  </Button>
-                  <Button
-                    styleCustom={{ margin: "10px 0 0 0" }}
-                    onClick={resourceSaveBtnClick}
-                  >
-                    <div>등록하기</div>
-                  </Button>
-                </div>
-              </>
+                          <Button
+                            styleCustom={{
+                              margin: "30px auto 0 auto",
+                              width: "40px",
+                              height: "40px",
+                            }}
+                            onClick={(e) => handleResourceAdd(index)}
+                          >
+                            <span>재료 추가</span>
+                          </Button>
+                        </IngredientsWrapper>
+                      </div>
+                    ))}
+
+                    <Button
+                      styleCustom={{ margin: "10px 0 0 0" }}
+                      onClick={resourcePreStepBtnClick}
+                    >
+                      <div>되돌아가기</div>
+                    </Button>
+                    <button type="submit">
+                      <div>등록하기</div>
+                    </button>
+                  </div>
+                          */}
+                </form>
+              </FormProvider>
             ) : (
               <>
                 <RegisterTitle margin={"30px 0 0 0"}>
