@@ -27,14 +27,14 @@ export default {
   get() {
     return authInstance.get(board).then((res) => res.data);
   },
-  async step1Post(payload: FormData) {
+  async postRecipe(payload: FormData) {
     const res = await authInstance.post(`${board}${step}/1`, payload, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     return res;
   },
 
-  async step2Post(payload: ResourcePostTemplate) {
+  async postResourceList(payload: ResourcePostTemplate) {
     const postDatas = {
       boardId: payload.boardId,
       resourceRequestDtoList: payload.resourceRequestDtoList,
@@ -45,20 +45,27 @@ export default {
     return res;
   },
 
-  async step3Post(payload: FormData) {
+  async postStep(payload: FormData) {
     const res = await authInstance.post(`${board}${step}/3`, payload, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     return res;
   },
 
-  async getPostsByDate(payload: Pageable) {
+  async postRegiste(payload: FormData) {
+    const res = await authInstance.post(`${board}${step}/-1`, payload, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return res;
+  },
+
+  async getRecipeListByDate(payload: Pageable) {
     const res = await axiosInstance.get(
       `${boards}?&page=${payload.page}&page=${payload.page}&size=${payload.size}&sort=${payload.sort}`
     );
     return res;
   },
-  async getPostDetail(boardId: number) {
+  async getRecipeDetail(boardId: number) {
     const res = await axiosInstance.get(`${boards}/${boardId}`);
     return res;
   },

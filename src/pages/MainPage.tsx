@@ -92,7 +92,7 @@ const MainPage = () => {
     };
     // API가 명확하지 않은 시점이라 getPostsByDate라는 함수로 호출 중
     // 나중에 API가 정리되면, 한개에 기능에 sort 를 기반으로 정렬 로직이 좀 달라질 예정
-    const res = await boardPostApi.getPostsByDate(paramTemplate);
+    const res = await boardPostApi.getRecipeListByDate(paramTemplate);
     const { content, last } = res.data;
     // 페이지 번호를 증가시키는 용도로 사용 될 nextPage는 기존 pageParam(페이지 넘버)에 +1을 해줌
     return { content, nextPage: pageParam + 1, last };
@@ -105,6 +105,7 @@ const MainPage = () => {
     // 페이지 번호는 getNextPageParam을 통해 1씩 증가하다가 마지막 도달 시 undefined로 작동을 멈춤
     async ({ pageParam = 0 }) => await fetchPostList(pageParam),
     {
+      refetchOnWindowFocus: false,
       getNextPageParam: (lastPage, pages) => {
         if (!lastPage.last) return lastPage.nextPage;
         return undefined;

@@ -6,34 +6,17 @@ import styled from "styled-components";
 
 import boardPostApi from "../apis/useBoardApi";
 import userToken from "../recoil/userAtom";
-
-export type Recipe = {
-  title: string;
-  subTitle: string;
-  content: string;
-  userImg: string;
-};
-
-export type ResourceList = {
-  category: string;
-  resources: [
-    {
-      resourceName: string;
-      amount: string;
-    }
-  ];
-};
-
-export type StepList = {
-  stepNum: number;
-  content: string;
-  imageLink: string;
-};
+import { Recipe, ResourceList, StepList } from "../type/recipeType";
+import { getToken, getNickname } from "../utils/jwt";
 
 const RecipeDetailPage = ({}) => {
+  // 공통 처리
+  const navigate = useNavigate();
   const location = useLocation();
   const state = location.state as { boardId: number };
 
+  // 페이지 조회 처리
+  const userName = getNickname(getToken("userToken"));
   const [boardId, setBoardId] = useState<number>(15);
   const [recipe, setRecipe] = useState<Recipe>();
   const [resourceList, setResourceList] = useState<ResourceList[]>([]);
@@ -42,12 +25,12 @@ const RecipeDetailPage = ({}) => {
   // 넘겨 받은 boardId를 이용해 해당 레시피의 상세 정보를 받아옴
   const { isLoading, data } = useQuery(
     ["postDetail", boardId],
-    async () => await boardPostApi.getPostDetail(boardId),
+    async () => await boardPostApi.getRecipeDetail(boardId),
     {
       cacheTime: Infinity,
+      refetchOnWindowFocus: false,
       enabled: !!boardId,
       onSuccess: (e) => {
-        console.log("e.data:", e.data);
         // 레시피 정보 처리 단계
         setRecipe({
           title: e.data.title,
@@ -58,7 +41,7 @@ const RecipeDetailPage = ({}) => {
 
         // 재료 정보 처리 단계
         // 화면에 그릴 때 Category 단위로 나눠서 map을 중첩해 사용하기 위해서 일치하는 Category 데이터끼리 묶음
-        const resourceListTemp = [...resourceList];
+        const resourceListTemp: ResourceList[] = [];
 
         //넘겨온 데이터에서 resource 내용을 열거함
         e.data.resourceResponseDtoList.map((fields: any, index: number) => {
@@ -89,7 +72,7 @@ const RecipeDetailPage = ({}) => {
         setResourceList(resourceListTemp);
 
         // 조리 과정 처리 단계
-        const stepListTemp = [...stepList];
+        const stepListTemp: StepList[] = [];
         e.data.recipeStepResponseDtoList.map((fields: any, index: number) => {
           stepListTemp[fields.stepNum] = fields;
         });
@@ -101,6 +84,14 @@ const RecipeDetailPage = ({}) => {
     }
   );
 
+  useEffect(() => {}, []);
+  // 수정 페이지 기능
+  const viewRecipeDetail = () => {
+    navigate("/recipeRegisterPage", {
+      state: { boardId, recipe, resourceList, stepList, type: "modify" },
+    });
+  };
+
   return (
     <>
       <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
@@ -110,6 +101,7 @@ const RecipeDetailPage = ({}) => {
             <p>{recipe?.title}</p>
             <p>{recipe?.subTitle}</p>
             <p>{recipe?.content}</p>
+            <button onClick={viewRecipeDetail}>수정</button>
             <hr></hr>
 
             <RegisterTitle>
