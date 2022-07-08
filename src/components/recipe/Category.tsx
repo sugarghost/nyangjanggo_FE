@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import styled from "styled-components";
 
@@ -10,21 +10,25 @@ type CategoryProps = {
   onDelete: any;
 };
 
-const Country = ({ name, index, onDelete }: CategoryProps) => {
+const Category = ({ name, index, onDelete }: CategoryProps) => {
   const { register, control } = useFormContext<ResourceFormData>();
   const { fields, append, remove } = useFieldArray({
     control,
-    name: `categories.${index}.resource`,
+    name: `categories.${index}.resources`,
   });
-
+  const deleteCategory = () => {
+    remove();
+    onDelete();
+  };
   return (
     <IngredientsWrapper className="box-shadow">
       <IngredientTitle>
         <input
           defaultValue={name}
+          placeholder="재료 분류"
           {...register(`categories.${index}.name`, { required: true })}
         />
-        <button onClick={onDelete}>삭제</button>
+        <input type="button" onClick={deleteCategory} value="삭제" />
       </IngredientTitle>
       {fields.map((item, i) => (
         <div key={item.id}>
@@ -33,28 +37,31 @@ const Country = ({ name, index, onDelete }: CategoryProps) => {
               <input
                 defaultValue={item.resourceName}
                 placeholder="재료명"
-                {...register(`categories.${index}.resource.${i}.resourceName`, {
-                  required: true,
-                })}
+                {...register(
+                  `categories.${index}.resources.${i}.resourceName`,
+                  {
+                    required: true,
+                  }
+                )}
               />
               <input
                 defaultValue={item.amount}
                 placeholder="재료량"
-                {...register(`categories.${index}.resource.${i}.amount`, {
+                {...register(`categories.${index}.resources.${i}.amount`, {
                   required: true,
                 })}
               />
-              <button onClick={() => remove(i)}>삭제</button>
+              <input type="button" onClick={() => remove(i)} value="삭제" />
             </div>
           </IngredientInfoWrapper>
         </div>
       ))}
-      <button onClick={() => append({})}>재료 추가</button>
+      <input type="button" onClick={() => append({})} value="재료 추가" />
     </IngredientsWrapper>
   );
 };
 
-export default Country;
+export default Category;
 
 const IngredientsWrapper = styled.div`
   margin: 8px 0 0 0;

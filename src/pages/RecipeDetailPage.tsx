@@ -4,9 +4,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 
-import boardPostApi from "../apis/useBoardApi";
+import boardPostApi from "../apis/RecipeApi";
 import userToken from "../recoil/userAtom";
-import { Recipe, ResourceList, StepList } from "../type/recipeType";
+import { RecipeView, ResourceList, StepList } from "../type/recipeType";
 import { getToken, getNickname } from "../utils/jwt";
 
 const RecipeDetailPage = ({}) => {
@@ -18,7 +18,7 @@ const RecipeDetailPage = ({}) => {
   // 페이지 조회 처리
   const userName = getNickname(getToken("userToken"));
   const [boardId, setBoardId] = useState<number>(15);
-  const [recipe, setRecipe] = useState<Recipe>();
+  const [recipe, setRecipe] = useState<RecipeView>();
   const [resourceList, setResourceList] = useState<ResourceList[]>([]);
   const [stepList, setStepList] = useState<StepList[]>([]);
 

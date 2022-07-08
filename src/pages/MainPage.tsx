@@ -11,7 +11,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
-import boardPostApi from "../apis/useBoardApi";
+import boardPostApi from "../apis/RecipeApi";
 import useIntersectionObserver from "../hook/intersectionObserver";
 
 export type Pageable = {

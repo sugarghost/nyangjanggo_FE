@@ -1,3 +1,4 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
   FieldValues,
@@ -5,19 +6,33 @@ import {
   useFieldArray,
   FormProvider,
 } from "react-hook-form";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient, useQuery } from "react-query";
 import { useNavigate, useLocation } from "react-router-dom";
+import { DefaultValue } from "recoil";
 import styled from "styled-components";
 
+import recipeApi from "../apis/RecipeApi";
 import { registerRecipe } from "../apis/RegisterApi";
-import recipeApi from "../apis/useBoardApi";
 import Button from "../components/Botton";
 import Figure from "../components/Figure";
 import InputV2 from "../components/InputV2";
 import Textarea from "../components/Textarea";
 import Category from "../components/recipe/Category";
+import Step from "../components/recipe/Step";
 import { ResourceFormData } from "../type/recipeType";
-import { Recipe, ResourceList, StepList } from "../type/recipeType";
+import {
+  Recipe,
+  RecipeFormData,
+  recipeValidationSchema,
+  recipeDefaultValues,
+  ResourceList,
+  StepList,
+  resourceDefaultValues,
+  resourceValidationSchema,
+  StepFormData,
+  stepDefaultValues,
+  stepValidationSchema,
+} from "../type/recipeType";
 
 export type StepPostFormFileds = {
   stepNum: number;
@@ -58,7 +73,8 @@ export type BoardPostFormFileds = {
   frontImageLink: File;
 };
 
-const RecipeRegisterPage = () => {
+const RecipeRegisterPage = (props: any) => {
+  console.log("props:", props);
   // 공통 처리
   const location = useLocation();
   const state = location.state as {
@@ -75,9 +91,10 @@ const RecipeRegisterPage = () => {
   );
 
   // 수정이냐 신규 작성이냐 여부를 나누기 위한 상태값
+  const isModify = state?.type == "modify";
   const [registerType, setRegisterType] = useState("Write");
   // 레시피 정보 등록, 재료 등록, 조리 과정 등록 페이지를 나누기 위한 상태값
-  const [registerStep, setRegisterStep] = useState(2);
+  const [registerStep, setRegisterStep] = useState(1);
   const queryClient = useQueryClient();
   // step 1 이후 반환되는 boardId를 저장하고, step2->step1으로 이동 시 수정여부를 구분을 하기 위한 용도
   const [boardId, setBoardId] = useState<number>();
@@ -109,15 +126,28 @@ const RecipeRegisterPage = () => {
     },
   ]);
 
+  // 처음 페이지 진입시 해당 유저가 작성중이었던 레시피가 있는지 확인해 조회
+  // 수정 모드인 경우 작동 안함
+  const { isLoading, data: postingData } = useQuery(
+    ["getRecipePosting"],
+    async () => await recipeApi.getRecipePosting(),
+    {
+      cacheTime: Infinity,
+      refetchOnWindowFocus: false,
+      enabled: !isModify,
+      onSuccess: () => {},
+    }
+  );
+
   // 최초 1회 실행되어 작성 모드가 수정인지 여부를 확인해 같이 들어온 값을 매핑 시키기 위함
   useEffect(() => {
     console.log("useEffect", state);
-    if (state?.type == "modify") {
+    if (isModify) {
       setRegisterType(state.type);
       setTitle(state.recipe.title);
       setSubTitle(state.recipe.subTitle);
       setContent(state.recipe.content);
-      setMainImageUrl(state.recipe.userImg);
+      // setMainImageUrl(state.recipe.userImg);
 
       setResourceList(state.resourceList);
 
@@ -132,6 +162,7 @@ const RecipeRegisterPage = () => {
         })
       );
       setStepList(list);
+    } else {
     }
   }, []);
   const postRecipeApi = recipeApi.postRecipe;
@@ -141,12 +172,27 @@ const RecipeRegisterPage = () => {
 
   //레시피 정보 등록 파트
 
+  const recipeMethods = useForm<RecipeFormData>({
+    resolver: yupResolver(recipeValidationSchema),
+    defaultValues: recipeDefaultValues,
+    mode: "onChange",
+  });
+
+  const {
+    register: recipeRegister,
+    handleSubmit: recipeHandleSubmit,
+    control: recipeControl,
+  } = recipeMethods;
+
+  const onSubmitRecipe = recipeHandleSubmit((values) => {
+    console.log(JSON.stringify(values, null, 2));
+  });
+
   const onSaveMainImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
       const uploadFile = e.target.files[0];
       const imgUrl = URL.createObjectURL(uploadFile);
       setMainImageUrl(imgUrl);
-      setMainImageFile(uploadFile);
     }
   };
 
@@ -192,22 +238,17 @@ const RecipeRegisterPage = () => {
 
   // 재료 정보 파트
   const resourceMethods = useForm<ResourceFormData>({
+    resolver: yupResolver(resourceValidationSchema),
+    defaultValues: resourceDefaultValues,
     mode: "onChange",
   });
 
-  const {
-    register: resourceRegister,
-    handleSubmit: resourceHandleSubmit,
-    control: resourceControl,
-  } = resourceMethods;
+  const { handleSubmit: resourceHandleSubmit, control: resourceControl } =
+    resourceMethods;
   const {
     fields: resourceFields,
-    append,
-    prepend,
-    remove,
-    swap,
-    move,
-    insert,
+    append: resourceAppend,
+    remove: resourceRemove,
   } = useFieldArray({
     control: resourceControl,
     name: "categories", // unique name for your Field Array
@@ -216,62 +257,6 @@ const RecipeRegisterPage = () => {
   const onSubmitResource = resourceHandleSubmit((values) => {
     console.log(JSON.stringify(values, null, 2));
   });
-
-  // 재료 분류가 수정 될 경우 실행
-  const handleCategoryChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    const { value } = e.target;
-    const list = [...resourceList];
-    list[index]["category"] = value;
-    setResourceList(list);
-  };
-
-  // 재료 분류에 삭제 버튼 클릭 시 실행
-  const handleCategoryRemove = (index: number) => {
-    const list = [...resourceList];
-    list.splice(index, 1);
-    setResourceList(list);
-  };
-
-  // 재료 분류 추가 버튼 클릭 시 실행
-  const handleCategoryAdd = () => {
-    setResourceList([
-      ...resourceList,
-      { category: "", resources: [{ resourceName: "", amount: "" }] },
-    ]);
-  };
-
-  // 재료명을 변경 시 실행
-  const handleResourceChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number,
-    subIndex: number
-  ) => {
-    const { name, value } = e.target;
-    const nameString: string = e.target.name;
-
-    const list = [...resourceList];
-    // String을 인덱스 키로 활용 하는 경우 if로 들어올 값을 검수 안하면 typescript에서 오류를 뿜어냄
-    if (name == "resourceName" || name == "amount")
-      list[index].resources[subIndex][name] = value;
-    setResourceList(list);
-  };
-
-  // 재료 입력 줄에 삭제 버튼 클릭 시 실행
-  const handleResourceRemove = (index: number, subIndex: number) => {
-    const list = [...resourceList];
-    list[index].resources.splice(subIndex, 1);
-    setResourceList(list);
-  };
-
-  // 재료 분류 내부에 재료 추가 버튼 클릭 시 실행
-  const handleResourceAdd = (index: number) => {
-    const list = [...resourceList];
-    list[index].resources.push({ resourceName: "", amount: "" });
-    setResourceList(list);
-  };
 
   // 재료 리스트를 서버로 전송하기 위해 react query로 API 호출 하는 부분
   const postResourceListMutation = useMutation(
@@ -318,60 +303,26 @@ const RecipeRegisterPage = () => {
 
   // 조리 과정 파트
 
-  // 조리 이미지 클릭 시 stepImageClick을 통해 file 타입을 가진 input 요소가 호출 되며,
-  // input 요소의 파일이 변경되면 실행 됨
-  const onSaveStepImageFile = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    if (e.target.files?.length) {
-      // 요소에 지정 된 파일을 가져옴
-      const uploadFile = e.target.files[0];
-      // 파일에서 URL을 추출
-      const imgUrl = URL.createObjectURL(uploadFile);
-      const list = [...stepList];
-      list[index].image = uploadFile;
-      list[index].imgUrl = imgUrl;
-      setStepList(list);
-    }
-  };
+  // 조리 과정 정보 파트
+  const stepMethods = useForm<StepFormData>({
+    resolver: yupResolver(stepValidationSchema),
+    defaultValues: stepDefaultValues,
+    mode: "onChange",
+  });
 
-  // 조리 이미지 클릭 시 Click 이벤트를 연결된 input 요소로 옮겨줌
-  const stepImageClick = (index: number) => {
-    stepRefList.current[index].click();
-  };
+  const { handleSubmit: stepHandleSubmit, control: stepControl } = stepMethods;
+  const {
+    fields: stepFields,
+    append: stepAppend,
+    remove: stepRemove,
+  } = useFieldArray({
+    control: stepControl,
+    name: "boardRequestDtoStepRecipe", // unique name for your Field Array
+  });
 
-  // 조리 과정 내용이 변경 될 경우 실행 됨
-  const handleStepChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
-    index: number
-  ) => {
-    const { value } = e.target;
-    const list = [...stepList];
-    list[index]["stepContent"] = value;
-    setStepList(list);
-  };
-
-  // 조리 과정 삭제 버튼 클릭 시 실행 됨
-  const handleStepRemove = (index: number) => {
-    const list = [...stepList];
-    list.splice(index, 1);
-    setStepList(list);
-  };
-  // 조리 과정을 추가시 실행 됨
-  const handleStepAdd = () => {
-    setStepList([
-      ...stepList,
-      {
-        stepNum: 0,
-        stepContent: "",
-        image: File,
-        // 샘플 이미지를 등록
-        imgUrl:
-          "https://cdn.pixabay.com/photo/2016/03/21/05/05/plus-1270001_960_720.png",
-      },
-    ]);
-  };
+  const onSubmitStep = stepHandleSubmit((values) => {
+    console.log(JSON.stringify(values, null, 2));
+  });
 
   // 조리 과정을 DB에 저장하기 위한 API
   const postStepMutation = useMutation(
@@ -434,7 +385,7 @@ const RecipeRegisterPage = () => {
         <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
           <div className="max-w-md mx-auto w-full">
             {registerStep === 1 ? (
-              <>
+              <form onSubmit={onSubmitRecipe}>
                 <MainImgWrapperLabel>요리 메인 페이지</MainImgWrapperLabel>
 
                 <RegisterImage
@@ -445,6 +396,7 @@ const RecipeRegisterPage = () => {
 
                 <input
                   type="file"
+                  {...recipeRegister("multipartFile", { required: true })}
                   onChange={onSaveMainImageFile}
                   accept="image/jpg,impge/png,image/jpeg"
                   ref={mainImageRef}
@@ -453,36 +405,44 @@ const RecipeRegisterPage = () => {
                 <InputV2
                   className="test"
                   inputLabel={"요리 이름"}
-                  onChange={(event) => setTitle(event.target.value)}
+                  {...recipeRegister("boardRequestDtoStepMain.title", {
+                    required: true,
+                  })}
                   styleCustom={{ width: "100%", margin: "20px 0 0 0" }}
-                  value={title}
                 />
                 <InputV2
                   inputLabel={"요리 소개"}
-                  onChange={(event) => setSubTitle(event.target.value)}
+                  {...recipeRegister("boardRequestDtoStepMain.subTitle", {
+                    required: true,
+                  })}
                   styleCustom={{ width: "100%", margin: "20px 0 0 0" }}
-                  value={subTitle}
                 />
 
                 <Textarea
                   inputLabel={"요리 설명"}
                   rows={10}
-                  onChange={(event) => setContent(event.target.value)}
+                  {...recipeRegister("boardRequestDtoStepMain.content", {
+                    required: true,
+                  })}
                   styleCustom={{ width: "100%", margin: "20px 0 0 0" }}
-                  value={content}
                 />
-                <Button
-                  styleCustom={{ margin: "10px 0 0 0" }}
-                  onClick={boardSaveBtnClick}
-                >
+                <Button styleCustom={{ margin: "10px 0 0 0" }}>
                   <div>등록하기</div>
                 </Button>
-              </>
+              </form>
             ) : registerStep === 2 ? (
               <FormProvider {...resourceMethods}>
                 <form onSubmit={onSubmitResource}>
                   <RegisterTitle>
-                    <Button styleCustom={{}} onClick={() => append({})}>
+                    <Button
+                      styleCustom={{}}
+                      onClick={() =>
+                        resourceAppend({
+                          name: "",
+                          resources: [{ resourceName: "", amount: "" }],
+                        })
+                      }
+                    >
                       <span>재료 분류 추가</span>
                     </Button>
                   </RegisterTitle>
@@ -492,165 +452,55 @@ const RecipeRegisterPage = () => {
                         <Category
                           name={item.name}
                           index={index}
-                          onDelete={() => remove(index)}
+                          onDelete={() => resourceRemove(index)}
                         />
                       </div>
                     ))}
 
-                    <button type="submit">
-                      <div>등록하기</div>
-                    </button>
-                  </div>
-                  {/* React Hook Form 적용을 위해 임시로 비활성화
-                  <RegisterTitle>
-                    <Button styleCustom={{}} onClick={handleCategoryAdd}>
-                      <span>재료 분류 추가</span>
-                    </Button>
-                  </RegisterTitle>
-                  <div style={{ position: "relative" }}>
-                    {resourceList.map((categorys, index) => (
-                      <div key={index}>
-                        <IngredientsWrapper className="box-shadow">
-                          <IngredientTitle>
-                            <input
-                              name="category"
-                              type="text"
-                              value={categorys.category}
-                              placeholder="재료 분류"
-                              onChange={(e) => handleCategoryChange(e, index)}
-                              required
-                            />
-
-                            <button
-                              onClick={(e) => handleCategoryRemove(index)}
-                            >
-                              <span>삭제</span>
-                            </button>
-                          </IngredientTitle>
-                          {categorys.resources.map((resource, subIndex) => (
-                            <div key={index + "_" + subIndex}>
-                              <IngredientInfoWrapper>
-                                <div className="float-left">
-                                  <input
-                                    name="resourceName"
-                                    type="text"
-                                    value={resource.resourceName}
-                                    placeholder="재료명"
-                                    onChange={(e) =>
-                                      handleResourceChange(e, index, subIndex)
-                                    }
-                                    required
-                                  />
-
-                                  <input
-                                    name="amount"
-                                    type="text"
-                                    value={resource.amount}
-                                    placeholder="재료량"
-                                    onChange={(e) =>
-                                      handleResourceChange(e, index, subIndex)
-                                    }
-                                    required
-                                  />
-
-                                  <button
-                                    onClick={(e) =>
-                                      handleResourceRemove(index, subIndex)
-                                    }
-                                  >
-                                    <span>삭제</span>
-                                  </button>
-                                </div>
-                                <div className="float-right"></div>
-                              </IngredientInfoWrapper>
-                            </div>
-                          ))}
-
-                          <Button
-                            styleCustom={{
-                              margin: "30px auto 0 auto",
-                              width: "40px",
-                              height: "40px",
-                            }}
-                            onClick={(e) => handleResourceAdd(index)}
-                          >
-                            <span>재료 추가</span>
-                          </Button>
-                        </IngredientsWrapper>
-                      </div>
-                    ))}
-
-                    <Button
-                      styleCustom={{ margin: "10px 0 0 0" }}
+                    <input
+                      type="button"
                       onClick={resourcePreStepBtnClick}
-                    >
-                      <div>되돌아가기</div>
-                    </Button>
+                      value="되돌아가기"
+                    />
                     <button type="submit">
                       <div>등록하기</div>
                     </button>
                   </div>
-                          */}
                 </form>
               </FormProvider>
             ) : (
-              <>
-                <RegisterTitle margin={"30px 0 0 0"}>
-                  조리 과정
-                  <Button styleCustom={{}} onClick={handleStepAdd}>
-                    <span>조리 과정 추가</span>
+              <FormProvider {...stepMethods}>
+                <form onSubmit={onSubmitStep}>
+                  <RegisterTitle margin={"30px 0 0 0"}>
+                    조리 과정
+                    <Button styleCustom={{}} onClick={() => stepAppend({})}>
+                      <span>조리 과정 추가</span>
+                    </Button>
+                  </RegisterTitle>
+                  <IngredientsWrapper className="box-shadow">
+                    {stepFields.map((item, index) => (
+                      <div key={index}>
+                        <Step
+                          index={index}
+                          onDelete={() => stepRemove(index)}
+                        />
+                      </div>
+                    ))}
+                  </IngredientsWrapper>
+                  <Button
+                    styleCustom={{ margin: "10px 0 0 0" }}
+                    onClick={stepPreStepBtnClick}
+                  >
+                    <div>되돌아가기</div>
                   </Button>
-                </RegisterTitle>
-                <IngredientsWrapper className="box-shadow">
-                  {stepList.map((field, index) => (
-                    <div key={index}>
-                      <IngredientTitle>
-                        조리과정 {index + 1}
-                        <button onClick={(e) => handleStepRemove(index)}>
-                          <span>삭제</span>
-                        </button>
-                      </IngredientTitle>
-                      <RecipeInfoWrapper>
-                        <IngredientInfoWrapper>
-                          <RecipeStepImage
-                            src={field.imgUrl}
-                            className="img-render"
-                            onClick={(e) => stepImageClick(index)}
-                          />
-
-                          <input
-                            key={index}
-                            type="file"
-                            onChange={(e) => onSaveStepImageFile(e, index)}
-                            accept="image/jpg,impge/png,image/jpeg"
-                            ref={(itself) =>
-                              (stepRefList.current[index] = itself)
-                            }
-                            hidden
-                          />
-                          <textarea
-                            placeholder="조리 과정을 알려주세요!"
-                            value={field.stepContent}
-                            onChange={(e) => handleStepChange(e, index)}
-                          ></textarea>
-                        </IngredientInfoWrapper>
-                      </RecipeInfoWrapper>
-                    </div>
-                  ))}
-                </IngredientsWrapper>
-                <Button
-                  styleCustom={{ margin: "10px 0 0 0" }}
-                  onClick={stepPreStepBtnClick}
-                >
-                  <div>되돌아가기</div>
-                </Button>
-                <Button
-                  styleCustom={{ margin: "10px 0 0 0" }}
-                  onClick={stepSaveBtnClick}
-                >
-                  <div>등록하기</div>
-                </Button>
-              </>
+                  <Button
+                    styleCustom={{ margin: "10px 0 0 0" }}
+                    onClick={stepSaveBtnClick}
+                  >
+                    <div>등록하기</div>
+                  </Button>
+                </form>
+              </FormProvider>
             )}
           </div>
         </div>
