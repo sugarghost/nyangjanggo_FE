@@ -109,6 +109,7 @@ export type Step = {
   stepNum: number;
   stepContent: string;
   multipartFile: File;
+  imageLink: string;
 };
 
 // 레시피 추가, 수정 단계에서 전송 될 타입
@@ -122,6 +123,7 @@ export const stepValidationSchema = yup.object().shape({
       stepNum: yup.number().required(),
       stepContent: yup.string().required(),
       multipartFile: yup.mixed().required(),
+      imageLink: yup.string().required(),
     })
   ),
 });
@@ -132,6 +134,8 @@ export const stepDefaultValues = {
       stepNum: 0,
       stepContent: "",
       multipartFile: undefined,
+      imageLink:
+        "https://cdn.pixabay.com/photo/2016/03/21/05/05/plus-1270001_960_720.png",
     },
   ],
 };
