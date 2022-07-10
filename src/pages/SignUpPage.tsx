@@ -24,8 +24,8 @@ const SignUpPage = () => {
 
   return (
     <>
-      <div className="bg-secondary-1 flex items-center min-h-screen bg-white dark:bg-gray-900">
-        <div className="container max-w-screen-lg xl:max-w-screen-xl mx-auto">
+      <div className="bg-secondary-1 items-center min-h-screen bg-white dark:bg-gray-900 mt-100">
+        <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
           <div className="max-w-md mx-auto">
             <div className="m-4">
               <SignTitle>
