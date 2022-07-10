@@ -63,19 +63,25 @@ button {
 }
 
 .date-wrapper {
-  padding: 20px;
+  margin-top: 20px;
+  padding: 5px;
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
 .container .date {
-  margin-top: 20px;
-  padding: auto;
+  margin: 0px auto;
+  width: 95%;
+}
+
+.container .date .day:hover {
+  opacity: 0.5;
 }
 
 .container .date .weekday {
-  width: calc(410px / 7);
+  /* width: calc(410px / 7); */
+  width: 11.6%;
   float: left;
   text-align: center;
   height: 50px;
@@ -98,7 +104,7 @@ button {
   background-color: rgb(88, 111, 187);
   color: white;
   font-weight: 700;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 .detail-menu-modal {

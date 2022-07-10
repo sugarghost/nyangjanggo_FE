@@ -8,11 +8,12 @@ const cx = classNames.bind(style);
 
 const Calendar = () => {
   const [showDateDetailModal, setShowDateDetailModal] = useState(false);
-  const handleOnClose = () => {
+  const handleOnClose = (e) => {
     setShowDateDetailModal(false);
   };
 
-  const handleOnShow = () => {
+  const handleOnShow = (e) => {
+    setSelectDate(`${selectedYear}-${selectedMonth}-${e.target.innerText}`);
     setShowDateDetailModal(true);
   };
 
@@ -26,6 +27,8 @@ const Calendar = () => {
   const [selectedYear, setSelectedYear] = useState(today.year); //현재 선택된 연도
   const [selectedMonth, setSelectedMonth] = useState(today.month); //현재 선택된 달
   const dateTotalCount = new Date(selectedYear, selectedMonth, 0).getDate(); //선택된 연도, 달의 마지막 날짜
+
+  const [selectedDate, setSelectDate] = useState();
 
   const prevMonth = useCallback(() => {
     //이전 달 보기 보튼
@@ -126,7 +129,7 @@ const Calendar = () => {
             <div
               key={i + 1}
               onClick={handleOnShow}
-              className={cx(
+              className={`${cx(
                 {
                   //오늘 날짜일 때 표시할 스타일 클라스네임
                   today:
@@ -153,14 +156,14 @@ const Calendar = () => {
                       i + 1
                     ).getDay() === 6,
                 }
-              )}
+              )} day`}
             >
               {i + 1}
             </div>
           );
         }
       } else {
-        dayArr.push(<div className="weekday"></div>);
+        dayArr.push(<div className="weekday day"></div>);
       }
     }
 
@@ -168,8 +171,13 @@ const Calendar = () => {
   }, [selectedYear, selectedMonth, dateTotalCount]);
 
   return (
-    <div className="container">
-      {showDateDetailModal && <DateDetailModal handleOnClose={handleOnClose} />}
+    <div className="container" style={{ maxWidth: "450px" }}>
+      {showDateDetailModal && (
+        <DateDetailModal
+          handleOnClose={handleOnClose}
+          selectedDate={selectedDate}
+        />
+      )}
 
       <div className="title">
         {/* <h3>
