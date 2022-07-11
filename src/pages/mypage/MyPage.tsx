@@ -5,7 +5,7 @@ import styled from "styled-components";
 const MyPage = () => {
   const navigate = useNavigate();
   const goMyRefrigeratorPage = () => {
-    navigate("/myRefrigeratorPage");
+    navigate("/myPage/myRefrigeratorPage");
   };
 
   const [profileImage, setProfileImage] = useState(
@@ -14,7 +14,7 @@ const MyPage = () => {
 
   return (
     <>
-      <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
+      <div className="bg-secondary-1 min-h-screen bg-white dark:bg-gray-900" style={{padding: "0px 10px"}}>
         <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
           <div className="max-w-md mx-auto w-full">
             <UserMainInfoWrapper className="min-width-400">
@@ -79,6 +79,6 @@ const OptionBox = styled.div`
   width: 100%;
   padding: 12px;
   border: 1px solid grey;
-  margin: 5px 0 0 0;
+  margin: 5px auto 0 auto;
   cursor: pointer;
 `;

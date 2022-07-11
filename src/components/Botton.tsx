@@ -87,7 +87,7 @@ const ButtonWrapper = styled.button<any>`
   height: ${(props) =>
     props.styleCustom.height ? props.styleCustom?.height : "50px"};
   margin: ${(props) =>
-    props.styleCustom.margin ? props.styleCustom?.margin : ""};
+    props.styleCustom.margin ? props.styleCustom?.margin : 0};
   max-width: ${(props) => props.styleCustom?.maxWidth ?? ""};
 
   @media screen and (max-width: 680px) {

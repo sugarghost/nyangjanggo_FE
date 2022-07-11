@@ -41,7 +41,6 @@ function App() {
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/test" element={<TestPage />} />
-
             <Route path="/signInPage" element={<SignInPage />} />
             <Route path="/signUpPage" element={<SignUpPage />} />
             <Route path="/recipeDetailPage" element={<RecipeDetailPage />} />
@@ -54,7 +53,7 @@ function App() {
               />
               <Route path="/myPage" element={<MyPage />} />
               <Route
-                path="/myRefrigeratorPage"
+                path="/myPage/myRefrigeratorPage"
                 element={<MyRefrigeratorPage />}
               />
             </Route>
@@ -62,7 +61,7 @@ function App() {
           {/* </div>
             </div>
           </div> */}
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </BrowserRouter>
     </QueryClientProvider>
