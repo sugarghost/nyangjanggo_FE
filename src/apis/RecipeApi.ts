@@ -90,6 +90,16 @@ export default {
     return res;
   },
 
+  async deleteStep(payload: FormData) {
+    const res = await authInstance.delete(`${board}${step}/3`, {
+      data: {
+        boardId: payload.get("boardId"),
+        stepNum: payload.get("stepNum"),
+      },
+    });
+    return res;
+  },
+
   async getRecipeListByDate(payload: Pageable) {
     const res = await axiosInstance.get(
       `${boards}?&page=${payload.page}&page=${payload.page}&size=${payload.size}&sort=${payload.sort}`

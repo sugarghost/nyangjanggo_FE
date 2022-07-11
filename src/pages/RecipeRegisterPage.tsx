@@ -208,6 +208,7 @@ const RecipeRegisterPage = (props: any) => {
   const putResourceListApi = recipeApi.putResourceList;
   const postStepApi = recipeApi.postStep;
   const putStepApi = recipeApi.putStep;
+  const deleteStepApi = recipeApi.deleteStep;
   const postRegistApi = recipeApi.postRegiste;
 
   // 레시피 정보 등록 파트
@@ -408,6 +409,27 @@ const RecipeRegisterPage = (props: any) => {
       onError: () => {},
     }
   );
+
+  // 조리 과정을 삭제하기 위한 API
+  const deleteStepMutation = useMutation(
+    (addData: FormData) => deleteStepApi(addData),
+    {
+      onSuccess: (res) => {
+        console.log(res);
+      },
+      onError: () => {},
+    }
+  );
+
+  const stepDelete = (index: number) => {
+    if (isModify) {
+      const formData = new FormData();
+      formData.append("boardId", String(boardId));
+      formData.append("stepNum", String(index));
+      deleteStepMutation.mutate(formData);
+    }
+    stepRemove(index);
+  };
   const onSubmitStep = stepHandleSubmit((values) => {
     console.log(JSON.stringify(values, null, 2));
 
@@ -565,7 +587,7 @@ const RecipeRegisterPage = (props: any) => {
                       <div key={index}>
                         <Step
                           index={index}
-                          onDelete={() => stepRemove(index)}
+                          onDelete={() => stepDelete(index)}
                         />
                       </div>
                     ))}
