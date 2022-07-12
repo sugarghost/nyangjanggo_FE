@@ -1,5 +1,6 @@
 import { FieldValues } from "react-hook-form";
 
+import { Step, StepFormData, StepFormDataWithId } from "../type/recipeType";
 import { authInstance, axiosInstance } from "./axiosInstance";
 
 const board = "/board";
@@ -40,26 +41,60 @@ export default {
     return res;
   },
 
-  async postResourceList(payload: ResourcePostTemplate) {
-    const postDatas = {
-      boardId: payload.boardId,
-      resourceRequestDtoList: payload.resourceRequestDtoList,
-    };
-    const res = await authInstance.post(`${board}${step}/2`, postDatas, {
+  async postResourceList(payload: FormData) {
+    const res = await authInstance.post(`${board}${step}/2`, payload, {
       headers: { "Content-Type": "application/json" },
     });
     return res;
   },
 
-  async postStep(payload: FormData) {
-    const res = await authInstance.post(`${board}${step}/3`, payload, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+  async loopStep(payload: StepFormDataWithId) {
+    let res;
+    for await (const param of payload.boardRequestDtoStepRecipe) {
+      let boardRequestDtoStepRecipe = {
+        boardId: payload.boardId,
+        recipeStepRequestDto: {
+          stepNum: param.stepNum,
+          stepContent: param.stepContent,
+        },
+      };
+
+      console.log(
+        `loop stepNum:${
+          param.stepNum
+        }, multipart: ${!!param.multipartFile}, fromServer: ${param.fromServer}`
+      );
+      console.log(JSON.stringify(boardRequestDtoStepRecipe, null, 2));
+      const formData = new FormData();
+      if (!!param.multipartFile)
+        formData.append("multipartFile", param.multipartFile);
+      else
+        formData.append(
+          "multipartFile",
+          new File([], "", { type: "multipart/form-data" })
+        );
+
+      formData.append(
+        "boardRequestDtoStepRecipe",
+        new Blob([JSON.stringify(boardRequestDtoStepRecipe)], {
+          type: "application/json",
+        })
+      );
+
+      res = !param.fromServer
+        ? await postStep(formData)
+        : await putStep(formData);
+      // 실패한 경우 break
+      if (res.status !== 200) {
+        console.log("status:", res.status, res.statusText);
+        break;
+      }
+    }
     return res;
   },
 
   async postRegiste(payload: FormData) {
-    const res = await authInstance.put(`${board}${step}/-1`, payload, {
+    const res = await authInstance.post(`${board}${step}/-1`, payload, {
       headers: { "Content-Type": "application/json" },
     });
     return res;
@@ -72,30 +107,16 @@ export default {
     return res;
   },
 
-  async putResourceList(payload: ResourcePostTemplate) {
-    const postDatas = {
-      boardId: payload.boardId,
-      resourceRequestDtoList: payload.resourceRequestDtoList,
-    };
-    const res = await authInstance.put(`${board}${step}/2`, postDatas, {
+  async putResourceList(payload: FormData) {
+    const res = await authInstance.put(`${board}${step}/2`, payload, {
       headers: { "Content-Type": "application/json" },
     });
     return res;
   },
-
-  async putStep(payload: FormData) {
-    const res = await authInstance.post(`${board}${step}/3`, payload, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-    return res;
-  },
-
   async deleteStep(payload: FormData) {
     const res = await authInstance.delete(`${board}${step}/3`, {
-      data: {
-        boardId: payload.get("boardId"),
-        stepNum: payload.get("stepNum"),
-      },
+      data: payload,
+      headers: { "Content-Type": "multipart/form-data" },
     });
     return res;
   },
@@ -110,4 +131,18 @@ export default {
     const res = await axiosInstance.get(`${board}/${boardId}`);
     return res;
   },
+};
+
+const postStep = (payload: FormData) => {
+  const res = authInstance.post(`${board}${step}/3`, payload, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res;
+};
+
+const putStep = (payload: FormData) => {
+  const res = authInstance.put(`${board}${step}/3`, payload, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res;
 };

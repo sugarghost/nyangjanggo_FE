@@ -17,7 +17,8 @@ const RecipeDetailPage = ({}) => {
 
   // 페이지 조회 처리
   const userName = getNickname(getToken("userToken"));
-  const [boardId, setBoardId] = useState<number>(15);
+  const [userInfo, setUserInfo] = useState<RecipeView>();
+  const [boardId, setBoardId] = useState<number>(state.boardId);
   const [recipe, setRecipe] = useState<RecipeView>();
   const [resourceList, setResourceList] = useState<ResourceList[]>([]);
   const [stepList, setStepList] = useState<StepList[]>([]);
@@ -31,11 +32,14 @@ const RecipeDetailPage = ({}) => {
       refetchOnWindowFocus: false,
       enabled: !!boardId,
       onSuccess: (e) => {
+        console.log("getRecipeDetail", e);
         // 레시피 정보 처리 단계
         setRecipe({
           title: e.data.title,
           subTitle: e.data.subTitle,
           content: e.data.content,
+          mainImg: e.data.mainImg,
+          nickname: e.data.nickname,
           userImg: e.data.userImg,
         });
 
@@ -86,22 +90,35 @@ const RecipeDetailPage = ({}) => {
 
   useEffect(() => {}, []);
   // 수정 페이지 기능
-  const viewRecipeDetail = () => {
+  const modifyRecipeDetail = () => {
     navigate("/recipeRegisterPage", {
       state: { boardId, recipe, resourceList, stepList, type: "modify" },
     });
   };
 
+  const deleteRecipeDetail = () => {
+    navigate("/recipeRegisterPage", {
+      state: { boardId, recipe, resourceList, stepList, type: "modify" },
+    });
+  };
   return (
     <>
       <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
         <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
           <div className="max-w-md mx-auto w-full">
-            <RegisterImage className="img-render" src={recipe?.userImg} />
+            <RegisterImage className="img-render" src={recipe?.mainImg} />
             <p>{recipe?.title}</p>
             <p>{recipe?.subTitle}</p>
             <p>{recipe?.content}</p>
-            <button onClick={viewRecipeDetail}>수정</button>
+            <button onClick={modifyRecipeDetail}>수정</button>
+            <button onClick={deleteRecipeDetail}>삭제</button>
+            {recipe?.nickname === userName && (
+              <>
+                <button onClick={modifyRecipeDetail}>수정</button>
+                <button onClick={deleteRecipeDetail}>삭제</button>
+              </>
+            )}
+
             <hr></hr>
 
             <RegisterTitle>

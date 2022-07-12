@@ -4,6 +4,8 @@ export type RecipeView = {
   title: string;
   subTitle: string;
   content: string;
+  mainImg: string;
+  nickname: string;
   userImg: string;
 };
 
@@ -25,7 +27,7 @@ export const recipeValidationSchema = yup.object().shape({
     subTitle: yup.string().required(),
     content: yup.string().required(),
   }),
-  multipartFile: yup.mixed().required(),
+  multipartFile: yup.mixed(),
 });
 
 export const recipeDefaultValues = {
@@ -108,12 +110,17 @@ export const resourceDefaultValues = {
 export type Step = {
   stepNum: number;
   stepContent: string;
-  multipartFile: File;
+  multipartFile: any;
   imageLink: string;
+  fromServer: boolean;
 };
 
 // 레시피 추가, 수정 단계에서 전송 될 타입
 export type StepFormData = {
+  boardRequestDtoStepRecipe: Step[];
+};
+export type StepFormDataWithId = {
+  boardId: number;
   boardRequestDtoStepRecipe: Step[];
 };
 
@@ -122,20 +129,12 @@ export const stepValidationSchema = yup.object().shape({
     yup.object().shape({
       stepNum: yup.number().required(),
       stepContent: yup.string().required(),
-      multipartFile: yup.mixed().required(),
       imageLink: yup.string().required(),
+      multipartFile: yup.mixed(),
     })
   ),
 });
 
 export const stepDefaultValues = {
-  boardRequestDtoStepRecipe: [
-    {
-      stepNum: 0,
-      stepContent: "",
-      multipartFile: undefined,
-      imageLink:
-        "https://cdn.pixabay.com/photo/2016/03/21/05/05/plus-1270001_960_720.png",
-    },
-  ],
+  boardRequestDtoStepRecipe: [],
 };

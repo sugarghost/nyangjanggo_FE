@@ -12,12 +12,14 @@ type StepProps = {
 const Step = ({ index, onDelete }: StepProps) => {
   const { register, getValues, setValue } = useFormContext<StepFormData>();
 
+  const [imageUrl, setImageUrl] = useState<string>(
+    getValues(`boardRequestDtoStepRecipe.${index}.imageLink`)
+  );
+
   const fileRef = useRef<any>();
 
   //src에 직접 값을 지정하고 state로 setImageUrl을 사용해봐도 렌더링이 되지 않아서 Effect를 등록함
-  useEffect(() => {}, [
-    getValues(`boardRequestDtoStepRecipe.${index}.imageLink`),
-  ]);
+  useEffect(() => {}, [imageUrl]);
 
   // 조리 이미지 클릭 시 Click 이벤트를 연결된 input 요소로 옮겨줌
   const stepImageClick = () => {
@@ -34,7 +36,9 @@ const Step = ({ index, onDelete }: StepProps) => {
       const uploadFile = e.target.files[0];
       // 파일에서 URL을 추출
       const imgUrl = URL.createObjectURL(uploadFile);
+      setImageUrl(imgUrl);
       setValue(`boardRequestDtoStepRecipe.${index}.imageLink`, imgUrl);
+      setValue(`boardRequestDtoStepRecipe.${index}.multipartFile`, uploadFile);
     }
   };
 
@@ -42,9 +46,7 @@ const Step = ({ index, onDelete }: StepProps) => {
     <>
       <IngredientTitle>
         조리과정 {index + 1}
-        <button onClick={onDelete}>
-          <span>삭제</span>
-        </button>
+        <input type="button" onClick={onDelete} value="삭제" />
       </IngredientTitle>
       <RecipeInfoWrapper>
         <IngredientInfoWrapper>
@@ -53,7 +55,7 @@ const Step = ({ index, onDelete }: StepProps) => {
             onClick={stepImageClick}
             // boardRequestDtoStepRecipe.${index}.imgUrl 형식으로 값을 등록해 봤지만 이미지가 변경이 되도 렌더링이 안되는 문제가 발생
             // useState를 사용해봐도 렌더링이 안되서 추가로 useEffect를 사용함
-            src={getValues(`boardRequestDtoStepRecipe.${index}.imageLink`)}
+            src={imageUrl}
           />
           <input
             {...register(`boardRequestDtoStepRecipe.${index}.stepNum`, {
@@ -64,9 +66,6 @@ const Step = ({ index, onDelete }: StepProps) => {
           />
           <input
             type="file"
-            {...register(`boardRequestDtoStepRecipe.${index}.multipartFile`, {
-              required: true,
-            })}
             accept="image/jpg,impge/png,image/jpeg"
             ref={fileRef}
             onChange={(e) => onSaveStepImageFile(e, index)}

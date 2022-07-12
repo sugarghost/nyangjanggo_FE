@@ -1,3 +1,4 @@
+import { ErrorMessage } from "@hookform/error-message";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
@@ -15,7 +16,7 @@ import recipeApi from "../apis/RecipeApi";
 import Button from "../components/Botton";
 import Category from "../components/recipe/Category";
 import Step from "../components/recipe/Step";
-import { ResourceFormData } from "../type/recipeType";
+import { ResourceFormData, StepFormDataWithId } from "../type/recipeType";
 import {
   Recipe,
   RecipeFormData,
@@ -69,8 +70,7 @@ export type BoardPostFormFileds = {
   frontImageLink: File;
 };
 
-const RecipeRegisterPage = (props: any) => {
-  console.log("props:", props);
+const RecipeRegisterPage = () => {
   // 공통 처리
   const location = useLocation();
   const state = location.state as {
@@ -80,11 +80,6 @@ const RecipeRegisterPage = (props: any) => {
     stepList: StepList[];
     type: string;
   };
-
-  // 이미지 등록 전에 보여줄 샘플 이미지를 기본으로 등록
-  const [mainImage, setMainImage] = useState(
-    "https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg"
-  );
 
   // 수정이냐 신규 작성이냐 여부를 나누기 위한 상태값
   const isModify = state?.type == "modify";
@@ -98,6 +93,7 @@ const RecipeRegisterPage = (props: any) => {
   const [boardId, setBoardId] = useState<number>();
   // 레시피 정보 상태
   const mainImageRef = useRef<HTMLInputElement>(null);
+  // 이미지 등록 전에 보여줄 샘플 이미지를 기본으로 등록
   const [mainImageUrl, setMainImageUrl] = useState<string>(
     "https://cdn.pixabay.com/photo/2016/03/21/05/05/plus-1270001_960_720.png"
   );
@@ -108,97 +104,100 @@ const RecipeRegisterPage = (props: any) => {
     ["getRecipePosting"],
     async () => await recipeApi.getRecipePosting(),
     {
-      cacheTime: Infinity,
       refetchOnWindowFocus: false,
       enabled: !isModify,
       onSuccess: (res) => {
+        console.log("getRecipePosting", res);
+
         if (!!res.data) {
           setBoardId(res.data.boardId);
           if (res.data.status == "step 1") {
-            setRegisterStep(1);
-            setRegisterState(1);
-          } else if (res.data.status == "step 2") {
             setRegisterStep(2);
             setRegisterState(2);
+          } else if (res.data.status == "step 2") {
+            setRegisterStep(3);
+            setRegisterState(3);
           } else if (res.data.status == "step 3") {
             setRegisterStep(3);
             setRegisterState(3);
           }
-
-          recipeDefaultValues.boardRequestDtoStepMain.title = res.data.title;
-          recipeDefaultValues.boardRequestDtoStepMain.subTitle =
-            res.data.subTitle;
-          recipeDefaultValues.boardRequestDtoStepMain.content =
-            res.data.content;
-          // 재료 정보가 있는 경우 서버에서 넘어오는 데이터가 View 형식과는 다르기 때문에 처리 과정이 필요
-          if (!!res.data.resourceResponseDtoList) {
-            resourceDefaultValues.categories = [];
-            res.data.resourceResponseDtoList.map(
-              (fields: any, index: number) => {
-                // 기존 resourceDefaultValues에 저장된 Category 값과 반환된 resourceResponseDtoList 속에 category 데이터와 일치하는 경우 해당 인덱스를 반환
-                const categoryIndex =
-                  resourceDefaultValues.categories.findIndex(
-                    (item) => item.name == fields.category
-                  );
-                // 일치하는 category가 있어서 인덱스가 -1이 아닌 경우 실행
-                if (categoryIndex != -1) {
-                  // 일치하는 category가 있는 위치에 resources(리스트 형태) 값에 push를 통해 데이터를 추가해줌
-                  resourceDefaultValues.categories[
-                    categoryIndex
-                  ].resources.push({
-                    resourceName: fields.resourceName,
-                    amount: fields.num,
-                  });
-                } else {
-                  // 만약 반환된 인덱스가 없으면 일치하는 카테고리가 없다는 뜻으로 신규로 만들어줌
-                  resourceDefaultValues.categories.push({
-                    name: fields.category,
-                    resources: [
-                      {
-                        resourceName: fields.resourceName,
-                        amount: fields.num,
-                      },
-                    ],
-                  });
-                }
-              }
-            );
-          }
-
-          if (!!res.data.recipeStepResponseDtoList) {
-            stepDefaultValues.boardRequestDtoStepRecipe = [];
-            res.data.recipeStepResponseDtoList.map(
-              (fields: any, index: number) => {
-                stepDefaultValues.boardRequestDtoStepRecipe[fields.stepNum] =
-                  fields;
-              }
-            );
-          }
         }
+        setQueryData(res.data);
       },
     }
   );
 
+  // 수정 모드인 경우 수정 데이터를 불러오기 위해 작동
+  const { isLoading: modifyIsLoading, data: modifyData } = useQuery(
+    ["getRecipeModify"],
+    async () => await recipeApi.getRecipeDetail(state?.boardId),
+    {
+      refetchOnWindowFocus: false,
+      enabled: isModify,
+      onSuccess: (res) => {
+        setQueryData(res.data);
+      },
+    }
+  );
+
+  const setQueryData = (data: any) => {
+    if (!!data) {
+      setBoardId(data.boardId);
+
+      recipeMethods.setValue("boardRequestDtoStepMain.title", data.title);
+      recipeMethods.setValue("boardRequestDtoStepMain.subTitle", data.subTitle);
+      recipeMethods.setValue("boardRequestDtoStepMain.content", data.content);
+      setMainImageUrl(data.mainImg);
+
+      // 재료 정보가 있는 경우 서버에서 넘어오는 데이터가 View 형식과는 다르기 때문에 처리 과정이 필요
+      if (!!data.resourceResponseDtoList) {
+        resourceMethods.setValue("categories", []);
+        data.resourceResponseDtoList.map((fields: any, index: number) => {
+          // 기존 resourceDefaultValues에 저장된 Category 값과 반환된 resourceResponseDtoList 속에 category 데이터와 일치하는 경우 해당 인덱스를 반환
+          const categoryIndex = resourceMethods
+            .getValues(`categories`)
+            .findIndex((item) => item.name == fields.category);
+          // 일치하는 category가 있어서 인덱스가 -1이 아닌 경우 실행
+          if (categoryIndex != -1) {
+            // 일치하는 category가 있는 위치에 resources(리스트 형태) 값에 push를 통해 데이터를 추가해줌
+            resourceMethods.setValue(`categories.${categoryIndex}.resources`, [
+              ...resourceMethods.getValues(
+                `categories.${categoryIndex}.resources`
+              ),
+              fields,
+            ]);
+          } else {
+            // 만약 반환된 인덱스가 없으면 일치하는 카테고리가 없다는 뜻으로 신규로 만들어줌
+            resourceMethods.setValue(`categories`, [
+              ...resourceMethods.getValues(`categories`),
+              {
+                name: fields.category,
+                resources: [fields],
+              },
+            ]);
+          }
+        });
+      }
+
+      if (!!data.recipeStepResponseDtoList) {
+        stepMethods.setValue(`boardRequestDtoStepRecipe`, []);
+        data.recipeStepResponseDtoList.map((fields: any, index: number) => {
+          stepMethods.setValue(`boardRequestDtoStepRecipe.${fields.stepNum}`, {
+            stepNum: fields.stepNum,
+            imageLink: fields.imageLink,
+            stepContent: fields.stepContent,
+            multipartFile: undefined,
+            fromServer: true,
+          });
+        });
+      }
+    }
+  };
   // 최초 1회 실행되어 작성 모드가 수정인지 여부를 확인해 같이 들어온 값을 매핑 시키기 위함
   useEffect(() => {
     console.log("useEffect", state);
     if (isModify) {
       setRegisterType(state.type);
-      // setMainImageUrl(state.recipe.userImg);
-
-      //setResourceList(state.resourceList);
-
-      // 조리 과정에는 image 변수에 File 객체가 포함되어 있기에 넘어온 데이터를 재가공해서 각각 넣어줌
-      const list: StepPostFormFileds[] = [];
-      state.stepList.map((field) =>
-        list.push({
-          stepNum: field.stepNum,
-          stepContent: field.content,
-          image: null,
-          imgUrl: field.imageLink,
-        })
-      );
-      //setStepList(list);
     } else {
     }
   }, []);
@@ -206,8 +205,7 @@ const RecipeRegisterPage = (props: any) => {
   const putRecipeApi = recipeApi.putRecipe;
   const postResourceListApi = recipeApi.postResourceList;
   const putResourceListApi = recipeApi.putResourceList;
-  const postStepApi = recipeApi.postStep;
-  const putStepApi = recipeApi.putStep;
+  const loopStepApi = recipeApi.loopStep;
   const deleteStepApi = recipeApi.deleteStep;
   const postRegistApi = recipeApi.postRegiste;
 
@@ -219,19 +217,26 @@ const RecipeRegisterPage = (props: any) => {
     mode: "onChange",
   });
 
-  const { register: recipeRegister, handleSubmit: recipeHandleSubmit } =
-    recipeMethods;
+  const {
+    register: recipeRegister,
+    formState: { errors: recipeError },
+    handleSubmit: recipeHandleSubmit,
+    setValue: setRecipeValue,
+  } = recipeMethods;
 
   const postRecipeMutation = useMutation(
     (addData: FormData) => postRecipeApi(addData),
     {
       onSuccess: (res) => {
-        //setBoardId(res.data.boardId);
-        setBoardId(2);
+        console.log("postRecipeMutation:", res);
+        setBoardId(res.data.boardId);
         setRegisterStep(2);
+        setRegisterState(2);
         window.scrollTo(0, 0);
       },
-      onError: () => {},
+      onError: (e) => {
+        console.log("postRecipeMutation Error:", e);
+      },
     }
   );
 
@@ -239,21 +244,28 @@ const RecipeRegisterPage = (props: any) => {
     (addData: FormData) => putRecipeApi(addData),
     {
       onSuccess: (res) => {
+        console.log("putRecipeMutation:", res);
         //setBoardId(res.data.boardId);
-        setBoardId(2);
         setRegisterStep(2);
+        setRegisterState(2);
         window.scrollTo(0, 0);
       },
-      onError: () => {},
+      onError: (e) => {
+        console.log("putRecipeMutation Error:", e);
+      },
     }
   );
   // 레시피 정보 등록 단계에서 저장 버튼 클릭 시 실행
-  const onSubmitRecipe = recipeHandleSubmit((values) => {
+  const onSubmitRecipe = (values: RecipeFormData) => {
     console.log(JSON.stringify(values, null, 2));
-
     const formData = new FormData();
-    formData.append("multipartFile", values.multipartFile);
-
+    if (!!values.multipartFile)
+      formData.append("multipartFile", values.multipartFile);
+    else
+      formData.append(
+        "multipartFile",
+        new File([], "", { type: "multipart/form-data" })
+      );
     formData.append(
       "boardRequestDtoStepMain ",
       new Blob(
@@ -269,19 +281,27 @@ const RecipeRegisterPage = (props: any) => {
     );
     // 만약 boardId가 존재하는 경우라면 재료 등록 단계에서 회귀한 상태로
     // 추가가 아닌 수정 모드로 전환 해야함
-    if (isModify || registerState !== 1) {
-      formData.append("boardId", String(boardId));
+    if (isModify || boardId) {
+      formData.append(
+        "boardId",
+
+        new Blob([JSON.stringify(boardId)], {
+          type: "application/json",
+        })
+      );
       putRecipeMutation.mutate(formData);
     } else {
       postRecipeMutation.mutate(formData);
     }
-  });
+  };
 
+  const onErrorRecipe = (errors: any, e: any) => console.log(errors, e);
   const onSaveMainImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
       const uploadFile = e.target.files[0];
       const imgUrl = URL.createObjectURL(uploadFile);
       setMainImageUrl(imgUrl);
+      setRecipeValue("multipartFile", uploadFile);
     }
   };
 
@@ -308,7 +328,7 @@ const RecipeRegisterPage = (props: any) => {
 
   // 재료 리스트 Post를 위해 react query로 API 호출 하는 부분
   const postResourceListMutation = useMutation(
-    (addData: resourceRequestDtoTemplate) => postResourceListApi(addData),
+    (addData: FormData) => postResourceListApi(addData),
     {
       onSuccess: (res) => {
         setRegisterStep(3);
@@ -320,7 +340,7 @@ const RecipeRegisterPage = (props: any) => {
   );
   // 재료 리스트 Put(수정)을 위해 react query로 API 호출 하는 부분
   const putResourceListMutation = useMutation(
-    (addData: resourceRequestDtoTemplate) => putResourceListApi(addData),
+    (addData: FormData) => putResourceListApi(addData),
     {
       onSuccess: (res) => {
         setRegisterStep(3);
@@ -332,9 +352,7 @@ const RecipeRegisterPage = (props: any) => {
   );
 
   // 재료 단계에서 저장 버튼 클릭 시 실행
-  const onSubmitResource = resourceHandleSubmit((values) => {
-    console.log(JSON.stringify(values, null, 2));
-
+  const onSubmitResource = (values: ResourceFormData) => {
     // 화면에서 그려주는 구조와 서버에서 받는 구조가 조금 다르기 때문에 별도의 list로 재정의
     let resourceRequestDtoTemplate: any = {
       boardId: boardId,
@@ -355,14 +373,23 @@ const RecipeRegisterPage = (props: any) => {
           ])
       )
     );
+
+    console.log(JSON.stringify(resourceRequestDtoTemplate, null, 2));
+    const formData = new FormData();
+    formData.append(
+      "boardRequestDtoStepResource",
+      new Blob([JSON.stringify(resourceRequestDtoTemplate)], {
+        type: "application/json",
+      })
+    );
     // 수정 모드 이거나 이미 2 단계를 지나서 3단계에 도달한 상태라면 Put 명령으로 변경
     if (isModify || registerState == 3) {
-      putResourceListMutation.mutate(resourceRequestDtoTemplate);
+      putResourceListMutation.mutate(formData);
     } else {
-      postResourceListMutation.mutate(resourceRequestDtoTemplate);
+      postResourceListMutation.mutate(formData);
     }
-  });
-
+  };
+  const onErrorResource = (errors: any, e: any) => console.log(errors, e);
   // 재료 단계에서 돌아가기 버튼 클릭 시 레시피 정보 단계로 이동
   const resourcePreStepBtnClick = () => {
     setRegisterStep(1);
@@ -388,23 +415,21 @@ const RecipeRegisterPage = (props: any) => {
     name: "boardRequestDtoStepRecipe", // unique name for your Field Array
   });
 
-  // 조리 과정을 DB에 저장하기 위한 API
-  const postStepMutation = useMutation(
-    (addData: FormData) => postStepApi(addData),
+  // 조리 과정을 반복적으로 DB에 저장하기 위한 API
+  const loopStepMutation = useMutation(
+    (addData: StepFormDataWithId) => loopStepApi(addData),
     {
       onSuccess: (res) => {
-        console.log(res);
-      },
-      onError: () => {},
-    }
-  );
+        console.log("loopStepApi res:", res);
+        const RegistData = new FormData();
+        RegistData.append(
+          "boardId",
 
-  // 조리 과정을 수정하기 위한 API
-  const putStepMutation = useMutation(
-    (addData: FormData) => putStepApi(addData),
-    {
-      onSuccess: (res) => {
-        console.log(res);
+          new Blob([JSON.stringify(boardId)], {
+            type: "application/json",
+          })
+        );
+        postRegistMutation.mutate(RegistData);
       },
       onError: () => {},
     }
@@ -417,51 +442,49 @@ const RecipeRegisterPage = (props: any) => {
       onSuccess: (res) => {
         console.log(res);
       },
-      onError: () => {},
+      onError: (e) => {
+        console.log(e);
+      },
     }
   );
 
   const stepDelete = (index: number) => {
-    if (isModify) {
+    console.log(
+      "stepDelete :",
+      isModify,
+      stepMethods.getValues(`boardRequestDtoStepRecipe.${index}.fromServer`)
+    );
+    if (
+      stepMethods.getValues(`boardRequestDtoStepRecipe.${index}.fromServer`)
+    ) {
       const formData = new FormData();
-      formData.append("boardId", String(boardId));
-      formData.append("stepNum", String(index));
+      formData.append(
+        "boardId",
+        new Blob([JSON.stringify(boardId)], {
+          type: "application/json",
+        })
+      );
+      formData.append(
+        "stepNum",
+        new Blob([JSON.stringify(index)], {
+          type: "application/json",
+        })
+      );
       deleteStepMutation.mutate(formData);
     }
     stepRemove(index);
   };
-  const onSubmitStep = stepHandleSubmit((values) => {
+  const onSubmitStep = async (values: StepFormData) => {
     console.log(JSON.stringify(values, null, 2));
-
-    // 조리 과정은 이미지를 개별로 보내기 위해서 별도로 호출을 진행함
-    values.boardRequestDtoStepRecipe.map((step, index) => {
-      let boardRequestDtoStepRecipe = {
+    if (boardId) {
+      let stepFormData: StepFormDataWithId = {
         boardId: boardId,
-        recipeStepRequestDto: { stepNum: index, stepContent: step.stepContent },
+        boardRequestDtoStepRecipe: values.boardRequestDtoStepRecipe,
       };
-
-      const formData = new FormData();
-      formData.append("multipartFile", step.multipartFile);
-
-      formData.append(
-        "boardRequestDtoStepRecipe",
-        new Blob([JSON.stringify(boardRequestDtoStepRecipe)], {
-          type: "application/json",
-        })
-      );
-      // 동기 처리가 필요한지 고민이 필요함
-      // 동기 처리가 들어가는 경우 then의 형태로 이전 작업 결과여부에 따라 다음 작업 진행 여부 판별이 필요
-      // 만약 특정 작업이 실패한 경우 해당 위치에서부터 다시 작업하기 위한 상태값 관리 필요
-
-      if (isModify) putStepMutation.mutate(RegistData);
-      else postStepMutation.mutate(formData);
-    });
-
-    const RegistData = new FormData();
-    RegistData.append("boardId", JSON.stringify({ boardId: boardId }));
-    postRegistMutation.mutate(RegistData);
-  });
-
+      await loopStepMutation.mutate(stepFormData);
+    }
+  };
+  const onErrorStep = (errors: any, e: any) => console.log(errors, e);
   // 레시피 등록을 종료하기 위한 API
   const postRegistMutation = useMutation(
     (addData: FormData) => postRegistApi(addData),
@@ -469,7 +492,9 @@ const RecipeRegisterPage = (props: any) => {
       onSuccess: (res) => {
         console.log(res);
       },
-      onError: () => {},
+      onError: (e) => {
+        console.log(e);
+      },
     }
   );
 
@@ -483,53 +508,61 @@ const RecipeRegisterPage = (props: any) => {
         <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
           <div className="max-w-md mx-auto w-full">
             {registerStep === 1 ? (
-              <form onSubmit={onSubmitRecipe}>
-                <MainImgWrapperLabel>요리 메인 페이지</MainImgWrapperLabel>
+              <FormProvider {...recipeMethods}>
+                <form
+                  onSubmit={recipeHandleSubmit(onSubmitRecipe, onErrorRecipe)}
+                >
+                  <MainImgWrapperLabel>요리 메인 페이지</MainImgWrapperLabel>
 
-                <RegisterImage
-                  className="img-render"
-                  src={mainImageUrl}
-                  onClick={mainImageClick}
-                />
+                  <RegisterImage
+                    className="img-render"
+                    src={mainImageUrl}
+                    onClick={mainImageClick}
+                  />
 
-                <input
-                  type="file"
-                  {...recipeRegister("multipartFile", { required: true })}
-                  onChange={onSaveMainImageFile}
-                  accept="image/jpg,impge/png,image/jpeg"
-                  ref={mainImageRef}
-                  hidden
-                />
-                <input
-                  className="p-4 my-4 w-full rounded-md border border-gray-300"
-                  placeholder="요리 이름"
-                  {...recipeRegister("boardRequestDtoStepMain.title", {
-                    required: true,
-                  })}
-                />
-                <input
-                  className="p-4 my-4 w-full rounded-md border border-gray-300"
-                  placeholder="요리 소개"
-                  {...recipeRegister("boardRequestDtoStepMain.subTitle", {
-                    required: true,
-                  })}
-                />
+                  <input
+                    type="file"
+                    onChange={onSaveMainImageFile}
+                    accept="image/jpg,impge/png,image/jpeg"
+                    ref={mainImageRef}
+                    hidden
+                  />
+                  <input
+                    className="p-4 my-4 w-full rounded-md border border-gray-300"
+                    placeholder="요리 이름"
+                    {...recipeRegister("boardRequestDtoStepMain.title", {
+                      required: true,
+                    })}
+                  />
+                  <input
+                    className="p-4 my-4 w-full rounded-md border border-gray-300"
+                    placeholder="요리 소개"
+                    {...recipeRegister("boardRequestDtoStepMain.subTitle", {
+                      required: true,
+                    })}
+                  />
 
-                <textarea
-                  className="p-4 my-4 w-full rounded-md border border-gray-300"
-                  placeholder="요리 설명"
-                  rows={10}
-                  {...recipeRegister("boardRequestDtoStepMain.content", {
-                    required: true,
-                  })}
-                />
-                <Button styleCustom={{ margin: "10px 0 0 0" }}>
-                  <div>등록하기</div>
-                </Button>
-              </form>
+                  <textarea
+                    className="p-4 my-4 w-full rounded-md border border-gray-300"
+                    placeholder="요리 설명"
+                    rows={10}
+                    {...recipeRegister("boardRequestDtoStepMain.content", {
+                      required: true,
+                    })}
+                  />
+                  <div>
+                    <button type="submit">등록하기</button>
+                  </div>
+                </form>
+              </FormProvider>
             ) : registerStep === 2 ? (
               <FormProvider {...resourceMethods}>
-                <form onSubmit={onSubmitResource}>
+                <form
+                  onSubmit={resourceHandleSubmit(
+                    onSubmitResource,
+                    onErrorResource
+                  )}
+                >
                   <RegisterTitle>
                     <Button
                       styleCustom={{}}
@@ -567,18 +600,10 @@ const RecipeRegisterPage = (props: any) => {
               </FormProvider>
             ) : (
               <FormProvider {...stepMethods}>
-                <form onSubmit={onSubmitStep}>
+                <form onSubmit={stepHandleSubmit(onSubmitStep, onErrorStep)}>
                   <RegisterTitle margin={"30px 0 0 0"}>
                     조리 과정
-                    <Button
-                      styleCustom={{}}
-                      onClick={() =>
-                        stepAppend({
-                          imageLink:
-                            "https://cdn.pixabay.com/photo/2016/03/21/05/05/plus-1270001_960_720.png",
-                        })
-                      }
-                    >
+                    <Button styleCustom={{}} onClick={() => stepAppend({})}>
                       <span>조리 과정 추가</span>
                     </Button>
                   </RegisterTitle>
@@ -598,9 +623,9 @@ const RecipeRegisterPage = (props: any) => {
                   >
                     <div>되돌아가기</div>
                   </Button>
-                  <Button styleCustom={{ margin: "10px 0 0 0" }}>
+                  <button type="submit">
                     <div>등록하기</div>
-                  </Button>
+                  </button>
                 </form>
               </FormProvider>
             )}
