@@ -49,7 +49,6 @@ const Header = () => {
   };
 
   const returnPageTitle = (pathName: RouterPages): RouterPageNames => {
-
     if (pathName === "/signInPage") {
       return "회원가입";
     } else if (pathName === "/signUpPage") {
@@ -91,12 +90,12 @@ const Header = () => {
         {windowDimenion.winWidth > 750 ? (
           <>
             <div className="mx-2 text-center">
-              <div
+              <LogoWrapper
                 className="font-extrabold xs:text-3xl md:text-3xl"
                 onPointerUp={goHome}
               >
                 LOGO
-              </div>
+              </LogoWrapper>
             </div>
             <UserIconWrapper
               className="img-render"
@@ -126,6 +125,10 @@ const Header = () => {
 };
 
 export default Header;
+
+const LogoWrapper = styled.div`
+  cursor: pointer;
+`;
 
 const MobileHeader = styled.header`
   width: 100%;

@@ -12,6 +12,7 @@
     "classnames": "^2.3.1",
     "js-cookie": "^3.0.1",
     "jwt-decode": "^3.1.2",
+    "react-datepicker": "^4.8.0",
     "react-dom": "18.2.0",
     "react-hook-form": "7.32.2",
     "react-query": "^3.39.1",
