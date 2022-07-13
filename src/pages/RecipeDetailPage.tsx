@@ -1,64 +1,52 @@
 import React, { Suspense, useEffect, useState } from "react";
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 
-import boardPostApi from "../apis/useBoardApi";
+import recipeApi from "../apis/RecipeApi";
 import userToken from "../recoil/userAtom";
-
-export type Recipe = {
-  title: string;
-  subTitle: string;
-  content: string;
-  userImg: string;
-};
-
-export type ResourceList = {
-  category: string;
-  resources: [
-    {
-      resourceName: string;
-      amount: string;
-    }
-  ];
-};
-
-export type StepList = {
-  stepNum: number;
-  content: string;
-  imageLink: string;
-};
+import { RecipeView, ResourceList, StepList } from "../type/recipeType";
+import { getToken, getNickname } from "../utils/jwt";
 
 const RecipeDetailPage = ({}) => {
+  // 공통 처리
+  const navigate = useNavigate();
   const location = useLocation();
   const state = location.state as { boardId: number };
 
-  const [boardId, setBoardId] = useState<number>(15);
-  const [recipe, setRecipe] = useState<Recipe>();
+  // 페이지 조회 처리
+  const userName = getNickname(getToken("userToken"));
+  const [userInfo, setUserInfo] = useState<RecipeView>();
+  const [boardId, setBoardId] = useState<number>(state.boardId);
+  const [recipe, setRecipe] = useState<RecipeView>();
   const [resourceList, setResourceList] = useState<ResourceList[]>([]);
   const [stepList, setStepList] = useState<StepList[]>([]);
+  const deleteRecipeApi = recipeApi.deleteRecipe;
 
   // 넘겨 받은 boardId를 이용해 해당 레시피의 상세 정보를 받아옴
   const { isLoading, data } = useQuery(
     ["postDetail", boardId],
-    async () => await boardPostApi.getPostDetail(boardId),
+    async () => await recipeApi.getRecipeDetail(boardId),
     {
       cacheTime: Infinity,
+      refetchOnWindowFocus: false,
       enabled: !!boardId,
       onSuccess: (e) => {
-        console.log("e.data:", e.data);
+        console.log("getRecipeDetail", e);
         // 레시피 정보 처리 단계
         setRecipe({
           title: e.data.title,
           subTitle: e.data.subTitle,
           content: e.data.content,
+          mainImg: e.data.mainImg,
+          nickname: e.data.nickname,
           userImg: e.data.userImg,
         });
 
         // 재료 정보 처리 단계
         // 화면에 그릴 때 Category 단위로 나눠서 map을 중첩해 사용하기 위해서 일치하는 Category 데이터끼리 묶음
-        const resourceListTemp = [...resourceList];
+        const resourceListTemp: ResourceList[] = [];
 
         //넘겨온 데이터에서 resource 내용을 열거함
         e.data.resourceResponseDtoList.map((fields: any, index: number) => {
@@ -89,7 +77,7 @@ const RecipeDetailPage = ({}) => {
         setResourceList(resourceListTemp);
 
         // 조리 과정 처리 단계
-        const stepListTemp = [...stepList];
+        const stepListTemp: StepList[] = [];
         e.data.recipeStepResponseDtoList.map((fields: any, index: number) => {
           stepListTemp[fields.stepNum] = fields;
         });
@@ -101,15 +89,48 @@ const RecipeDetailPage = ({}) => {
     }
   );
 
+  useEffect(() => {}, []);
+  // 수정 페이지 기능
+  const modifyRecipeDetail = () => {
+    navigate("/recipeRegisterPage", {
+      state: { boardId, recipe, resourceList, stepList, type: "modify" },
+    });
+  };
+
+  const putRecipeMutation = useMutation(
+    (boardId: number) => deleteRecipeApi(boardId),
+    {
+      onSuccess: (res) => {
+        navigate(-1);
+      },
+      onError: (e) => {
+        console.log("putRecipeMutation Error:", e);
+      },
+    }
+  );
+
+  // 삭제 버튼 클릭시 삭제
+  const deleteRecipeDetail = () => {
+    putRecipeMutation.mutate(boardId);
+  };
   return (
     <>
       <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
         <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
           <div className="max-w-md mx-auto w-full">
-            <RegisterImage className="img-render" src={recipe?.userImg} />
+            <RegisterImage className="img-render" src={recipe?.mainImg} />
             <p>{recipe?.title}</p>
             <p>{recipe?.subTitle}</p>
             <p>{recipe?.content}</p>
+            <button onClick={modifyRecipeDetail}>수정</button>
+            <button onClick={deleteRecipeDetail}>삭제</button>
+            {recipe?.nickname === userName && (
+              <>
+                <button onClick={modifyRecipeDetail}>수정</button>
+                <button onClick={deleteRecipeDetail}>삭제</button>
+              </>
+            )}
+
             <hr></hr>
 
             <RegisterTitle>
