@@ -1,10 +1,10 @@
 import React, { Suspense, useEffect, useState } from "react";
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 
-import boardPostApi from "../apis/RecipeApi";
+import recipeApi from "../apis/RecipeApi";
 import userToken from "../recoil/userAtom";
 import { RecipeView, ResourceList, StepList } from "../type/recipeType";
 import { getToken, getNickname } from "../utils/jwt";
@@ -22,11 +22,12 @@ const RecipeDetailPage = ({}) => {
   const [recipe, setRecipe] = useState<RecipeView>();
   const [resourceList, setResourceList] = useState<ResourceList[]>([]);
   const [stepList, setStepList] = useState<StepList[]>([]);
+  const deleteRecipeApi = recipeApi.deleteRecipe;
 
   // 넘겨 받은 boardId를 이용해 해당 레시피의 상세 정보를 받아옴
   const { isLoading, data } = useQuery(
     ["postDetail", boardId],
-    async () => await boardPostApi.getRecipeDetail(boardId),
+    async () => await recipeApi.getRecipeDetail(boardId),
     {
       cacheTime: Infinity,
       refetchOnWindowFocus: false,
@@ -96,10 +97,21 @@ const RecipeDetailPage = ({}) => {
     });
   };
 
+  const putRecipeMutation = useMutation(
+    (boardId: number) => deleteRecipeApi(boardId),
+    {
+      onSuccess: (res) => {
+        navigate(-1);
+      },
+      onError: (e) => {
+        console.log("putRecipeMutation Error:", e);
+      },
+    }
+  );
+
+  // 삭제 버튼 클릭시 삭제
   const deleteRecipeDetail = () => {
-    navigate("/recipeRegisterPage", {
-      state: { boardId, recipe, resourceList, stepList, type: "modify" },
-    });
+    putRecipeMutation.mutate(boardId);
   };
   return (
     <>

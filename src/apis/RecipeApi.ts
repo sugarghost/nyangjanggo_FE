@@ -131,6 +131,12 @@ export default {
     const res = await axiosInstance.get(`${board}/${boardId}`);
     return res;
   },
+  async deleteRecipe(boardId: number) {
+    const res = await authInstance.delete(`${board}/${boardId}`, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res;
+  },
 };
 
 const postStep = (payload: FormData) => {
