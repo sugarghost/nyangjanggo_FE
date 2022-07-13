@@ -123,6 +123,7 @@ const MainPage = () => {
       },
     }
   );
+  console.log(data);
   // 상세 페이지 기능
   const viewRecipeDetail = (boardId: number) => {
     navigate("/recipeDetailPage", { state: { boardId } });
@@ -237,20 +238,8 @@ const MainPage = () => {
                         key={index + "_" + subIndex}
                       >
                         <img src={content.mainImg} className="w-2/5"></img>
-                        <div className="w-full">
-                          <p>{content.title}</p>
-                          <p>{content.subTitle}</p>
-                          <div className="flex">
-                            <img
-                              className="w-40px h-40px place-self-center rounded-full m-1"
-                              src={content.userImg}
-                            ></img>{" "}
-                            <div>
-                              <p>{content.nickname}</p>좋아요:{" "}
-                              {content.goodCount}
-                            </div>
-                          </div>
-                        </div>
+                        <p className="text-sm">{content.title}</p>
+                        <p>{content.subTitle}</p>
                       </div>
                     ))}
                   </div>

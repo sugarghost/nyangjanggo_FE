@@ -57,5 +57,5 @@
   "msw": {
     "workerDirectory": "public"
   },
-  "proxy": "http://3.35.233.99"
+  "proxy": "http://13.125.36.183"
 }

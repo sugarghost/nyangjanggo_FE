@@ -88,7 +88,7 @@ const RecipeRegisterPage = () => {
 
   const [registerType, setRegisterType] = useState("Write");
   // 레시피 정보 등록, 재료 등록, 조리 과정 등록 페이지를 나누기 위한 상태값
-  const [registerStep, setRegisterStep] = useState(3);
+  const [registerStep, setRegisterStep] = useState(1);
   // step 1 이후 반환되는 boardId를 저장하고, step2->step1으로 이동 시 수정여부를 구분을 하기 위한 용도
   const [boardId, setBoardId] = useState<number>();
   // 레시피 정보 상태
