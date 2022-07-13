@@ -8,10 +8,7 @@ import React, {
   useCallback,
 } from "react";
 import { useInfiniteQuery, useQuery } from "react-query";
-import { useParams } from "react-router";
 import { useNavigate, useLocation } from "react-router-dom";
-import Slider from "react-slick";
-import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
 import boardPostApi from "../apis/RecipeApi";
@@ -68,14 +65,6 @@ const MainPage = () => {
   const [isSearchedValue, setIsSearchedValue] = useState<boolean>(false);
   const [searchedList, setSearchedList] = useState(wholeTextArray);
   const [searchedItemIndex, setSearchedItemIndex] = useState(-1);
-
-  const sliderSettings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-  };
 
   // 게시글 목록 기능
   const chagneMode = () => {
@@ -228,28 +217,28 @@ const MainPage = () => {
                 )}
               </div>
               <hr />
-              <Slider {...sliderSettings}>
-                {data?.pages?.map((page, index) => (
-                  <div key={index}>
-                    {page.content.map((content: any, subIndex: number) => (
-                      <div
-                        className="flex my-2"
-                        onClick={(e) => viewRecipeDetail(content.boardId)}
-                        key={index + "_" + subIndex}
-                      >
-                        <img src={content.mainImg} className="w-2/5"></img>
-                        <p className="text-sm">{content.title}</p>
+              {data?.pages?.map((page, index) => (
+                <div key={index}>
+                  {page.content.map((content: any, subIndex: number) => (
+                    <div
+                      className="flex my-2"
+                      onClick={(e) => viewRecipeDetail(content.boardId)}
+                      key={index + "_" + subIndex}
+                    >
+                      <img src={content.mainImg} className="w-2/5"></img>
+                      <div className="w-full">
+                        <p>{content.title}</p>
                         <p>{content.subTitle}</p>
+                        <div className="flex">
+                          <div>
+                            <p>{content.nickname}</p>좋아요: {content.goodCount}
+                          </div>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                ))}
-              </Slider>
-              <div className="h-screen-xl">테스트</div>
-              <div className="h-screen-xl">테스트</div>
-              <div className="h-screen-xl">테스트</div>
-              <div className="h-screen-xl">테스트</div>
-              <div className="h-screen-xl">테스트</div>
+                    </div>
+                  ))}
+                </div>
+              ))}
               {status == "loading" ? (
                 <div className="py-3 text-center">로딩 중</div>
               ) : (
