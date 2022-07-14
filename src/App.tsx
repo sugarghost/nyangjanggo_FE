@@ -24,11 +24,12 @@ const queryClient = new QueryClient();
 function App() {
   useLayoutEffect(() => {
     const access_token = window.location.href.split("token=")[1];
+    const isOauthPage = window.location.href.includes("oauth2");
 
-    if (access_token) {
-      localStorage.clear();
-      localStorage.setItem("token", access_token);
-      axios.defaults.headers.common["accessToken"] = access_token;
+    if (isOauthPage) {
+      // localStorage.clear();
+      // localStorage.setItem("token", access_token);
+      // axios.defaults.headers.common["accessToken"] = access_token;
 
       var req = new XMLHttpRequest();
       // @ts-ignore
@@ -37,7 +38,7 @@ function App() {
       var headers = req.getAllResponseHeaders().toLowerCase();
       alert(headers);
 
-      window.location.replace("/");
+      //window.location.replace("/");
     }
 
     if (localStorage.getItem("token")) {
