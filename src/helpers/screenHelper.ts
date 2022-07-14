@@ -1,13 +1,11 @@
-export const getNowUrl = () => {
-  return window.location.pathname;
-};
+export const getNowUrl = () => window.location.pathname;
 
 export const isUserPath = (path: string) => {
   if (path.split("/")[1] === "users") {
     return true;
-  } else {
+  } 
     return false;
-  }
+  
 };
 
 export const renderHelper = (segment: string, segments: string[]): boolean => {

@@ -31,9 +31,7 @@ const UserEditProfile = () => {
       method: "PUT",
       url: `/user`,
       mode: "cors",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+      headers: {"Content-Type": "multipart/form-data",},
       data: formData,
     });
 
@@ -54,7 +52,7 @@ const UserEditProfile = () => {
         <div className="max-w-md mx-auto w-full">
           <ProfileImageUploader
             setProfileImageFile={setProfileImageFile}
-          ></ProfileImageUploader>
+           />
 
           <InputV2
             inputLabel="닉네임"

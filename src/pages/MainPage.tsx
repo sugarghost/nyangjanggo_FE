@@ -15,8 +15,8 @@ import boardPostApi from "../apis/RecipeApi";
 import useIntersectionObserver from "../hook/intersectionObserver";
 
 export type Pageable = {
-  page: Number;
-  size: Number;
+  page: number;
+  size: number;
   sort: string;
 };
 
@@ -104,7 +104,7 @@ const MainPage = () => {
       "infinitePosts",
       // pageParam(페이지 번호)를 파라미터로 axios 실행을 위한 fetchPostList를 실행
       // 페이지 번호는 getNextPageParam을 통해 1씩 증가하다가 마지막 도달 시 undefined로 작동을 멈춤
-      async ({ pageParam = 0 }) => await fetchPostList(pageParam),
+      async ({ pageParam = 0 }) => fetchPostList(pageParam),
       {
         refetchOnWindowFocus: false,
         getNextPageParam: (lastPage, pages) => {
@@ -143,7 +143,7 @@ const MainPage = () => {
   };
 
   const handleDropDownKey = (event: any) => {
-    //input에 값이 있을때만 작동
+    // input에 값이 있을때만 작동
     if (isSearchedValue) {
       if (
         event.key === "ArrowDown" &&
@@ -196,8 +196,7 @@ const MainPage = () => {
                     {searchedList.length === 0 && (
                       <DropDownItem>해당하는 단어가 없습니다</DropDownItem>
                     )}
-                    {searchedList.map((searchedItem, searchedIndex) => {
-                      return (
+                    {searchedList.map((searchedItem, searchedIndex) => (
                         <DropDownItem
                           key={searchedIndex}
                           onClick={() => clickDropDownItem(searchedItem)}
@@ -212,8 +211,7 @@ const MainPage = () => {
                         >
                           {searchedItem}
                         </DropDownItem>
-                      );
-                    })}
+                      ))}
                   </DropDownBox>
                 )}
               </div>
@@ -224,9 +222,9 @@ const MainPage = () => {
                     <div
                       className="flex my-2"
                       onClick={(e) => viewRecipeDetail(content.boardId)}
-                      key={index + "_" + subIndex}
+                      key={`${index  }_${  subIndex}`}
                     >
-                      <img src={content.mainImg} className="w-2/5"></img>
+                      <img src={content.mainImg} className="w-2/5" />
                       <div className="w-full">
                         <p>{content.title}</p>
                         <p>{content.subTitle}</p>
@@ -243,7 +241,7 @@ const MainPage = () => {
               {isFetchingNextPage ? (
                 <div className="py-3 text-center">로딩 중</div>
               ) : hasNextPage ? (
-                <div ref={setTarget} className="py-3 text-center"></div>
+                <div ref={setTarget} className="py-3 text-center" />
               ) : (
                 <></>
               )}

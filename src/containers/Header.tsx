@@ -51,17 +51,17 @@ const Header = () => {
   const returnPageTitle = (pathName: RouterPages): RouterPageNames => {
     if (pathName === "/signInPage") {
       return "회원가입";
-    } else if (pathName === "/signUpPage") {
+    } if (pathName === "/signUpPage") {
       return "";
-    } else if (pathName === "/recipeDetailPage") {
+    } if (pathName === "/recipeDetailPage") {
       return "상세보기";
-    } else if (pathName === "/recipeRegisterPage") {
+    } if (pathName === "/recipeRegisterPage") {
       return "등록하기";
-    } else if (pathName === "/myPage") {
+    } if (pathName === "/myPage") {
       return "마이페이지";
-    } else if (pathName === "/myPage/myRefrigeratorPage") {
+    } if (pathName === "/myPage/myRefrigeratorPage") {
       return "MY 냉장고";
-    } else if (pathName === "/") {
+    } if (pathName === "/") {
       return "";
     }
 
@@ -109,7 +109,7 @@ const Header = () => {
               onClick={() => {
                 navigate(-1);
               }}
-            ></BackButton>
+             />
             <MobileHeaderTitle>{pageTitle}</MobileHeaderTitle>
             {/* <div>&nbsp;&nbsp;</div> */}
             <UserIconWrapper

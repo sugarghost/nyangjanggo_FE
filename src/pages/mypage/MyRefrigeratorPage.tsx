@@ -37,8 +37,7 @@ const MyRefrigeratorPage = () => {
     const res = axiosInstance.post(``);
   };
   return (
-    <>
-      <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
+    <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
         <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
           <div className="mx-auto w-full" style={{ padding: "0px 10px" }}>
             <OptionsWrapper>
@@ -58,7 +57,7 @@ const MyRefrigeratorPage = () => {
                     onChange={handleOnChangeIngredientCount}
                     value={ingredientCount}
                     placeholder="재료 수량"
-                    type={"number"}
+                    type="number"
                   />
                   {/* <DatePicker
                     selected={startDate}
@@ -66,15 +65,13 @@ const MyRefrigeratorPage = () => {
                   /> */}
                 </>
               ) : (
-                <>
-                  <IngredientsBox className="">
+                <IngredientsBox className="">
                     <div>
                       06/01
                       <span style={{ margin: "0 0 0 20px" }}>달걀(6개)</span>
                     </div>
                     <div>10일 남음</div>
                   </IngredientsBox>
-                </>
               )}
 
               <Calendar />
@@ -89,7 +86,6 @@ const MyRefrigeratorPage = () => {
           </BottomFloat>
         )}
       </div>
-    </>
   );
 };
 

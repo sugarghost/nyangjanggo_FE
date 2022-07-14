@@ -1,42 +1,36 @@
-import {
-  faHouse,
-  faBoxArchive,
-  faPen,
-  faHeart,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { faHouse, faBoxArchive, faPen, faHeart, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-import "../styles/footer.css";
+import '../styles/footer.css';
 
-const Footer = () => {
+function Footer() {
   const navigate = useNavigate();
 
   // 홈 버튼
   const homeButtonClick = () => {
-    navigate("/");
+    navigate('/');
   };
 
   // 냉장고 버튼
   const frigeButtonClick = () => {
-    navigate("/");
+    navigate('/');
   };
 
   // 레시피 버튼
   const recipeButtonClick = () => {
-    navigate("/recipeRegisterPage");
+    navigate('/recipeRegisterPage');
   };
 
   // 좋아요 버튼
   const likeButtonClick = () => {
-    navigate("/");
+    navigate('/');
   };
 
   // 내정보 버튼
   const myInfoButtonClick = () => {
-    navigate("/myPage");
+    navigate('/myPage');
   };
 
   return (
@@ -65,6 +59,6 @@ const Footer = () => {
       </div>
     </footer>
   );
-};
+}
 
 export default Footer;
