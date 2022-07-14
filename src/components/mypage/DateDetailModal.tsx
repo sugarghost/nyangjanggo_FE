@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { axiosInstance } from "../../apis/axiosInstance";
 import styled from "styled-components";
+import { axiosInstance } from "../../apis/axiosInstance";
 
 interface IProps {
   onClick?: (e: React.MouseEvent) => void;
@@ -12,18 +12,16 @@ const DateDetailModal = (props: IProps) => {
   const { handleOnClose, selectedDate } = props;
 
   useEffect(() => {
-    //TODO 
+    // TODO 
   }, []);
 
   return (
-    <>
-      <div className="detail-menu-modal box-shadow">
+    <div className="detail-menu-modal box-shadow">
         <div>{selectedDate}</div>
         <div className="detail-model-submit">
           <button onClick={handleOnClose}>닫기</button>
         </div>
       </div>
-    </>
   );
 };
 

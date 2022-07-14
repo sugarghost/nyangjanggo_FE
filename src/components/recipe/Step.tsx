@@ -20,7 +20,7 @@ const Step = ({ index, onDelete }: StepProps) => {
 
   const fileRef = useRef<any>();
 
-  //src에 직접 값을 지정하고 state로 setImageUrl을 사용해봐도 렌더링이 되지 않아서 Effect를 등록함
+  // src에 직접 값을 지정하고 state로 setImageUrl을 사용해봐도 렌더링이 되지 않아서 Effect를 등록함
   useEffect(() => {}, [imageUrl]);
 
   // 조리 이미지 클릭 시 Click 이벤트를 연결된 input 요소로 옮겨줌
@@ -56,9 +56,7 @@ const Step = ({ index, onDelete }: StepProps) => {
       </div>
       <div className="flex justify-between w-full mb-4">
         <input
-          {...register(`boardRequestDtoStepRecipe.${index}.stepNum`, {
-            required: true,
-          })}
+          {...register(`boardRequestDtoStepRecipe.${index}.stepNum`, {required: true,})}
           value={index}
           hidden
         />
@@ -80,10 +78,8 @@ const Step = ({ index, onDelete }: StepProps) => {
         <textarea
           className="w-4/6 ml-4 border-gray-200 border-2 rounded-md p-1"
           placeholder="조리 과정을 알려주세요!"
-          {...register(`boardRequestDtoStepRecipe.${index}.stepContent`, {
-            required: true,
-          })}
-        ></textarea>
+          {...register(`boardRequestDtoStepRecipe.${index}.stepContent`, {required: true,})}
+         />
       </div>
     </>
   );

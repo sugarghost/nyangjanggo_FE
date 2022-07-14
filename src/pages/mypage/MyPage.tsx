@@ -1,65 +1,52 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
-const MyPage = () => {
+function MyPage() {
   const navigate = useNavigate();
   const goMyRefrigeratorPage = () => {
-    navigate("/myPage/myRefrigeratorPage");
+    navigate('/myPage/myRefrigeratorPage');
   };
 
   const goUserEditPage = () => {
-    navigate("/myPage/userEditPage");
+    navigate('/myPage/userEditPage');
   };
 
-  const [profileImage, setProfileImage] = useState(
-    "https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg"
-  );
+  const [profileImage, setProfileImage] = useState('https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg');
 
   const handleOnClickLogOut = () => {
     localStorage.clear();
-    navigate("/");
+    navigate('/');
   };
 
   return (
-    <>
-      <div
-        className="bg-secondary-1 min-h-screen bg-white dark:bg-gray-900"
-        style={{ padding: "0px 10px" }}
-      >
-        <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-          <div className="max-w-md mx-auto w-full">
-            <UserMainInfoWrapper className="min-width-400">
-              <ProfileImage className="img-render" src={profileImage} />
-              <ProfileInfo>
-                <div
-                  style={{ fontWeight: "bold", fontSize: "24px" }}
-                  className="text-aling-left"
-                >
-                  닉네임
-                </div>
-                <div
-                  style={{ margin: "5px 0 0 0" }}
-                  className="text-aling-left"
-                >
-                  뭐들어가지
-                </div>
-              </ProfileInfo>
-            </UserMainInfoWrapper>
-            <OptionsWrapper>
-              <OptionBox onClick={goUserEditPage}>정보 수정</OptionBox>
-              <OptionBox onClick={goMyRefrigeratorPage} className="">
-                냉장고
-              </OptionBox>
-              <OptionBox className="">이건뭘까</OptionBox>
-            </OptionsWrapper>
-            <LogOutButton onClick={handleOnClickLogOut}>로그아웃</LogOutButton>
-          </div>
+    <div className="bg-secondary-1 min-h-screen bg-white dark:bg-gray-900" style={{ padding: '0px 10px' }}>
+      <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
+        <div className="max-w-md mx-auto w-full">
+          <UserMainInfoWrapper className="min-width-400">
+            <ProfileImage className="img-render" src={profileImage} />
+            <ProfileInfo>
+              <div style={{ fontWeight: 'bold', fontSize: '24px' }} className="text-aling-left">
+                닉네임
+              </div>
+              <div style={{ margin: '5px 0 0 0' }} className="text-aling-left">
+                뭐들어가지
+              </div>
+            </ProfileInfo>
+          </UserMainInfoWrapper>
+          <OptionsWrapper>
+            <OptionBox onClick={goUserEditPage}>정보 수정</OptionBox>
+            <OptionBox onClick={goMyRefrigeratorPage} className="">
+              냉장고
+            </OptionBox>
+            <OptionBox className="">이건뭘까</OptionBox>
+          </OptionsWrapper>
+          <LogOutButton onClick={handleOnClickLogOut}>로그아웃</LogOutButton>
         </div>
       </div>
-    </>
+    </div>
   );
-};
+}
 
 export default MyPage;
 

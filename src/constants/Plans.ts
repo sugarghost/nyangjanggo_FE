@@ -68,8 +68,8 @@ export interface ILicense {
   limits: ILicenseLimit[];
 }
 
-//공개 비공개 여부
-//한도 초과에 대한 처리 방식 / 제한 또는 집계
+// 공개 비공개 여부
+// 한도 초과에 대한 처리 방식 / 제한 또는 집계
 export interface IPlan {
   id: string; // 요금제 ID
   title: string; // 요금제 이름
@@ -316,9 +316,9 @@ export const getMonthlyPrice = (plan: IPlan) => {
     return (
       (originalPriceWithTax * (100 - promotion.value)) / 100 / periodMonths
     );
-  } else {
+  } 
     return originalPriceWithTax;
-  }
+  
 };
 
 export const getDiscountedPrice = (plan: IPlan) => {
@@ -327,9 +327,9 @@ export const getDiscountedPrice = (plan: IPlan) => {
 
   if (promotion && promotion.type === PROMOTION_TYPE.DISCOUNT_PERCENT) {
     return (originalPriceWithTax * (100 - promotion.value)) / 100;
-  } else {
+  } 
     return originalPriceWithTax;
-  }
+  
 };
 
 export const getOriginalPriceWithTax = (plan: IPlan) => {

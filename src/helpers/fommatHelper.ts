@@ -11,7 +11,7 @@ export const phoneNumberFormatter = (nationalCode: string, phoneNumber: string) 
 export const emailFormatter = (email:string, emailDomain:string) => {
 
   if (emailDomain.substr(0, 1) !== "@") {
-    emailDomain = "@" + emailDomain;
+    emailDomain = `@${  emailDomain}`;
   }
 
   return email + emailDomain;

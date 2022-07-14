@@ -42,17 +42,13 @@ const Category = ({ name, index, onDelete }: CategoryProps) => {
               className="float-left text-base w-1/3 my-1 font-400"
               defaultValue={item.resourceName}
               placeholder="재료명"
-              {...register(`categories.${index}.resources.${i}.resourceName`, {
-                required: true,
-              })}
+              {...register(`categories.${index}.resources.${i}.resourceName`, {required: true,})}
             />
             <input
               className="float-left text-base w-1/3 my-1 font-400"
               defaultValue={item.amount}
               placeholder="재료량"
-              {...register(`categories.${index}.resources.${i}.amount`, {
-                required: true,
-              })}
+              {...register(`categories.${index}.resources.${i}.amount`, {required: true,})}
             />
             <span className="float-right" onClick={() => remove(i)}>
               <FontAwesomeIcon icon={faMinus} color="grey" size="sm" />

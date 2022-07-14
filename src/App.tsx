@@ -1,55 +1,56 @@
-import axios from "axios";
-import React, { Suspense, useEffect, useLayoutEffect } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import axios from 'axios';
+import React, { Suspense, useEffect, useLayoutEffect } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import "./App.css";
-import { refreshToken } from "./apis/AuthApi";
-import Footer from "./containers/Footer";
-import Header from "./containers/Header";
-import MainPage from "./pages/MainPage";
-import RecipeDetailPage from "./pages/RecipeDetailPage";
-import RecipeRegisterPage from "./pages/RecipeRegisterPage";
-import SignInPage from "./pages/SignInPage";
-import SignUpPage from "./pages/SignUpPage";
-import TestPage from "./pages/TestPage";
-import MyPage from "./pages/mypage/MyPage";
-import MyRefrigeratorPage from "./pages/mypage/MyRefrigeratorPage";
-import UserEditProfile from "./pages/mypage/UserEditProfile";
-import { isExp } from "./utils/jwt";
-import PrivateRoutes from "./utils/privateRoutes";
+import './App.css';
+import { refreshToken } from './apis/AuthApi';
+import Footer from './containers/Footer';
+import Header from './containers/Header';
+import MainPage from './pages/MainPage';
+import RecipeDetailPage from './pages/RecipeDetailPage';
+import RecipeRegisterPage from './pages/RecipeRegisterPage';
+import SignInPage from './pages/SignInPage';
+import SignUpPage from './pages/SignUpPage';
+import TestPage from './pages/TestPage';
+import MyPage from './pages/mypage/MyPage';
+import MyRefrigeratorPage from './pages/mypage/MyRefrigeratorPage';
+import UserEditProfile from './pages/mypage/UserEditProfile';
+import { isExp } from './utils/jwt';
+import PrivateRoutes from './utils/privateRoutes';
 
 const queryClient = new QueryClient();
 
 function App() {
   useLayoutEffect(() => {
-    const access_token = window.location.href.split("token=")[1];
-    const isOauthPage = window.location.href.includes("oauth2");
+    const userInfoArr = window.location.href.split('&');
 
-    if (isOauthPage) {
-      // localStorage.clear();
-      // localStorage.setItem("token", access_token);
-      // axios.defaults.headers.common["accessToken"] = access_token;
+    // console.log(access_token)
+    if (userInfoArr.length > 2) {
+      const access_token = userInfoArr[0].split('?')[1].replace('Access-Token=', '');
+      const refreshToken = userInfoArr[1].replace('Refresh-Token=', '');
+      const isNew = userInfoArr[2].replace('isNew=', '');
+      
+      localStorage.clear();
+      localStorage.setItem('token', access_token);
+      localStorage.setItem('refreshToken', refreshToken);
 
-      var req = new XMLHttpRequest();
-      // @ts-ignore
-      req.open("GET", document.location, false);
-      req.send(null);
-      var headers = req.getAllResponseHeaders().toLowerCase();
-      alert(headers);
-
-      //window.location.replace("/");
-    }
-
-    if (localStorage.getItem("token")) {
-      const token = localStorage.getItem("token") as string;
-      axios.defaults.headers.common["accessToken"] = token;
-
-      console.log(isExp(token));
-      if (isExp(token)) {
-        refreshToken();
+      axios.defaults.headers.common.accessToken = access_token;
+      if (isNew === 'true') {
+        window.location.replace('/myPage/userEditPage');
       }
+      window.location.replace('/');
     }
+
+    // if (localStorage.getItem('token')) {
+    //   const token = localStorage.getItem('token') as string;
+    //   axios.defaults.headers.common.accessToken = token;
+
+    //   console.log(isExp(token));
+    //   if (isExp(token)) {
+    //     refreshToken();
+    //   }
+    // }
   }, []);
 
   return (
@@ -57,7 +58,7 @@ function App() {
       <BrowserRouter>
         <div className="App">
           {
-            //<Header />
+            // <Header />
           }
           {/* <div className="bg-secondary-1 flex items-center min-h-screen bg-white dark:bg-gray-900">
             <div className="container max-w-screen-lg xl:max-w-screen-xl mx-auto">
@@ -70,22 +71,13 @@ function App() {
             <Route path="/recipeDetailPage" element={<RecipeDetailPage />} />
 
             {/* 로그인이 필요한 페이지 */}
-            <Route element={<PrivateRoutes authentication={true} />}> 
-              <Route
-                path="/recipeRegisterPage"
-                element={<RecipeRegisterPage />}
-              />
+            <Route element={<PrivateRoutes authentication />}>
+              <Route path="/recipeRegisterPage" element={<RecipeRegisterPage />} />
               <Route path="/myPage" element={<MyPage />} />
-              <Route
-                path="/myPage/myRefrigeratorPage"
-                element={<MyRefrigeratorPage />}
-              />
+              <Route path="/myPage/myRefrigeratorPage" element={<MyRefrigeratorPage />} />
 
-              <Route
-                path="/myPage/userEditPage"
-                element={<UserEditProfile />}
-              />
-            </Route> 
+              <Route path="/myPage/userEditPage" element={<UserEditProfile />} />
+            </Route>
           </Routes>
           {/* </div>
             </div>
