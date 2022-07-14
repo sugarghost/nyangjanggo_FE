@@ -46,7 +46,7 @@ const SignUpPage = () => {
                   http://back-end-server/oauth2/authorization/kakao,
                   http://back-end-server/oauth2/authorization/naver
                 */}
-                <a href="http://3.35.233.99/oauth2/authorization/kakao">
+                <a href="http://13.125.36.183//oauth2/authorization/kakao">
                   <div>Sign In with Kakao</div>
                 </a>
                 {/* <div onClick={kakaoAuth}>카카오 로그인</div> */}
@@ -59,7 +59,7 @@ const SignUpPage = () => {
                 }}
                 onClick={() => {}}
               >
-                <a href="http://3.35.233.99/oauth2/authorization/naver">
+                <a href="http://13.125.36.183//oauth2/authorization/naver">
                   <div>Sign In with Naver</div>
                 </a>
               </Button>

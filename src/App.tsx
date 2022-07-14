@@ -55,7 +55,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <div className="App">
-          <Header />
+          {
+            //<Header />
+          }
           {/* <div className="bg-secondary-1 flex items-center min-h-screen bg-white dark:bg-gray-900">
             <div className="container max-w-screen-lg xl:max-w-screen-xl mx-auto">
               <div className="max-w-md mx-auto my-10 w-full"> */}
@@ -87,7 +89,7 @@ function App() {
           {/* </div>
             </div>
           </div> */}
-          {/* <Footer /> */}
+          <Footer />
         </div>
       </BrowserRouter>
     </QueryClientProvider>

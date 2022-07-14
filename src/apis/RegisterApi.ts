@@ -1,6 +1,6 @@
 import { axiosInstance } from "./axiosInstance";
 
-export const registerRecipe = async (payload) => {
+export const registerRecipe = async () => {
   try {
     const res = await axiosInstance.post(``, {});
     return res.data;
