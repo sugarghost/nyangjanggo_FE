@@ -99,19 +99,20 @@ const MainPage = () => {
   };
 
   // 무한 스크롤을 위해 useInfiniteQuery를 사용함,
-  const { data, status, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
-    "infinitePosts",
-    // pageParam(페이지 번호)를 파라미터로 axios 실행을 위한 fetchPostList를 실행
-    // 페이지 번호는 getNextPageParam을 통해 1씩 증가하다가 마지막 도달 시 undefined로 작동을 멈춤
-    async ({ pageParam = 0 }) => await fetchPostList(pageParam),
-    {
-      refetchOnWindowFocus: false,
-      getNextPageParam: (lastPage, pages) => {
-        if (!lastPage.last) return lastPage.nextPage;
-        return undefined;
-      },
-    }
-  );
+  const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } =
+    useInfiniteQuery(
+      "infinitePosts",
+      // pageParam(페이지 번호)를 파라미터로 axios 실행을 위한 fetchPostList를 실행
+      // 페이지 번호는 getNextPageParam을 통해 1씩 증가하다가 마지막 도달 시 undefined로 작동을 멈춤
+      async ({ pageParam = 0 }) => await fetchPostList(pageParam),
+      {
+        refetchOnWindowFocus: false,
+        getNextPageParam: (lastPage, pages) => {
+          if (!lastPage.last) return lastPage.nextPage;
+          return undefined;
+        },
+      }
+    );
   console.log(data);
   // 상세 페이지 기능
   const viewRecipeDetail = (boardId: number) => {
@@ -239,12 +240,14 @@ const MainPage = () => {
                   ))}
                 </div>
               ))}
-              {status == "loading" ? (
+              {isFetchingNextPage ? (
                 <div className="py-3 text-center">로딩 중</div>
+              ) : hasNextPage ? (
+                <div ref={setTarget} className="py-3 text-center"></div>
               ) : (
                 <></>
               )}
-              <div ref={setTarget} className="py-3 text-center"></div>
+
               <hr />
             </div>
           </div>
