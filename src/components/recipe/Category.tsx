@@ -1,3 +1,5 @@
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import styled from "styled-components";
@@ -21,43 +23,48 @@ const Category = ({ name, index, onDelete }: CategoryProps) => {
     onDelete();
   };
   return (
-    <IngredientsWrapper className="box-shadow">
-      <IngredientTitle>
+    <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
+      <div className="mb-4">
         <input
           defaultValue={name}
           placeholder="재료 분류"
+          className="text-lg my-1 font-500 float-left"
           {...register(`categories.${index}.name`, { required: true })}
         />
-        <input type="button" onClick={deleteCategory} value="삭제" />
-      </IngredientTitle>
+        <span className="float-right" onClick={deleteCategory}>
+          <FontAwesomeIcon icon={faMinus} color="grey" size="lg" />
+        </span>
+      </div>
       {fields.map((item, i) => (
         <div key={item.id}>
-          <IngredientInfoWrapper>
-            <div className="float-left">
-              <input
-                defaultValue={item.resourceName}
-                placeholder="재료명"
-                {...register(
-                  `categories.${index}.resources.${i}.resourceName`,
-                  {
-                    required: true,
-                  }
-                )}
-              />
-              <input
-                defaultValue={item.amount}
-                placeholder="재료량"
-                {...register(`categories.${index}.resources.${i}.amount`, {
-                  required: true,
-                })}
-              />
-              <input type="button" onClick={() => remove(i)} value="삭제" />
-            </div>
-          </IngredientInfoWrapper>
+          <div className="flex justify-between w-full">
+            <input
+              className="float-left text-base w-1/3 my-1 font-400"
+              defaultValue={item.resourceName}
+              placeholder="재료명"
+              {...register(`categories.${index}.resources.${i}.resourceName`, {
+                required: true,
+              })}
+            />
+            <input
+              className="float-left text-base w-1/3 my-1 font-400"
+              defaultValue={item.amount}
+              placeholder="재료량"
+              {...register(`categories.${index}.resources.${i}.amount`, {
+                required: true,
+              })}
+            />
+            <span className="float-right" onClick={() => remove(i)}>
+              <FontAwesomeIcon icon={faMinus} color="grey" size="sm" />
+            </span>
+          </div>
+          <hr />
         </div>
       ))}
-      <input type="button" onClick={() => append({})} value="재료 추가" />
-    </IngredientsWrapper>
+      <p className="mt-2" onClick={() => append({})}>
+        <FontAwesomeIcon icon={faPlus} color="grey" size="lg" />
+      </p>
+    </div>
   );
 };
 
