@@ -69,7 +69,7 @@ export default Button;
 const ButtonWrapper = styled.button<any>`
   background-color: ${(props) => props.styleCustom?.background ?? "grey"};
   color: ${(props) => props.styleCustom?.color ?? "white"};
-  border-radius: ${(props) => props.styleCustom?.borderRadius ?? "8px"};
+  border-radius: ${(props) => props.styleCustom?.borderRadius ?? "4px"};
   padding: ${(props) => props.styleCustom?.padding ?? "0 16px"};
   order: 2;
   display: ${(props) => (props.isIcon ? "flex" : "block")};

@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "./App.css";
+import { refreshToken } from "./apis/AuthApi";
 import Footer from "./containers/Footer";
 import Header from "./containers/Header";
 import MainPage from "./pages/MainPage";
@@ -14,6 +15,8 @@ import SignUpPage from "./pages/SignUpPage";
 import TestPage from "./pages/TestPage";
 import MyPage from "./pages/mypage/MyPage";
 import MyRefrigeratorPage from "./pages/mypage/MyRefrigeratorPage";
+import UserEditProfile from "./pages/mypage/UserEditProfile";
+import { isExp } from "./utils/jwt";
 import PrivateRoutes from "./utils/privateRoutes";
 
 const queryClient = new QueryClient();
@@ -26,7 +29,25 @@ function App() {
       localStorage.clear();
       localStorage.setItem("token", access_token);
       axios.defaults.headers.common["accessToken"] = access_token;
+
+      var req = new XMLHttpRequest();
+      // @ts-ignore
+      req.open("GET", document.location, false);
+      req.send(null);
+      var headers = req.getAllResponseHeaders().toLowerCase();
+      alert(headers);
+
       window.location.replace("/");
+    }
+
+    if (localStorage.getItem("token")) {
+      const token = localStorage.getItem("token") as string;
+      axios.defaults.headers.common["accessToken"] = token;
+
+      console.log(isExp(token));
+      if (isExp(token)) {
+        refreshToken();
+      }
     }
   }, []);
 
@@ -48,7 +69,7 @@ function App() {
             <Route path="/recipeDetailPage" element={<RecipeDetailPage />} />
 
             {/* 로그인이 필요한 페이지 */}
-            <Route element={<PrivateRoutes authentication={true} />}>
+            <Route element={<PrivateRoutes authentication={true} />}> 
               <Route
                 path="/recipeRegisterPage"
                 element={<RecipeRegisterPage />}
@@ -58,7 +79,12 @@ function App() {
                 path="/myPage/myRefrigeratorPage"
                 element={<MyRefrigeratorPage />}
               />
-            </Route>
+
+              <Route
+                path="/myPage/userEditPage"
+                element={<UserEditProfile />}
+              />
+            </Route> 
           </Routes>
           {/* </div>
             </div>

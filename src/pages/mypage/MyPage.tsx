@@ -8,13 +8,25 @@ const MyPage = () => {
     navigate("/myPage/myRefrigeratorPage");
   };
 
+  const goUserEditPage = () => {
+    navigate("/myPage/userEditPage");
+  };
+
   const [profileImage, setProfileImage] = useState(
     "https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg"
   );
 
+  const handleOnClickLogOut = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+
   return (
     <>
-      <div className="bg-secondary-1 min-h-screen bg-white dark:bg-gray-900" style={{padding: "0px 10px"}}>
+      <div
+        className="bg-secondary-1 min-h-screen bg-white dark:bg-gray-900"
+        style={{ padding: "0px 10px" }}
+      >
         <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
           <div className="max-w-md mx-auto w-full">
             <UserMainInfoWrapper className="min-width-400">
@@ -35,12 +47,13 @@ const MyPage = () => {
               </ProfileInfo>
             </UserMainInfoWrapper>
             <OptionsWrapper>
-              <OptionBox className="">내 정보</OptionBox>
+              <OptionBox onClick={goUserEditPage}>정보 수정</OptionBox>
               <OptionBox onClick={goMyRefrigeratorPage} className="">
                 냉장고
               </OptionBox>
               <OptionBox className="">이건뭘까</OptionBox>
             </OptionsWrapper>
+            <LogOutButton onClick={handleOnClickLogOut}>로그아웃</LogOutButton>
           </div>
         </div>
       </div>
@@ -80,5 +93,12 @@ const OptionBox = styled.div`
   padding: 12px;
   border: 1px solid grey;
   margin: 5px auto 0 auto;
+  cursor: pointer;
+`;
+
+const LogOutButton = styled.div`
+  margin: 10px 0 0 0;
+  font-size: 14px;
+  opacity: 0.7;
   cursor: pointer;
 `;

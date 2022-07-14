@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
+
 import { axiosInstance } from "../../apis/axiosInstance";
 import BottomFloat from "../../components/BottomFloat";
 import Calendar from "../../components/mypage/Calendar";
@@ -12,7 +15,8 @@ const MyRefrigeratorPage = () => {
   const [showRegisterIngredient, setShowRegisterIngredient] = useState(false);
   const [ingredientName, setIngredientName] = useState("");
   const [ingredientCount, setIngredientCount] = useState<number>();
-
+  const [startDate, setStartDate] = useState(new Date());
+  
   const handleOnClcikAddButton = () => {
     setShowRegisterIngredient(!showRegisterIngredient);
   };
@@ -30,8 +34,7 @@ const MyRefrigeratorPage = () => {
   };
 
   const handleOnClickRegister = () => {
-    const res = axiosInstance.post(``)
-    
+    const res = axiosInstance.post(``);
   };
   return (
     <>
@@ -57,6 +60,10 @@ const MyRefrigeratorPage = () => {
                     placeholder="재료 수량"
                     type={"number"}
                   />
+                  {/* <DatePicker
+                    selected={startDate}
+                    onChange={(date: Date) => setStartDate(date)}
+                  /> */}
                 </>
               ) : (
                 <>

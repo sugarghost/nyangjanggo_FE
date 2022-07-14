@@ -3,7 +3,7 @@
 }
 
 .img-render {
-  object-fit: fit;
+  object-fit: cover;
   image-rendering: auto;
 }
 
