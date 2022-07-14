@@ -23,32 +23,34 @@ const queryClient = new QueryClient();
 
 function App() {
   useLayoutEffect(() => {
-    const access_token = window.location.href.split('token=')[1];
+    const userInfoArr = window.location.href.split('&');
 
-    if (access_token) {
+    // console.log(access_token)
+    if (userInfoArr.length > 2) {
+      const access_token = userInfoArr[0].split('?')[1].replace('Access-Token=', '');
+      const refreshToken = userInfoArr[1].replace('Refresh-Token=', '');
+      const isNew = userInfoArr[2].replace('isNew=', '');
+      
       localStorage.clear();
       localStorage.setItem('token', access_token);
+      localStorage.setItem('refreshToken', refreshToken);
+
       axios.defaults.headers.common.accessToken = access_token;
-
-      const req = new XMLHttpRequest();
-      // @ts-ignore
-      req.open('GET', document.location, false);
-      req.send(null);
-      const headers = req.getAllResponseHeaders().toLowerCase();
-      alert(headers);
-
+      if (isNew === 'true') {
+        window.location.replace('/myPage/userEditPage');
+      }
       window.location.replace('/');
     }
 
-    if (localStorage.getItem('token')) {
-      const token = localStorage.getItem('token') as string;
-      axios.defaults.headers.common.accessToken = token;
+    // if (localStorage.getItem('token')) {
+    //   const token = localStorage.getItem('token') as string;
+    //   axios.defaults.headers.common.accessToken = token;
 
-      console.log(isExp(token));
-      if (isExp(token)) {
-        refreshToken();
-      }
-    }
+    //   console.log(isExp(token));
+    //   if (isExp(token)) {
+    //     refreshToken();
+    //   }
+    // }
   }, []);
 
   return (
@@ -70,20 +72,11 @@ function App() {
 
             {/* 로그인이 필요한 페이지 */}
             <Route element={<PrivateRoutes authentication />}>
-              <Route
-                path="/recipeRegisterPage"
-                element={<RecipeRegisterPage />}
-              />
+              <Route path="/recipeRegisterPage" element={<RecipeRegisterPage />} />
               <Route path="/myPage" element={<MyPage />} />
-              <Route
-                path="/myPage/myRefrigeratorPage"
-                element={<MyRefrigeratorPage />}
-              />
+              <Route path="/myPage/myRefrigeratorPage" element={<MyRefrigeratorPage />} />
 
-              <Route
-                path="/myPage/userEditPage"
-                element={<UserEditProfile />}
-              />
+              <Route path="/myPage/userEditPage" element={<UserEditProfile />} />
             </Route>
           </Routes>
           {/* </div>
