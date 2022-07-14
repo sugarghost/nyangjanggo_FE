@@ -21,7 +21,7 @@ type RouterPageNames =
   | "상세보기"
   | "등록하기"
   | "마이페이지"
-  | "내 냉장고"
+  | "MY 냉장고"
   | "메인페이지"
   | ""
   | null;
@@ -52,7 +52,7 @@ const Header = () => {
     if (pathName === "/signInPage") {
       return "회원가입";
     } else if (pathName === "/signUpPage") {
-      return "로그인";
+      return "";
     } else if (pathName === "/recipeDetailPage") {
       return "상세보기";
     } else if (pathName === "/recipeRegisterPage") {
@@ -60,19 +60,19 @@ const Header = () => {
     } else if (pathName === "/myPage") {
       return "마이페이지";
     } else if (pathName === "/myPage/myRefrigeratorPage") {
-      return "내 냉장고";
+      return "MY 냉장고";
     } else if (pathName === "/") {
-      return "메인페이지";
+      return "";
     }
 
-    return "";
+    //return "";
   };
 
   const [pageTitle, setPageTitle] = useState<RouterPageNames>("");
 
   useEffect(() => {
     const currentPathName = window.location.pathname as RouterPages;
-
+    
     setPageTitle(returnPageTitle(currentPathName));
   }, [window.location.pathname]);
 
@@ -150,8 +150,8 @@ const MobileHeaderTitle = styled.div`
 `;
 
 const UserIconWrapper = styled.img`
-  // /margin-right: 10px;
-  width: 31px;
-  height: 35px;
+  margin-right: 8px;
+  width: 21px;
+  height: 24px;
   cursor: pointer;
 `;

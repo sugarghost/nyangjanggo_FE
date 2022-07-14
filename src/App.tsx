@@ -67,7 +67,7 @@ function App() {
             <Route path="/recipeDetailPage" element={<RecipeDetailPage />} />
 
             {/* 로그인이 필요한 페이지 */}
-            <Route element={<PrivateRoutes authentication={true} />}>
+            <Route element={<PrivateRoutes authentication={true} />}> 
               <Route
                 path="/recipeRegisterPage"
                 element={<RecipeRegisterPage />}
@@ -82,7 +82,7 @@ function App() {
                 path="/myPage/userEditPage"
                 element={<UserEditProfile />}
               />
-            </Route>
+            </Route> 
           </Routes>
           {/* </div>
             </div>

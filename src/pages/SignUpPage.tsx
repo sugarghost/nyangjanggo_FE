@@ -1,9 +1,11 @@
 import React from "react";
+import styled from "styled-components";
 
 import { refreshToken } from "../apis/AuthApi";
 import { axiosInstance } from "../apis/axiosInstance";
 import Button from "../components/Botton";
 import SignTitle from "../components/sign/SignTitle";
+import Logo from "../images/nyang_logo.png";
 
 const SignUpPage = () => {
   const kakaoAuth = async () => {
@@ -29,13 +31,14 @@ const SignUpPage = () => {
           <div className="max-w-md mx-auto">
             <div className="m-4">
               <SignTitle>
-                <div>LOGO</div>
+                <LogoWrapper className="img-render" src={Logo} />
               </SignTitle>
+              <SignInfo>Sign in |</SignInfo>
               <Button
                 className={"w-full"}
                 styleCustom={{
                   background: "grey",
-                  margin: "150px 0 0 0",
+                  margin: "30px 0 0 0",
                 }}
                 onClick={() => {}}
               >
@@ -44,7 +47,7 @@ const SignUpPage = () => {
                   http://back-end-server/oauth2/authorization/naver
                 */}
                 <a href="http://3.35.233.99/oauth2/authorization/kakao">
-                  <div>카카오 로그인</div>
+                  <div>Sign In with Kakao</div>
                 </a>
                 {/* <div onClick={kakaoAuth}>카카오 로그인</div> */}
               </Button>
@@ -52,15 +55,15 @@ const SignUpPage = () => {
                 className={"w-full"}
                 styleCustom={{
                   background: "grey",
-                  margin: "10px 0 0 0",
+                  margin: "12px 0 0 0",
                 }}
                 onClick={() => {}}
               >
                 <a href="http://3.35.233.99/oauth2/authorization/naver">
-                  <div>네이버 로그인</div>
+                  <div>Sign In with Naver</div>
                 </a>
               </Button>
-              <Button
+              {/* <Button
                 className={"w-full"}
                 styleCustom={{
                   background: "grey",
@@ -69,7 +72,7 @@ const SignUpPage = () => {
                 onClick={refreshTokenTest}
               >
                 <div>리프래쉬 토큰 테스트</div>
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>
@@ -77,5 +80,23 @@ const SignUpPage = () => {
     </>
   );
 };
+
+const LogoWrapper = styled.img`
+  width: 130px;
+  height: 130px;
+  margin: 0px auto;
+`;
+
+const SignInfo = styled.div`
+  width: 100%;
+  text-align: left;
+  font-family: "NEXON Lv2 Gothic";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 27px;
+  color: #797979;
+  margin: 84px 0 0 0;
+`;
 
 export default SignUpPage;

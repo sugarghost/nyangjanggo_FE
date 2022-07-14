@@ -1,9 +1,8 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
+import React from "react";
 import { RecoilRoot } from "recoil";
 import "virtual:windi-devtools";
 import "virtual:windi.css";
-
 import App from "./App";
 import "./index.css";
 
