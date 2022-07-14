@@ -135,6 +135,4 @@ export const stepValidationSchema = yup.object().shape({
   ),
 });
 
-export const stepDefaultValues = {
-  boardRequestDtoStepRecipe: [],
-};
+export const stepDefaultValues = {boardRequestDtoStepRecipe: [],};

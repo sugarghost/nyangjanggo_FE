@@ -12,9 +12,7 @@ interface PrivateRouteProps {
 }
 
 // 타입 스크립트 첫 글자가 대문자여야지 인식을 함
-export default function PrivateRoutes({
-  authentication,
-}: PrivateRouteProps): React.ReactElement | null {
+export default function PrivateRoutes({authentication,}: PrivateRouteProps): React.ReactElement | null {
   //   const token = localToken ? JSON.parse(localToken) : "";
   const ReactSwal = withReactContent(Swal);
   const isAuthenticated = isExist(getToken("userToken") ?? "");

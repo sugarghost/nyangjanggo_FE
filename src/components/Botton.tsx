@@ -44,8 +44,7 @@ function Button(props: IProps) {
   }: IProps = props;
 
   return (
-    <>
-      <ButtonWrapper
+    <ButtonWrapper
         className={className}
         type="button"
         styleCustom={styleCustom}
@@ -60,7 +59,6 @@ function Button(props: IProps) {
       >
         {children}
       </ButtonWrapper>
-    </>
   );
 }
 

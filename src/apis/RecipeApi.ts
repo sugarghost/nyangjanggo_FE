@@ -8,7 +8,7 @@ const boards = "/boards";
 const step = "/step";
 
 export type ResourcePostTemplate = {
-  boardId: Number;
+  boardId: number;
   resourceRequestDtoList: [
     {
       resourceName: string;
@@ -19,8 +19,8 @@ export type ResourcePostTemplate = {
 };
 
 export type Pageable = {
-  page: Number;
-  size: Number;
+  page: number;
+  size: number;
   sort: string;
 };
 
@@ -35,23 +35,19 @@ export default {
   },
 
   async postRecipe(payload: FormData) {
-    const res = await authInstance.post(`${board}${step}/1`, payload, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    const res = await authInstance.post(`${board}${step}/1`, payload, {headers: { "Content-Type": "multipart/form-data" },});
     return res;
   },
 
   async postResourceList(payload: FormData) {
-    const res = await authInstance.post(`${board}${step}/2`, payload, {
-      headers: { "Content-Type": "application/json" },
-    });
+    const res = await authInstance.post(`${board}${step}/2`, payload, {headers: { "Content-Type": "application/json" },});
     return res;
   },
 
   async loopStep(payload: StepFormDataWithId) {
     let res;
     for await (const param of payload.boardRequestDtoStepRecipe) {
-      let boardRequestDtoStepRecipe = {
+      const boardRequestDtoStepRecipe = {
         boardId: payload.boardId,
         recipeStepRequestDto: {
           stepNum: param.stepNum,
@@ -66,7 +62,7 @@ export default {
       );
       console.log(JSON.stringify(boardRequestDtoStepRecipe, null, 2));
       const formData = new FormData();
-      if (!!param.multipartFile)
+      if (param.multipartFile)
         formData.append("multipartFile", param.multipartFile);
       else
         formData.append(
@@ -76,9 +72,7 @@ export default {
 
       formData.append(
         "boardRequestDtoStepRecipe",
-        new Blob([JSON.stringify(boardRequestDtoStepRecipe)], {
-          type: "application/json",
-        })
+        new Blob([JSON.stringify(boardRequestDtoStepRecipe)], {type: "application/json",})
       );
 
       res = !param.fromServer
@@ -94,23 +88,17 @@ export default {
   },
 
   async postRegiste(payload: FormData) {
-    const res = await authInstance.post(`${board}${step}/-1`, payload, {
-      headers: { "Content-Type": "application/json" },
-    });
+    const res = await authInstance.post(`${board}${step}/-1`, payload, {headers: { "Content-Type": "application/json" },});
     return res;
   },
 
   async putRecipe(payload: FormData) {
-    const res = await authInstance.put(`${board}${step}/1`, payload, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    const res = await authInstance.put(`${board}${step}/1`, payload, {headers: { "Content-Type": "multipart/form-data" },});
     return res;
   },
 
   async putResourceList(payload: FormData) {
-    const res = await authInstance.put(`${board}${step}/2`, payload, {
-      headers: { "Content-Type": "application/json" },
-    });
+    const res = await authInstance.put(`${board}${step}/2`, payload, {headers: { "Content-Type": "application/json" },});
     return res;
   },
   async deleteStep(payload: FormData) {
@@ -132,23 +120,17 @@ export default {
     return res;
   },
   async deleteRecipe(boardId: number) {
-    const res = await authInstance.delete(`${board}/${boardId}`, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    const res = await authInstance.delete(`${board}/${boardId}`, {headers: { "Content-Type": "multipart/form-data" },});
     return res;
   },
 };
 
 const postStep = (payload: FormData) => {
-  const res = authInstance.post(`${board}${step}/3`, payload, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const res = authInstance.post(`${board}${step}/3`, payload, {headers: { "Content-Type": "multipart/form-data" },});
   return res;
 };
 
 const putStep = (payload: FormData) => {
-  const res = authInstance.put(`${board}${step}/3`, payload, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const res = authInstance.put(`${board}${step}/3`, payload, {headers: { "Content-Type": "multipart/form-data" },});
   return res;
 };
