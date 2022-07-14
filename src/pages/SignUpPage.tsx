@@ -11,7 +11,7 @@ const SignUpPage = () => {
   const kakaoAuth = async () => {
     try {
       const res = await axiosInstance.get(
-        `http://3.35.233.99/oauth2/authorization/kakao`
+        `http://13.125.36.183/oauth2/authorization/kakao`
       );
       return res.data;
     } catch (err) {
@@ -46,8 +46,8 @@ const SignUpPage = () => {
                   http://back-end-server/oauth2/authorization/kakao,
                   http://back-end-server/oauth2/authorization/naver
                 */}
-                <a href="http://13.125.36.183//oauth2/authorization/kakao">
-                  <div>Sign In with Kakao</div>
+                <a href="http://13.125.36.183/oauth2/authorization/kakao">
+                  <div>카카오 로그인</div>
                 </a>
                 {/* <div onClick={kakaoAuth}>카카오 로그인</div> */}
               </Button>
@@ -59,8 +59,8 @@ const SignUpPage = () => {
                 }}
                 onClick={() => {}}
               >
-                <a href="http://13.125.36.183//oauth2/authorization/naver">
-                  <div>Sign In with Naver</div>
+                <a href="http://13.125.36.183/oauth2/authorization/naver">
+                  <div>네이버 로그인</div>
                 </a>
               </Button>
               {/* <Button

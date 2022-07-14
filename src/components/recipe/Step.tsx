@@ -1,3 +1,5 @@
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import styled from "styled-components";
@@ -44,41 +46,45 @@ const Step = ({ index, onDelete }: StepProps) => {
 
   return (
     <>
-      <IngredientTitle>
-        조리과정 {index + 1}
-        <input type="button" onClick={onDelete} value="삭제" />
-      </IngredientTitle>
-      <RecipeInfoWrapper>
-        <IngredientInfoWrapper>
-          <RecipeStepImage
-            className="img-render"
-            onClick={stepImageClick}
-            // boardRequestDtoStepRecipe.${index}.imgUrl 형식으로 값을 등록해 봤지만 이미지가 변경이 되도 렌더링이 안되는 문제가 발생
-            // useState를 사용해봐도 렌더링이 안되서 추가로 useEffect를 사용함
-            src={imageUrl}
-          />
-          <input
-            {...register(`boardRequestDtoStepRecipe.${index}.stepNum`, {
-              required: true,
-            })}
-            value={index}
-            hidden
-          />
-          <input
-            type="file"
-            accept="image/jpg,impge/png,image/jpeg"
-            ref={fileRef}
-            onChange={(e) => onSaveStepImageFile(e, index)}
-            hidden
-          />
-          <textarea
-            placeholder="조리 과정을 알려주세요!"
-            {...register(`boardRequestDtoStepRecipe.${index}.stepContent`, {
-              required: true,
-            })}
-          ></textarea>
-        </IngredientInfoWrapper>
-      </RecipeInfoWrapper>
+      <div className="mb-4">
+        <span className="text-lg my-1 font-500 float-left">
+          조리과정 {index + 1}
+        </span>
+        <span className="float-right" onClick={onDelete}>
+          <FontAwesomeIcon icon={faMinus} color="grey" size="lg" />
+        </span>
+      </div>
+      <div className="flex justify-between w-full mb-4">
+        <input
+          {...register(`boardRequestDtoStepRecipe.${index}.stepNum`, {
+            required: true,
+          })}
+          value={index}
+          hidden
+        />
+        <input
+          type="file"
+          accept="image/jpg,impge/png,image/jpeg"
+          ref={fileRef}
+          onChange={(e) => onSaveStepImageFile(e, index)}
+          hidden
+        />
+        <img
+          height="w-2/6"
+          className="img-render w-2/6 rounded-lg"
+          onClick={stepImageClick}
+          // boardRequestDtoStepRecipe.${index}.imgUrl 형식으로 값을 등록해 봤지만 이미지가 변경이 되도 렌더링이 안되는 문제가 발생
+          // useState를 사용해봐도 렌더링이 안되서 추가로 useEffect를 사용함
+          src={imageUrl}
+        />
+        <textarea
+          className="w-4/6 ml-4 border-gray-200 border-2 rounded-md p-1"
+          placeholder="조리 과정을 알려주세요!"
+          {...register(`boardRequestDtoStepRecipe.${index}.stepContent`, {
+            required: true,
+          })}
+        ></textarea>
+      </div>
     </>
   );
 };

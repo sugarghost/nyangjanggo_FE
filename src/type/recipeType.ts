@@ -51,7 +51,7 @@ export type ResourceList = {
 
 export type StepList = {
   stepNum: number;
-  content: string;
+  stepContent: string;
   imageLink: string;
 };
 

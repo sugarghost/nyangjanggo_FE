@@ -1,3 +1,5 @@
+import { faChevronLeft, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ErrorMessage } from "@hookform/error-message";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useEffect, useState, useRef, useCallback } from "react";
@@ -72,6 +74,7 @@ export type BoardPostFormFileds = {
 
 const RecipeRegisterPage = () => {
   // 공통 처리
+  const navigate = useNavigate();
   const location = useLocation();
   const state = location.state as {
     boardId: number;
@@ -94,9 +97,12 @@ const RecipeRegisterPage = () => {
   // 레시피 정보 상태
   const mainImageRef = useRef<HTMLInputElement>(null);
   // 이미지 등록 전에 보여줄 샘플 이미지를 기본으로 등록
-  const [mainImageUrl, setMainImageUrl] = useState<string>(
-    "https://cdn.pixabay.com/photo/2016/03/21/05/05/plus-1270001_960_720.png"
-  );
+  const [mainImageUrl, setMainImageUrl] = useState<string>();
+
+  // 뒤로 돌아가기 용
+  const goBack = () => {
+    navigate(-1);
+  };
 
   // 처음 페이지 진입시 해당 유저가 작성중이었던 레시피가 있는지 확인해 조회
   // 수정 모드인 경우 작동 안함
@@ -506,16 +512,30 @@ const RecipeRegisterPage = () => {
     <>
       <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
         <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-          <div className="max-w-md mx-auto w-full">
+          <div className="mx-auto w-90vw">
+            <div className="py-4 sticky top-0 w-full bg-light-50">
+              <FontAwesomeIcon
+                className="m-1 float-left"
+                icon={faChevronLeft}
+                color="grey"
+                size="lg"
+                onClick={goBack}
+              />
+              <span className="text-lg text-gray-700 font-bold">
+                레시피 등록
+              </span>
+              <hr className="mt-2" />
+            </div>
             {registerStep === 1 ? (
               <FormProvider {...recipeMethods}>
                 <form
                   onSubmit={recipeHandleSubmit(onSubmitRecipe, onErrorRecipe)}
                 >
-                  <MainImgWrapperLabel>요리 메인 페이지</MainImgWrapperLabel>
-
-                  <RegisterImage
-                    className="img-render"
+                  <p className="text-gray-700 text-left text-lg my-1 font-900">
+                    요리 메인 이미지
+                  </p>
+                  <img
+                    className="min-h-80 w-full rounded-2xl image-render-auto bg-gray-100"
                     src={mainImageUrl}
                     onClick={mainImageClick}
                   />
@@ -545,13 +565,18 @@ const RecipeRegisterPage = () => {
                   <textarea
                     className="p-4 my-4 w-full rounded-md border border-gray-300"
                     placeholder="요리 설명"
-                    rows={10}
+                    rows={6}
                     {...recipeRegister("boardRequestDtoStepMain.content", {
                       required: true,
                     })}
                   />
                   <div>
-                    <button type="submit">등록하기</button>
+                    <button
+                      type="submit"
+                      className=" rounded-md h-10 w-full text-white bg-red-600 items-center"
+                    >
+                      등록하기
+                    </button>
                   </div>
                 </form>
               </FormProvider>
@@ -563,37 +588,43 @@ const RecipeRegisterPage = () => {
                     onErrorResource
                   )}
                 >
-                  <RegisterTitle>
-                    <Button
-                      styleCustom={{}}
-                      onClick={() =>
-                        resourceAppend({
-                          name: "",
-                          resources: [{ resourceName: "", amount: "" }],
-                        })
-                      }
-                    >
-                      <span>재료 분류 추가</span>
-                    </Button>
-                  </RegisterTitle>
-                  <div style={{ position: "relative" }}>
-                    {resourceFields.map((item, index) => (
-                      <div key={index}>
-                        <Category
-                          name={item.name}
-                          index={index}
-                          onDelete={() => resourceRemove(index)}
-                        />
-                      </div>
-                    ))}
+                  <span className="text-gray-700 text-left float-left text-lg my-1 font-900">
+                    재료 분류
+                  </span>
 
+                  <button
+                    className="m-1 float-right"
+                    onClick={() =>
+                      resourceAppend({
+                        name: "",
+                        resources: [{ resourceName: "", amount: "" }],
+                      })
+                    }
+                  >
+                    <FontAwesomeIcon icon={faPlus} color="grey" size="lg" />
+                  </button>
+                  {resourceFields.map((item, index) => (
+                    <div key={index}>
+                      <Category
+                        name={item.name}
+                        index={index}
+                        onDelete={() => resourceRemove(index)}
+                      />
+                    </div>
+                  ))}
+
+                  <div>
                     <input
                       type="button"
+                      className=" rounded-md h-10 w-full text-white my-1 bg-red-300 items-center"
                       onClick={resourcePreStepBtnClick}
                       value="되돌아가기"
                     />
-                    <button type="submit">
-                      <div>등록하기</div>
+                    <button
+                      type="submit"
+                      className=" rounded-md h-10 w-full text-white my-1 bg-red-600 items-center"
+                    >
+                      등록하기
                     </button>
                   </div>
                 </form>
@@ -601,13 +632,17 @@ const RecipeRegisterPage = () => {
             ) : (
               <FormProvider {...stepMethods}>
                 <form onSubmit={stepHandleSubmit(onSubmitStep, onErrorStep)}>
-                  <RegisterTitle margin={"30px 0 0 0"}>
+                  <span className="text-gray-700 text-left float-left text-lg my-1 font-900">
                     조리 과정
-                    <Button styleCustom={{}} onClick={() => stepAppend({})}>
-                      <span>조리 과정 추가</span>
-                    </Button>
-                  </RegisterTitle>
-                  <IngredientsWrapper className="box-shadow">
+                  </span>
+
+                  <button
+                    className="m-1 float-right"
+                    onClick={() => stepAppend({})}
+                  >
+                    <FontAwesomeIcon icon={faPlus} color="grey" size="lg" />
+                  </button>
+                  <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
                     {stepFields.map((item, index) => (
                       <div key={index}>
                         <Step
@@ -616,16 +651,22 @@ const RecipeRegisterPage = () => {
                         />
                       </div>
                     ))}
-                  </IngredientsWrapper>
-                  <Button
-                    styleCustom={{ margin: "10px 0 0 0" }}
-                    onClick={stepPreStepBtnClick}
-                  >
-                    <div>되돌아가기</div>
-                  </Button>
-                  <button type="submit">
-                    <div>등록하기</div>
-                  </button>
+                  </div>
+
+                  <div>
+                    <input
+                      type="button"
+                      className=" rounded-md h-10 w-full text-white my-1 bg-red-300 items-center"
+                      onClick={stepPreStepBtnClick}
+                      value="되돌아가기"
+                    />
+                    <button
+                      type="submit"
+                      className=" rounded-md h-10 w-full text-white my-1 bg-red-600 items-center"
+                    >
+                      등록하기
+                    </button>
+                  </div>
                 </form>
               </FormProvider>
             )}

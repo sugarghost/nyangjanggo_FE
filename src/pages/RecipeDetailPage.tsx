@@ -1,3 +1,10 @@
+import {
+  faChevronLeft,
+  faPlus,
+  faTrashCan,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Suspense, useEffect, useState } from "react";
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -59,7 +66,7 @@ const RecipeDetailPage = ({}) => {
             // 일치하는 category가 있는 위치에 resources(리스트 형태) 값에 push를 통해 데이터를 추가해줌
             resourceListTemp[categoryIndex].resources.push({
               resourceName: fields.resourceName,
-              amount: fields.num,
+              amount: fields.amount,
             });
           } else {
             // 만약 반환된 인덱스가 없으면 일치하는 카테고리가 없다는 뜻으로 신규로 만들어줌
@@ -68,7 +75,7 @@ const RecipeDetailPage = ({}) => {
               resources: [
                 {
                   resourceName: fields.resourceName,
-                  amount: fields.num,
+                  amount: fields.amount,
                 },
               ],
             });
@@ -113,69 +120,113 @@ const RecipeDetailPage = ({}) => {
   const deleteRecipeDetail = () => {
     putRecipeMutation.mutate(boardId);
   };
+  const goBack = () => {
+    navigate(-1);
+  };
   return (
     <>
       <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
         <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-          <div className="max-w-md mx-auto w-full">
-            <RegisterImage className="img-render" src={recipe?.mainImg} />
-            <p>{recipe?.title}</p>
-            <p>{recipe?.subTitle}</p>
-            <p>{recipe?.content}</p>
-            <button onClick={modifyRecipeDetail}>수정</button>
-            <button onClick={deleteRecipeDetail}>삭제</button>
-            {recipe?.nickname === userName && (
-              <>
-                <button onClick={modifyRecipeDetail}>수정</button>
-                <button onClick={deleteRecipeDetail}>삭제</button>
-              </>
-            )}
+          <div className="mx-auto w-90vw">
+            <div className="py-4 sticky top-0 w-full bg-light-50">
+              <FontAwesomeIcon
+                className="m-1 float-left"
+                icon={faChevronLeft}
+                color="grey"
+                size="lg"
+                onClick={goBack}
+              />
+              <span className="text-lg text-gray-700 font-bold">
+                레시피 등록
+              </span>
+              <hr className="mt-2" />
+            </div>
+            <div className="float-right">
+              <button
+                className="w-10 h-10 rounded-2xl bg-gray-200 m-1"
+                onClick={modifyRecipeDetail}
+              >
+                <FontAwesomeIcon icon={faPenToSquare} color="white" size="lg" />
+              </button>
+              <button
+                className="w-10 h-10 rounded-2xl bg-gray-200 m-1"
+                onClick={deleteRecipeDetail}
+              >
+                <FontAwesomeIcon icon={faTrashCan} color="white" size="lg" />
+              </button>
+              {recipe?.nickname === userName && (
+                <>
+                  <button onClick={modifyRecipeDetail}>수정</button>
+                  <button onClick={deleteRecipeDetail}>삭제</button>
+                </>
+              )}
+            </div>
+            <img
+              className="min-h-80 mb-4 w-full rounded-2xl image-render-auto bg-gray-100"
+              src={recipe?.mainImg}
+            />
+            <p className="text-gray-700 text-left text-4xl my-1 font-900">
+              {recipe?.title}
+            </p>
+            <p className="text-gray-600 text-left text-lg my-1 font-600">
+              {recipe?.subTitle}
+            </p>
+            <div className="text-left text-lg my-1 font-300 border-gray-200 border-2 rounded-md min-h-30 p-2">
+              {recipe?.content}
+            </div>
 
             <hr></hr>
 
-            <RegisterTitle>
-              <span>재료 분류</span>
-            </RegisterTitle>
-            <IngredientsWrapper className="box-shadow">
-              {resourceList.map((categorys, index) => (
-                <div key={index}>
-                  <IngredientsWrapper className="box-shadow">
-                    <IngredientTitle>{categorys.category}</IngredientTitle>
-                    {categorys.resources.map((resource, subIndex) => (
-                      <div key={index + "_" + subIndex}>
-                        <IngredientInfoWrapper>
-                          <div className="float-left">
-                            {resource.resourceName}
-                          </div>
-                          <div className="float-right">{resource.amount}</div>
-                        </IngredientInfoWrapper>
+            <p className="text-gray-700 text-left text-lg my-1 font-900">
+              재료 분류
+            </p>
+            {resourceList.map((categorys, index) => (
+              <div key={index}>
+                <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
+                  <p className="text-lg my-1 font-500 text-left">
+                    {categorys.category}
+                  </p>
+                  {categorys.resources.map((resource, subIndex) => (
+                    <div key={index + "_" + subIndex}>
+                      <div className="flex justify-between w-full mb-4">
+                        <span className="float-left text-left text-base w-2/3 my-1 font-400">
+                          {resource.resourceName}
+                        </span>
+                        <span className="text-base my-1 font-400">:</span>
+                        <span className="float-right text-right text-base w-1/3 my-1 font-400">
+                          {resource.amount}
+                        </span>
                       </div>
-                    ))}
-                  </IngredientsWrapper>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </IngredientsWrapper>
+              </div>
+            ))}
             <hr></hr>
 
-            <RegisterTitle>
-              <span>조리과정</span>
-            </RegisterTitle>
-            <IngredientsWrapper className="box-shadow">
+            <p className="text-gray-700 text-left text-lg my-1 font-900">
+              조리 과정
+            </p>
+            <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
               {stepList.map((field, index) => (
                 <div key={index}>
-                  <IngredientTitle>조리과정 {index + 1}</IngredientTitle>
+                  <p className="text-lg my-1 font-500 text-left">
+                    조리과정 {index + 1}
+                  </p>
                   <RecipeInfoWrapper>
-                    <IngredientInfoWrapper>
-                      <RecipeStepImage
+                    <div className="flex justify-between w-full mb-4">
+                      <img
                         src={field.imageLink}
-                        className="img-render"
+                        className="img-render w-2/6 rounded-lg"
                       />
-                      <p>{field.content}</p>
-                    </IngredientInfoWrapper>
+                      <div className="w-4/6 ml-4 text-left border-gray-200 border-2 rounded-md p-1">
+                        {field.stepContent}
+                      </div>
+                    </div>
                   </RecipeInfoWrapper>
                 </div>
               ))}
-            </IngredientsWrapper>
+            </div>
           </div>
         </div>
       </div>
