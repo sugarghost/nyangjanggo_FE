@@ -1,11 +1,10 @@
 export const getNowUrl = () => window.location.pathname;
 
 export const isUserPath = (path: string) => {
-  if (path.split("/")[1] === "users") {
+  if (path.split('/')[1] === 'users') {
     return true;
-  } 
-    return false;
-  
+  }
+  return false;
 };
 
 export const renderHelper = (segment: string, segments: string[]): boolean => {
@@ -23,5 +22,5 @@ export const renderHelper = (segment: string, segments: string[]): boolean => {
 export const getRedirectUrl = () => {
   const searchParams = new URLSearchParams(window.location.search);
 
-  return searchParams.get("redirectUrl");
+  return searchParams.get('redirectUrl');
 };

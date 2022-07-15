@@ -5,10 +5,10 @@ export const BASIC_CREDIT = 350;
 export const STARTER_PERIOD = 7;
 export const UNLIMITED_PERIOD = 30;
 export const PLAN_TITLE = {
-  STARTER: "스타터",
-  BASIC: "베이직",
-  PRO: "프로",
-  IMAGE_TRANSLATION_API: "이미지 번역 API",
+  STARTER: '스타터',
+  BASIC: '베이직',
+  PRO: '프로',
+  IMAGE_TRANSLATION_API: '이미지 번역 API',
 };
 
 /**
@@ -17,43 +17,43 @@ export const PLAN_TITLE = {
  */
 
 export enum TAX_TYPE {
-  SURTAX_PERCENT = "SURTAX_PERCENT",
+  SURTAX_PERCENT = 'SURTAX_PERCENT',
 }
 
 export enum PROMOTION_TYPE {
-  BONUS_AMOUNT = "BONUS_AMOUNT", // 정량 보너스
-  BONUS_PERCENT = "BONUS_PERCENT", // 퍼센트 보너스
-  DISCOUNT_AMOUNT = "DISCOUNT_AMOUNT", // 정량 할인
-  DISCOUNT_PERCENT = "DISCOUNT_PERCENT", // 퍼센트 할인
-  BONUS_FEATURE = "BONUS_FEATURE",
+  BONUS_AMOUNT = 'BONUS_AMOUNT', // 정량 보너스
+  BONUS_PERCENT = 'BONUS_PERCENT', // 퍼센트 보너스
+  DISCOUNT_AMOUNT = 'DISCOUNT_AMOUNT', // 정량 할인
+  DISCOUNT_PERCENT = 'DISCOUNT_PERCENT', // 퍼센트 할인
+  BONUS_FEATURE = 'BONUS_FEATURE',
 }
 
 export enum PROMOTION_CONDITION_TYPE {
-  BILLING_CYCLE = "BILLING_CYCLE", // 결제 주기
-  LICENSE_PERIOD = "LICENSE_PERIOD", // 라이센스 유효기간
+  BILLING_CYCLE = 'BILLING_CYCLE', // 결제 주기
+  LICENSE_PERIOD = 'LICENSE_PERIOD', // 라이센스 유효기간
 }
 
 export enum LICENSE_FEATURE {
-  EDITOR = "EDITOR",
-  API = "API",
-  HOSTING = "HOSTING",
+  EDITOR = 'EDITOR',
+  API = 'API',
+  HOSTING = 'HOSTING',
 }
 
 export enum LICENSE_LIMIT_TYPE {
-  TIME = "TIME",
-  CREDIT = "CREDIT",
-  COUNTS = "COUNT",
-  MEGABYTES = "MEGABYTES",
+  TIME = 'TIME',
+  CREDIT = 'CREDIT',
+  COUNTS = 'COUNT',
+  MEGABYTES = 'MEGABYTES',
 }
 
 export enum PLAN_OBJECTIVE {
-  STARTER = "STARTER",
-  PURCHASE = "PURCHASE",
-  COMPENSATION = "COMPENSATION",
+  STARTER = 'STARTER',
+  PURCHASE = 'PURCHASE',
+  COMPENSATION = 'COMPENSATION',
 }
 
 export enum PLAN_SCOPE {
-  STUDIO = "STUDIO",
+  STUDIO = 'STUDIO',
 }
 
 export interface ILicenseLimit {
@@ -114,9 +114,9 @@ interface IActivePlans {
 
 export const PLANS_DATA: IPlan[] = [
   {
-    id: "1da746f4c12140e88de7422f785784c4",
-    countryCode: "KR",
-    descriptions: ["오후스튜디오 첫 가입 시", "별도 신청 절차 없이 자동 지급"],
+    id: '1da746f4c12140e88de7422f785784c4',
+    countryCode: 'KR',
+    descriptions: ['오후스튜디오 첫 가입 시', '별도 신청 절차 없이 자동 지급'],
     scopes: [PLAN_SCOPE.STUDIO],
     period: 604800000,
     createTime: 1642016622230,
@@ -138,15 +138,15 @@ export const PLANS_DATA: IPlan[] = [
     objective: PLAN_OBJECTIVE.STARTER,
     expirationTime: 4102444800000,
     amount: 0,
-    currencyCode: "KRW",
+    currencyCode: 'KRW',
     taxes: [],
-    title: "스타터",
+    title: '스타터',
     activationTime: 0,
   },
   {
-    id: "fb44560eecff49d281044f2cca8204d5",
-    countryCode: "KR",
-    descriptions: ["5,000장씩 1개월(30일)간 이용 가능"],
+    id: 'fb44560eecff49d281044f2cca8204d5',
+    countryCode: 'KR',
+    descriptions: ['5,000장씩 1개월(30일)간 이용 가능'],
     scopes: [PLAN_SCOPE.STUDIO],
     period: 2592000000,
     createTime: 1644308511613,
@@ -168,20 +168,20 @@ export const PLANS_DATA: IPlan[] = [
     objective: PLAN_OBJECTIVE.PURCHASE,
     expirationTime: 1648768499000,
     amount: 60000,
-    currencyCode: "KRW",
+    currencyCode: 'KRW',
     taxes: [
       {
         type: TAX_TYPE.SURTAX_PERCENT,
         value: 10,
       },
     ],
-    title: "프로 1개월 이용권",
+    title: '프로 1개월 이용권',
     activationTime: 0,
   },
   {
-    id: "a7b7f15695ab4a4b8c214376f52ac2b8",
-    countryCode: "KR",
-    descriptions: ["30일 주기로 5,000장씩 6개월(180일)간 이용 가능"],
+    id: 'a7b7f15695ab4a4b8c214376f52ac2b8',
+    countryCode: 'KR',
+    descriptions: ['30일 주기로 5,000장씩 6개월(180일)간 이용 가능'],
     scopes: [PLAN_SCOPE.STUDIO],
     period: 15552000000,
     createTime: 1644308511613,
@@ -209,20 +209,20 @@ export const PLANS_DATA: IPlan[] = [
     objective: PLAN_OBJECTIVE.PURCHASE,
     expirationTime: 1648768499000,
     amount: 360000,
-    currencyCode: "KRW",
+    currencyCode: 'KRW',
     taxes: [
       {
         type: TAX_TYPE.SURTAX_PERCENT,
         value: 10,
       },
     ],
-    title: "프로 6개월 이용권",
+    title: '프로 6개월 이용권',
     activationTime: 0,
   },
   {
-    id: "c83f6d8d70594ff19bf30c7cd03cb74d",
-    countryCode: "KR",
-    descriptions: ["30일 주기로 5,000장씩 12개월(365일)간 이용 가능"],
+    id: 'c83f6d8d70594ff19bf30c7cd03cb74d',
+    countryCode: 'KR',
+    descriptions: ['30일 주기로 5,000장씩 12개월(365일)간 이용 가능'],
     scopes: [PLAN_SCOPE.STUDIO],
     period: 31104000000,
     createTime: 1644308511613,
@@ -250,23 +250,23 @@ export const PLANS_DATA: IPlan[] = [
     objective: PLAN_OBJECTIVE.PURCHASE,
     expirationTime: 1648768499000,
     amount: 720000,
-    currencyCode: "KRW",
+    currencyCode: 'KRW',
     taxes: [
       {
         type: TAX_TYPE.SURTAX_PERCENT,
         value: 10,
       },
     ],
-    title: "프로 12개월 이용권",
+    title: '프로 12개월 이용권',
     activationTime: 0,
   },
   {
-    id: "11c10260cee540ae982df420d0f171ca",
-    countryCode: "KR",
+    id: '11c10260cee540ae982df420d0f171ca',
+    countryCode: 'KR',
     descriptions: [
-      "5,000장씩 1개월간 이용 가능",
-      "오후스튜디오 에디터 이용권 포함",
-      "*사전 계약된 솔루션 회원 전용 요금제",
+      '5,000장씩 1개월간 이용 가능',
+      '오후스튜디오 에디터 이용권 포함',
+      '*사전 계약된 솔루션 회원 전용 요금제',
     ],
     scopes: [PLAN_SCOPE.STUDIO],
     period: 2592000000,
@@ -295,14 +295,14 @@ export const PLANS_DATA: IPlan[] = [
     objective: PLAN_OBJECTIVE.PURCHASE,
     expirationTime: 1648768499000,
     amount: 120000,
-    currencyCode: "KRW",
+    currencyCode: 'KRW',
     taxes: [
       {
         type: TAX_TYPE.SURTAX_PERCENT,
         value: 10,
       },
     ],
-    title: "API 1개월 이용권",
+    title: 'API 1개월 이용권',
     activationTime: 0,
   },
 ];
@@ -313,12 +313,9 @@ export const getMonthlyPrice = (plan: IPlan) => {
   const originalPriceWithTax = getOriginalPriceWithTax(plan);
 
   if (promotion && promotion.type === PROMOTION_TYPE.DISCOUNT_PERCENT) {
-    return (
-      (originalPriceWithTax * (100 - promotion.value)) / 100 / periodMonths
-    );
-  } 
-    return originalPriceWithTax;
-  
+    return (originalPriceWithTax * (100 - promotion.value)) / 100 / periodMonths;
+  }
+  return originalPriceWithTax;
 };
 
 export const getDiscountedPrice = (plan: IPlan) => {
@@ -327,9 +324,8 @@ export const getDiscountedPrice = (plan: IPlan) => {
 
   if (promotion && promotion.type === PROMOTION_TYPE.DISCOUNT_PERCENT) {
     return (originalPriceWithTax * (100 - promotion.value)) / 100;
-  } 
-    return originalPriceWithTax;
-  
+  }
+  return originalPriceWithTax;
 };
 
 export const getOriginalPriceWithTax = (plan: IPlan) => {

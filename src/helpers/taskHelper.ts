@@ -1,8 +1,4 @@
-const taskHelper = (
-  callback: Function,
-  interval = 3000,
-  end?: boolean
-) => {
+const taskHelper = (callback: Function, interval = 3000, end?: boolean) => {
   // TODO setInterval 대신 사용할 합수 만들기
   let flag = true;
 

@@ -54,43 +54,42 @@ export const validateBusinessNumber = (phoneNumber: string) => {
 export const validateBlank = (value: string) => {
   if (value) {
     return true;
-  } 
-    return false;
-  
+  }
+  return false;
 };
 
 export const validateNumber = (value: number) => {
   if (isNaN(value)) {
     return false;
-  } 
-    
-  
+  }
 };
 
 export const autoHypenPhone = (str: string) => {
-  str = str.replace(/[^0-9]/g, "");
-  let tmp = "";
+  str = str.replace(/[^0-9]/g, '');
+  let tmp = '';
   if (str.length < 4) {
     return str;
-  } if (str.length < 7) {
+  }
+  if (str.length < 7) {
     tmp += str.substr(0, 3);
-    tmp += "-";
+    tmp += '-';
     tmp += str.substr(3);
     return tmp;
-  } if (str.length < 11) {
+  }
+  if (str.length < 11) {
     tmp += str.substr(0, 3);
-    tmp += "-";
+    tmp += '-';
     tmp += str.substr(3, 3);
-    tmp += "-";
+    tmp += '-';
     tmp += str.substr(6);
     return tmp;
-  } 
-    tmp += str.substr(0, 3);
-    tmp += "-";
-    tmp += str.substr(3, 4);
-    tmp += "-";
-    tmp += str.substr(7);
-    return tmp;
-  
+  }
+  tmp += str.substr(0, 3);
+  tmp += '-';
+  tmp += str.substr(3, 4);
+  tmp += '-';
+  tmp += str.substr(7);
+  return tmp;
+
   return str;
 };

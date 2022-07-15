@@ -6,7 +6,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import boardPostApi from '../apis/RecipeApi';
+import Card from '../components/Card';
 import useIntersectionObserver from '../hook/intersectionObserver';
+import RecipeSearchIcon from '../images/recipe_search_icon.png';
 
 export type Pageable = {
   page: number;
@@ -149,11 +151,20 @@ const MainPage = () => {
           <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
             <div className="mx-auto w-full">
               <div className="p-4 sticky top-0 w-100vw">
-                <div className="rounded-md bg-gray-100 flex flex-row p-1vw">
-                  <FontAwesomeIcon className="m-1" icon={faSearch} color="grey" />
-                  <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
-                  <div className="cursor-pointer mr-1" onClick={() => setSearchValue('')}>
-                    &times;
+                <div className="flex flex-row" style={{justifyContent: "space-between", alignItems:"center"}}>
+                  <div
+                    className="rounded-md flex flex-row p-1vw"
+                    style={{ background: '#EFEFF0', padding: '10px', width: '88%' }}
+                  >
+                    <FontAwesomeIcon className="m-1" icon={faSearch} color="grey" />
+                    <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
+                    <div className="cursor-pointer mr-1" onClick={() => setSearchValue('')}>
+                      &times;
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent:"center" }}>
+                    <RecipeSearchIconWrapper src={RecipeSearchIcon} className="img-render" />
+                    <RecipeSearchTitle>재료검색</RecipeSearchTitle>
                   </div>
                 </div>
                 {isSearchedValue && (
@@ -173,44 +184,99 @@ const MainPage = () => {
                 )}
               </div>
               <hr />
-              {data?.pages?.map((page, index) => (
-                <div key={index}>
-                  {page.content.map((content: any, subIndex: number) => (
-                    <div
-                      className="flex my-2"
-                      onClick={(e) => viewRecipeDetail(content.boardId)}
-                      key={`${index}_${subIndex}`}
-                    >
-                      <img src={content.mainImg} className="w-2/5" />
-                      <div className="w-full">
-                        <p>{content.title}</p>
-                        <p>{content.subTitle}</p>
-                        <div className="flex">
-                          <div>
-                            <p>{content.nickname}</p>좋아요: {content.goodCount}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-              {isFetchingNextPage ? (
-                <div className="py-3 text-center">로딩 중</div>
-              ) : hasNextPage ? (
-                <div ref={setTarget} className="py-3 text-center" />
-              ) : (
-                <></>
-              )}
-
-              <hr />
+              <ContentTitle>인기도</ContentTitle>
+              <CardsContainer className="flex flex-row">
+                {data?.pages?.map((page, index) => (
+                  <>
+                    {page.content.map((content: any, subIndex: number) => (
+                      <Card
+                        cardTitle={content.title}
+                        subTitle={content.nickname}
+                        key={`${index}_${subIndex}`}
+                        cardImg={content.mainImg}
+                        styleCustom={{ width: '50%', margin: '16px 0 0 0' }}
+                        onClick={(e) => viewRecipeDetail(content.boardId)}
+                        rank={subIndex + 1}
+                      />
+                      // <div
+                      //   className="flex my-2"
+                      //   onClick={(e) => viewRecipeDetail(content.boardId)}
+                      //   key={`${index}_${subIndex}`}
+                      // >
+                      //   <img src={content.mainImg} className="w-2/5" />
+                      //   <div className="w-full">
+                      //     <p>{content.title}</p>
+                      //     <p>{content.subTitle}</p>
+                      //     <div className="flex">
+                      //       <div>
+                      //         <p>{content.nickname}</p>좋아요: {content.goodCount}
+                      //       </div>
+                      //     </div>
+                      //   </div>
+                      // </div>
+                    ))}
+                  </>
+                ))}
+              </CardsContainer>
             </div>
+            {isFetchingNextPage ? (
+              <div className="py-3 text-center">로딩 중</div>
+            ) : hasNextPage ? (
+              <div ref={setTarget} className="py-3 text-center" />
+            ) : (
+              <></>
+            )}
+
+            <hr />
           </div>
         </div>
       </Suspense>
     </>
   );
 };
+
+const RecipeSearchIconWrapper = styled.img`
+  width: 20px;
+  height: 14px;
+  margin: 0 auto;
+`
+
+const RecipeSearchTitle = styled.p`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 11px;
+  text-align: center;
+  /* Main */
+  color: #eb3120;
+  margin: 5px auto 0 auto;
+`;
+
+const ContentTitle = styled.div`
+  text-align: left;
+  padding: 0px 15px 0px 15px;
+  font-family: 'NEXON Lv2 Gothic';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 23px;
+  /* identical to box height */
+
+  /* Main */
+
+  padding: 16px 16px 0 16px;
+  color: #eb3120;
+`;
+
+const CardsContainer = styled.div`
+  margin: 0px auto;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 0px 15px 0px 15px;
+`;
 
 const activeBorderRadius = '1vw 1vw 0 0';
 const inactiveBorderRadius = '1vw 1vw 1vw 1vw';
@@ -234,7 +300,6 @@ const InputBox = styled.div`
 const Input = styled.input`
   flex: 1 0 0;
   margin: 0;
-  padding: 0;
   background-color: transparent;
   border: none;
   outline: none;

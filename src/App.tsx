@@ -30,7 +30,7 @@ function App() {
       const access_token = userInfoArr[0].split('?')[1].replace('Access-Token=', '');
       const refreshToken = userInfoArr[1].replace('Refresh-Token=', '');
       const isNew = userInfoArr[2].replace('isNew=', '');
-      
+
       localStorage.clear();
       localStorage.setItem('token', access_token);
       localStorage.setItem('refreshToken', refreshToken);
@@ -57,29 +57,25 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <div className="App">
-          {
-            // <Header />
-          }
-          {/* <div className="bg-secondary-1 flex items-center min-h-screen bg-white dark:bg-gray-900">
-            <div className="container max-w-screen-lg xl:max-w-screen-xl mx-auto">
-              <div className="max-w-md mx-auto my-10 w-full"> */}
+          <Header />
+          {/*<div className="bg-secondary-1 flex items-center min-h-screen bg-white dark:bg-gray-900">
+              <div className="container max-w-screen-lg xl:max-w-screen-xl mx-auto">
+              <div className="max-w-md mx-auto my-10 w-full">*/}
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/test" element={<TestPage />} />
             <Route path="/signInPage" element={<SignInPage />} />
             <Route path="/signUpPage" element={<SignUpPage />} />
             <Route path="/recipeDetailPage" element={<RecipeDetailPage />} />
-
             {/* 로그인이 필요한 페이지 */}
             <Route element={<PrivateRoutes authentication />}>
               <Route path="/recipeRegisterPage" element={<RecipeRegisterPage />} />
               <Route path="/myPage" element={<MyPage />} />
               <Route path="/myPage/myRefrigeratorPage" element={<MyRefrigeratorPage />} />
-
               <Route path="/myPage/userEditPage" element={<UserEditProfile />} />
             </Route>
           </Routes>
-          {/* </div>
+          {/*</div>
             </div>
           </div> */}
           <Footer />

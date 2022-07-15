@@ -12,4 +12,4 @@ export const ERROR_MESSAGE = {
   GET_COUPONS_ERROR: '쿠폰정보 받아오기 실패!',
 };
 
-export const SUCCESS_MESSAGE = {SUCCESS: '성공!',};
+export const SUCCESS_MESSAGE = { SUCCESS: '성공!' };
