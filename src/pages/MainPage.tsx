@@ -1,18 +1,12 @@
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, {
-  Suspense,
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-} from "react";
-import { useInfiniteQuery, useQuery } from "react-query";
-import { useNavigate, useLocation } from "react-router-dom";
-import styled from "styled-components";
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { Suspense, useEffect, useState, useRef, useCallback } from 'react';
+import { useInfiniteQuery, useQuery } from 'react-query';
+import { useNavigate, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
 
-import boardPostApi from "../apis/RecipeApi";
-import useIntersectionObserver from "../hook/intersectionObserver";
+import boardPostApi from '../apis/RecipeApi';
+import useIntersectionObserver from '../hook/intersectionObserver';
 
 export type Pageable = {
   page: number;
@@ -40,39 +34,29 @@ const MainPage = () => {
 
   // 게시글 목록 전처리
 
-  const [boardType, setBoardType] = useState<string>("date");
+  const [boardType, setBoardType] = useState<string>('date');
   const [axiosParam, setAxiosParam] = useState<any>({
     size: 5,
-    sort: "createdAt,desc",
+    sort: 'createdAt,desc',
   });
 
   const preventRef = useRef(true);
   const obsRef = useRef(null);
 
   // 검색어 전처리
-  const wholeTextArray = [
-    "양파",
-    "바나나",
-    "쌀",
-    "당근",
-    "파",
-    "대파",
-    "파프리카",
-    "다시마",
-    "파슬리",
-  ];
-  const [searchValue, setSearchValue] = useState<string>("");
+  const wholeTextArray = ['양파', '바나나', '쌀', '당근', '파', '대파', '파프리카', '다시마', '파슬리'];
+  const [searchValue, setSearchValue] = useState<string>('');
   const [isSearchedValue, setIsSearchedValue] = useState<boolean>(false);
   const [searchedList, setSearchedList] = useState(wholeTextArray);
   const [searchedItemIndex, setSearchedItemIndex] = useState(-1);
 
   // 게시글 목록 기능
   const chagneMode = () => {
-    if (boardType == "date")
+    if (boardType === 'date')
       setAxiosParam({
         page: 0,
         size: 5,
-        sort: "createdAt,desc",
+        sort: 'createdAt,desc',
       });
   };
   // 무한 스크롤을 위해 특정 요소가 보이는지 판별하기 위한 Intersection Observer
@@ -99,24 +83,23 @@ const MainPage = () => {
   };
 
   // 무한 스크롤을 위해 useInfiniteQuery를 사용함,
-  const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } =
-    useInfiniteQuery(
-      "infinitePosts",
-      // pageParam(페이지 번호)를 파라미터로 axios 실행을 위한 fetchPostList를 실행
-      // 페이지 번호는 getNextPageParam을 통해 1씩 증가하다가 마지막 도달 시 undefined로 작동을 멈춤
-      async ({ pageParam = 0 }) => fetchPostList(pageParam),
-      {
-        refetchOnWindowFocus: false,
-        getNextPageParam: (lastPage, pages) => {
-          if (!lastPage.last) return lastPage.nextPage;
-          return undefined;
-        },
-      }
-    );
+  const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery(
+    'infinitePosts',
+    // pageParam(페이지 번호)를 파라미터로 axios 실행을 위한 fetchPostList를 실행
+    // 페이지 번호는 getNextPageParam을 통해 1씩 증가하다가 마지막 도달 시 undefined로 작동을 멈춤
+    async ({ pageParam = 0 }) => fetchPostList(pageParam),
+    {
+      refetchOnWindowFocus: false,
+      getNextPageParam: (lastPage, pages) => {
+        if (!lastPage.last) return lastPage.nextPage;
+        return undefined;
+      },
+    },
+  );
   console.log(data);
   // 상세 페이지 기능
   const viewRecipeDetail = (boardId: number) => {
-    navigate("/recipeDetailPage", { state: { boardId } });
+    navigate('/recipeDetailPage', { state: { boardId } });
   };
 
   // 검색창 기능
@@ -126,13 +109,11 @@ const MainPage = () => {
   };
 
   const showSearchedList = () => {
-    if (searchValue === "") {
+    if (searchValue === '') {
       setIsSearchedValue(false);
       setSearchedList([]);
     } else {
-      const choosenTextList = wholeTextArray.filter((textItem) =>
-        textItem.includes(searchValue)
-      );
+      const choosenTextList = wholeTextArray.filter((textItem) => textItem.includes(searchValue));
       setSearchedList(choosenTextList);
     }
   };
@@ -145,16 +126,12 @@ const MainPage = () => {
   const handleDropDownKey = (event: any) => {
     // input에 값이 있을때만 작동
     if (isSearchedValue) {
-      if (
-        event.key === "ArrowDown" &&
-        searchedList.length - 1 > searchedItemIndex
-      ) {
+      if (event.key === 'ArrowDown' && searchedList.length - 1 > searchedItemIndex) {
         setSearchedItemIndex(searchedItemIndex + 1);
       }
 
-      if (event.key === "ArrowUp" && searchedItemIndex >= 0)
-        setSearchedItemIndex(searchedItemIndex - 1);
-      if (event.key === "Enter" && searchedItemIndex >= 0) {
+      if (event.key === 'ArrowUp' && searchedItemIndex >= 0) setSearchedItemIndex(searchedItemIndex - 1);
+      if (event.key === 'Enter' && searchedItemIndex >= 0) {
         clickDropDownItem(searchedList[searchedItemIndex]);
         setSearchedItemIndex(-1);
       }
@@ -173,45 +150,25 @@ const MainPage = () => {
             <div className="mx-auto w-full">
               <div className="p-4 sticky top-0 w-100vw">
                 <div className="rounded-md bg-gray-100 flex flex-row p-1vw">
-                  <FontAwesomeIcon
-                    className="m-1"
-                    icon={faSearch}
-                    color="grey"
-                  />
-                  <Input
-                    type="text"
-                    value={searchValue}
-                    onChange={changeSearchValue}
-                    onKeyUp={handleDropDownKey}
-                  />
-                  <div
-                    className="cursor-pointer mr-1"
-                    onClick={() => setSearchValue("")}
-                  >
+                  <FontAwesomeIcon className="m-1" icon={faSearch} color="grey" />
+                  <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
+                  <div className="cursor-pointer mr-1" onClick={() => setSearchValue('')}>
                     &times;
                   </div>
                 </div>
                 {isSearchedValue && (
                   <DropDownBox>
-                    {searchedList.length === 0 && (
-                      <DropDownItem>해당하는 단어가 없습니다</DropDownItem>
-                    )}
+                    {searchedList.length === 0 && <DropDownItem>해당하는 단어가 없습니다</DropDownItem>}
                     {searchedList.map((searchedItem, searchedIndex) => (
-                        <DropDownItem
-                          key={searchedIndex}
-                          onClick={() => clickDropDownItem(searchedItem)}
-                          onMouseOver={() =>
-                            setSearchedItemIndex(searchedIndex)
-                          }
-                          className={
-                            searchedItemIndex === searchedIndex
-                              ? "selected"
-                              : ""
-                          }
-                        >
-                          {searchedItem}
-                        </DropDownItem>
-                      ))}
+                      <DropDownItem
+                        key={searchedIndex}
+                        onClick={() => clickDropDownItem(searchedItem)}
+                        onMouseOver={() => setSearchedItemIndex(searchedIndex)}
+                        className={searchedItemIndex === searchedIndex ? 'selected' : ''}
+                      >
+                        {searchedItem}
+                      </DropDownItem>
+                    ))}
                   </DropDownBox>
                 )}
               </div>
@@ -222,7 +179,7 @@ const MainPage = () => {
                     <div
                       className="flex my-2"
                       onClick={(e) => viewRecipeDetail(content.boardId)}
-                      key={`${index  }_${  subIndex}`}
+                      key={`${index}_${subIndex}`}
                     >
                       <img src={content.mainImg} className="w-2/5" />
                       <div className="w-full">
@@ -255,8 +212,8 @@ const MainPage = () => {
   );
 };
 
-const activeBorderRadius = "1vw 1vw 0 0";
-const inactiveBorderRadius = "1vw 1vw 1vw 1vw";
+const activeBorderRadius = '1vw 1vw 0 0';
+const inactiveBorderRadius = '1vw 1vw 1vw 1vw';
 
 const WholeBox = styled.div`
   padding: 1vw;
