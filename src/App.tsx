@@ -70,20 +70,11 @@ function App() {
 
             {/* 로그인이 필요한 페이지 */}
             <Route element={<PrivateRoutes authentication />}>
-              <Route
-                path="/recipeRegisterPage"
-                element={<RecipeRegisterPage />}
-              />
+              <Route path="/recipeRegisterPage" element={<RecipeRegisterPage />} />
               <Route path="/myPage" element={<MyPage />} />
-              <Route
-                path="/myPage/myRefrigeratorPage"
-                element={<MyRefrigeratorPage />}
-              />
+              <Route path="/myPage/myRefrigeratorPage" element={<MyRefrigeratorPage />} />
 
-              <Route
-                path="/myPage/userEditPage"
-                element={<UserEditProfile />}
-              />
+              <Route path="/myPage/userEditPage" element={<UserEditProfile />} />
             </Route>
           </Routes>
           {/* </div>
