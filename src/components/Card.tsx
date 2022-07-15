@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { COLOR_V2 } from '../constants/ColorV2';
+import LikeIcon from '../images/like_icon.png';
 
 export type CardType = 'coupon' | 'normal';
 
@@ -25,7 +26,7 @@ interface StyleCustom {
 interface IProps {
   cardType?: CardType;
   cardTitle?: string;
-  cardDesc?: string;
+  subTitle?: string;
   cardImg?: string;
   cardExpiration?: string;
   className?: string;
@@ -34,25 +35,36 @@ interface IProps {
   disabled?: boolean;
   styleCustom?: StyleCustom;
   cardPromotionValue?: string;
+  rank?: number;
 }
 
 function Card(props: IProps) {
-  const { onClick, styleCustom, cardTitle, cardDesc, cardImg, className }: IProps = props;
+  const { onClick, rank, styleCustom, cardTitle, subTitle, cardImg, className }: IProps = props;
 
   return (
     <CardContainer onClick={onClick}>
-      <CardImgWrapper
-        className={className}
-        styleCustom={styleCustom}
-        onClick={onClick}
-        color={COLOR_V2.WHITE1}
-        hoverColor={COLOR_V2.PRIMARY5}
-        activeColor={COLOR_V2.PRIMARY_ACTIVE}
-        disabledColor={COLOR_V2.PRIMARY_DISABLED}
-        src={cardImg}
-      />
-      <CardTitleWrapper styleCustom={styleCustom}>{cardTitle}</CardTitleWrapper>
-      <CardDescWrapper styleCustom={styleCustom}>{cardDesc}</CardDescWrapper>
+      <div style={{ position: 'relative' }}>
+        <CardImgWrapper
+          className={className}
+          styleCustom={styleCustom}
+          onClick={onClick}
+          color={COLOR_V2.WHITE1}
+          hoverColor={COLOR_V2.PRIMARY5}
+          activeColor={COLOR_V2.PRIMARY_ACTIVE}
+          disabledColor={COLOR_V2.PRIMARY_DISABLED}
+          src={cardImg}
+        ></CardImgWrapper>
+        <RankWrapper> {rank}</RankWrapper>
+      </div>
+      <CardContentWrapper>
+        <CardContentLeft>
+          <CardTitleWrapper styleCustom={styleCustom}>{cardTitle}</CardTitleWrapper>
+          <CardDescWrapper styleCustom={styleCustom}>{subTitle}</CardDescWrapper>
+        </CardContentLeft>
+        <CardContentRight>
+          <img style={{ width: '21px', height: '18px' }} src={LikeIcon} className="img-render" />
+        </CardContentRight>
+      </CardContentWrapper>
     </CardContainer>
   );
 }
@@ -76,67 +88,70 @@ const CardContainer = styled.div<any>`
   margin: ${(props) => props.styleCustom?.margin ?? ''};
   display: flex;
   flex-direction: column;
-
-  @media screen and (max-width: 680px) {
-  }
-
-  &:hover {
-    background-color: ${(props) => props.styleCustom?.hoverColor ?? ''};
-  }
-  &:active {
-    background-color: ${(props) => props.styleCustom?.activeColor ?? ''};
-  }
-  &:disabled {
-    background-color: ${(props) => props.styleCustom?.disabledColor ?? ''};
-  }
 `;
 
 const CardImgWrapper = styled.img<any>`
   border-radius: 8px;
-  width: ${(props) => props.styleCustom?.width ?? ''};
+  //width: ${(props) => props.styleCustom?.width ?? ''};
   height: ${(props) => props.styleCustom?.height ?? ''};
   margin: ${(props) => props.styleCustom?.margin ?? ''};
-  object-fit: fit;
+  object-fit: cover;
   cursor: pointer;
 
   @media screen and (max-width: 680px) {
-    width: 165px;
-    height: 165px;
+    width: 173px;
+    height: 173px;
   }
+`;
 
-  &:hover {
-    background-color: ${(props) => props.styleCustom?.hoverColor ?? ''};
-  }
-  &:active {
-    background-color: ${(props) => props.styleCustom?.activeColor ?? ''};
-  }
-  &:disabled {
-    background-color: ${(props) => props.styleCustom?.disabledColor ?? ''};
-  }
+const RankWrapper = styled.div`
+  position: absolute;
+  top: 25px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  background: #ffffff;
+  box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  text-align: center;
+  padding: 4px 0 0 0;
+  font-size: 15px;
+  color: #EB3120;
+  font-weight: bold;
 `;
 
 const CardContentWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  height: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 0 0 0;
 `;
 
+const CardContentLeft = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const CardContentRight = styled.div``;
 const CardTitleWrapper = styled.div<any>`
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 140%;
   display: flex;
   align-items: center;
   text-align: center;
-  letter-spacing: -0.02em;
-  margin: 5px 0 0 0;
+  width: auto;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 18px;
+  color: #3f3f3f;
 `;
 
 const CardDescWrapper = styled.div<any>`
   margin-top: 5px;
   font-weight: 400;
-  font-size: 12px;
-  line-height: 90%;
   display: flex;
   letter-spacing: -0.02em;
+  width: auto;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 14px;
+  color: #9a9a9a;
 `;

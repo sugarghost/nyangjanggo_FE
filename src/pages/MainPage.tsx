@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import boardPostApi from '../apis/RecipeApi';
+import Card from '../components/Card';
 import useIntersectionObserver from '../hook/intersectionObserver';
 
 export type Pageable = {
@@ -173,44 +174,82 @@ const MainPage = () => {
                 )}
               </div>
               <hr />
-              {data?.pages?.map((page, index) => (
-                <div key={index}>
-                  {page.content.map((content: any, subIndex: number) => (
-                    <div
-                      className="flex my-2"
-                      onClick={(e) => viewRecipeDetail(content.boardId)}
-                      key={`${index}_${subIndex}`}
-                    >
-                      <img src={content.mainImg} className="w-2/5" />
-                      <div className="w-full">
-                        <p>{content.title}</p>
-                        <p>{content.subTitle}</p>
-                        <div className="flex">
-                          <div>
-                            <p>{content.nickname}</p>좋아요: {content.goodCount}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-              {isFetchingNextPage ? (
-                <div className="py-3 text-center">로딩 중</div>
-              ) : hasNextPage ? (
-                <div ref={setTarget} className="py-3 text-center" />
-              ) : (
-                <></>
-              )}
-
-              <hr />
+              <ContentTitle>인기도</ContentTitle>
+              <CardsContainer className="flex flex-row">
+                {data?.pages?.map((page, index) => (
+                  <>
+                    {page.content.map((content: any, subIndex: number) => (
+                      <Card
+                        cardTitle={content.title}
+                        subTitle={content.nickname}
+                        key={`${index}_${subIndex}`}
+                        cardImg={content.mainImg}
+                        styleCustom={{ width: '50%', margin: '16px 0 0 0' }}
+                        onClick={(e) => viewRecipeDetail(content.boardId)}
+                        rank={subIndex + 1}
+                      />
+                      // <div
+                      //   className="flex my-2"
+                      //   onClick={(e) => viewRecipeDetail(content.boardId)}
+                      //   key={`${index}_${subIndex}`}
+                      // >
+                      //   <img src={content.mainImg} className="w-2/5" />
+                      //   <div className="w-full">
+                      //     <p>{content.title}</p>
+                      //     <p>{content.subTitle}</p>
+                      //     <div className="flex">
+                      //       <div>
+                      //         <p>{content.nickname}</p>좋아요: {content.goodCount}
+                      //       </div>
+                      //     </div>
+                      //   </div>
+                      // </div>
+                    ))}
+                  </>
+                ))}
+              </CardsContainer>
             </div>
+            {isFetchingNextPage ? (
+              <div className="py-3 text-center">로딩 중</div>
+            ) : hasNextPage ? (
+              <div ref={setTarget} className="py-3 text-center" />
+            ) : (
+              <></>
+            )}
+
+            <hr />
           </div>
         </div>
       </Suspense>
     </>
   );
 };
+
+const ContentTitle = styled.div`
+  text-align: left;
+  padding: 0px 15px 0px 15px;
+  font-family: 'NEXON Lv2 Gothic';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 23px;
+  /* identical to box height */
+
+  /* Main */
+
+  padding: 16px 16px 0 16px;
+  color: #eb3120;
+`;
+
+const CardsContainer = styled.div`
+  margin: 0px auto;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 0px 15px 0px 15px;
+`;
 
 const activeBorderRadius = '1vw 1vw 0 0';
 const inactiveBorderRadius = '1vw 1vw 1vw 1vw';
