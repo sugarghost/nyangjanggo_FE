@@ -1,17 +1,9 @@
-import React, { useCallback, useState } from "react";
-import styled from "styled-components";
+import React, { useCallback, useState } from 'react';
+import styled from 'styled-components';
 
-import { COLOR_V2 } from "../constants/ColorV2";
+import { COLOR_V2 } from '../constants/ColorV2';
 
-type InputType =
-  | "text"
-  | "userId"
-  | "password"
-  | "confirmPassword"
-  | "email"
-  | "emailConfirm"
-  | "phone"
-  | "emailAuth";
+type InputType = 'text' | 'userId' | 'password' | 'confirmPassword' | 'email' | 'emailConfirm' | 'phone' | 'emailAuth';
 
 interface IProps {
   className?: string;
@@ -22,10 +14,7 @@ interface IProps {
   validationMessage?: string;
   inputLabel?: string;
   value?: string;
-  onChange: (
-    e: React.ChangeEvent<HTMLInputElement>,
-    validationErorr?: boolean
-  ) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>, validationErorr?: boolean) => void;
   onClickClearValue?: (e: MouseEvent) => void;
   validationCheck?: boolean;
   loginType?: boolean;
@@ -62,7 +51,7 @@ const InputV2 = (props: IProps) => {
     onClickClearValue,
     validationCheck,
     inputType,
-    autoComplete = "off",
+    autoComplete = 'off',
   }: IProps = props;
 
   const [validationErorr, setValidationErorr] = useState(false);
@@ -101,8 +90,7 @@ const InputV2 = (props: IProps) => {
 };
 
 const InputContainer = styled.div<any>`
-  margin: ${(props) =>
-    props.styleCustom.margin ? props.styleCustom.margin : ""};
+  margin: ${(props) => (props.styleCustom.margin ? props.styleCustom.margin : '')};
 `;
 
 const LabelContainer = styled.div`
@@ -127,16 +115,12 @@ const InputWrapper = styled.input<any>`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: ${(props) =>
-    props.inputType === "phone" ? "16px 16px 16px 100px" : "16px"};
-  border: 1px solid
-    ${(props) =>
-      props.styleCustom.borderColor ? props.styleCustom?.borderColor : ""};
+  padding: ${(props) => (props.inputType === 'phone' ? '16px 16px 16px 100px' : '16px')};
+  border: 1px solid ${(props) => (props.styleCustom.borderColor ? props.styleCustom?.borderColor : '')};
   box-sizing: border-box;
   border-radius: 4px;
   flex: none;
-  background: ${(props) =>
-    props.disabled ? props.styleCustom?.disabledColor : ""};
+  background: ${(props) => (props.disabled ? props.styleCustom?.disabledColor : '')};
   width: 100%;
   height: 100%;
   user-select: text;
@@ -145,18 +129,17 @@ const InputWrapper = styled.input<any>`
 
   @media screen and (max-width: 768px) {
     width: 100%;
-    padding: "10px 10px 10px 80px";
+    padding: '10px 10px 10px 80px';
   }
 
   &:hover {
     outline: none;
-    border: ${(props) =>
-      props.disabled ? "" : `1px solid ${props.styleCustom?.hoverColor}` ?? ""};
+    border: ${(props) => (props.disabled ? '' : `1px solid ${props.styleCustom?.hoverColor}` ?? '')};
   }
 
   &:focus {
     outline: none;
-    border: 1px solid ${(props) => props.styleCustom?.focusColor ?? ""};
+    border: 1px solid ${(props) => props.styleCustom?.focusColor ?? ''};
   }
 
   &::placeholder {
@@ -176,8 +159,8 @@ const InputWrapper = styled.input<any>`
 
 const InputOuter = styled.div<any>`
   position: relative;
-  height: ${(props) => props.styleCustom?.height ?? ""};
-  width: ${(props) => props.styleCustom?.width ?? ""};
+  height: ${(props) => props.styleCustom?.height ?? ''};
+  width: ${(props) => props.styleCustom?.width ?? ''};
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
@@ -195,10 +178,8 @@ const ClearBtn = styled.button<any>`
 `;
 
 const FlexContainer = styled.div<any>`
-  width: ${(props) =>
-    props.styleCustom?.width ? props.styleCustom?.width : ""};
-  height: ${(props) =>
-    props.styleCustom?.height ? props.styleCustom?.height : ""};
+  width: ${(props) => (props.styleCustom?.width ? props.styleCustom?.width : '')};
+  height: ${(props) => (props.styleCustom?.height ? props.styleCustom?.height : '')};
   display: flex;
   flex-direction: row;
   justify-content: space-between;

@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-import { COLOR_V2 } from "../constants/ColorV2";
+import { COLOR_V2 } from '../constants/ColorV2';
 
-export type CardType = "coupon" | "normal";
+export type CardType = 'coupon' | 'normal';
 
 interface StyleCustom {
   width?: string;
@@ -37,14 +37,7 @@ interface IProps {
 }
 
 function Card(props: IProps) {
-  const {
-    onClick,
-    styleCustom,
-    cardTitle,
-    cardDesc,
-    cardImg,
-    className,
-  }: IProps = props;
+  const { onClick, styleCustom, cardTitle, cardDesc, cardImg, className }: IProps = props;
 
   return (
     <CardContainer onClick={onClick}>
@@ -67,20 +60,20 @@ function Card(props: IProps) {
 export default Card;
 
 const CardContainer = styled.div<any>`
-  background-color: ${(props) => props.styleCustom?.background ?? ""};
-  color: ${(props) => props.styleCustom?.color ?? ""};
+  background-color: ${(props) => props.styleCustom?.background ?? ''};
+  color: ${(props) => props.styleCustom?.color ?? ''};
   border-radius: 8px;
-  border: ${(props) => props.styleCustom?.border ?? ""};
-  padding: ${(props) => props.styleCustom?.padding ?? ""};
+  border: ${(props) => props.styleCustom?.border ?? ''};
+  padding: ${(props) => props.styleCustom?.padding ?? ''};
   font-style: normal;
   font-weight: 600;
-  font-size: ${(props) => props.styleCustom?.fontSize ?? "18px"};
+  font-size: ${(props) => props.styleCustom?.fontSize ?? '18px'};
   line-height: 22px;
   text-align: left;
   letter-spacing: -0.02em;
-  width: ${(props) => props.styleCustom?.width ?? ""};
-  height: ${(props) => props.styleCustom?.height ?? ""};
-  margin: ${(props) => props.styleCustom?.margin ?? ""};
+  width: ${(props) => props.styleCustom?.width ?? ''};
+  height: ${(props) => props.styleCustom?.height ?? ''};
+  margin: ${(props) => props.styleCustom?.margin ?? ''};
   display: flex;
   flex-direction: column;
 
@@ -88,21 +81,21 @@ const CardContainer = styled.div<any>`
   }
 
   &:hover {
-    background-color: ${(props) => props.styleCustom?.hoverColor ?? ""};
+    background-color: ${(props) => props.styleCustom?.hoverColor ?? ''};
   }
   &:active {
-    background-color: ${(props) => props.styleCustom?.activeColor ?? ""};
+    background-color: ${(props) => props.styleCustom?.activeColor ?? ''};
   }
   &:disabled {
-    background-color: ${(props) => props.styleCustom?.disabledColor ?? ""};
+    background-color: ${(props) => props.styleCustom?.disabledColor ?? ''};
   }
 `;
 
 const CardImgWrapper = styled.img<any>`
   border-radius: 8px;
-  width: ${(props) => props.styleCustom?.width ?? ""};
-  height: ${(props) => props.styleCustom?.height ?? ""};
-  margin: ${(props) => props.styleCustom?.margin ?? ""};
+  width: ${(props) => props.styleCustom?.width ?? ''};
+  height: ${(props) => props.styleCustom?.height ?? ''};
+  margin: ${(props) => props.styleCustom?.margin ?? ''};
   object-fit: fit;
   cursor: pointer;
 
@@ -112,13 +105,13 @@ const CardImgWrapper = styled.img<any>`
   }
 
   &:hover {
-    background-color: ${(props) => props.styleCustom?.hoverColor ?? ""};
+    background-color: ${(props) => props.styleCustom?.hoverColor ?? ''};
   }
   &:active {
-    background-color: ${(props) => props.styleCustom?.activeColor ?? ""};
+    background-color: ${(props) => props.styleCustom?.activeColor ?? ''};
   }
   &:disabled {
-    background-color: ${(props) => props.styleCustom?.disabledColor ?? ""};
+    background-color: ${(props) => props.styleCustom?.disabledColor ?? ''};
   }
 `;
 

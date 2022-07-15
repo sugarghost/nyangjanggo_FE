@@ -1,3 +1,3 @@
 export enum FontSize {
-  MEDIUM = "16px",
+  MEDIUM = '16px',
 }

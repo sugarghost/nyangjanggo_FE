@@ -1,12 +1,8 @@
 let index = 0;
-  let isAdding = true;
-  let textToBeTypedIndex = 0;
+let isAdding = true;
+let textToBeTypedIndex = 0;
 
-export const typingAnimationHelper = (
-  className: string,
-  textToBeTypedArr: string[],
-  time = 5000
-) => {
+export const typingAnimationHelper = (className: string, textToBeTypedArr: string[], time = 5000) => {
   setTimeout(
     () => {
       const typeText = document.querySelector(`.${className}`) as HTMLElement;
@@ -22,18 +18,16 @@ export const typingAnimationHelper = (
             typingAnimationHelper(className, textToBeTypedArr);
           }, time);
           return;
-        } 
-          // increment index by 1
-          index++;
-        
+        }
+        // increment index by 1
+        index++;
       } else {
         // removing text
         if (index === 0) {
           // no more text to remove
           isAdding = true;
           // switch to next text in text array
-          textToBeTypedIndex =
-            (textToBeTypedIndex + 1) % textToBeTypedArr.length;
+          textToBeTypedIndex = (textToBeTypedIndex + 1) % textToBeTypedArr.length;
         } else {
           // decrement index by 1
           index--;
@@ -42,6 +36,6 @@ export const typingAnimationHelper = (
       // call itself
       typingAnimationHelper(className, textToBeTypedArr);
     },
-    isAdding ? 120 : 60
+    isAdding ? 120 : 60,
   );
 };

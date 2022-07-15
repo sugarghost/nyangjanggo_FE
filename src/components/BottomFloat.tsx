@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 interface IProps {
   children?: React.ReactElement;
@@ -9,11 +9,7 @@ interface IProps {
 const BottomFloat = (props: IProps) => {
   const { children, className } = props;
 
-  return (
-    <BottomFloatContainer className={className}>
-      {children}
-    </BottomFloatContainer>
-  );
+  return <BottomFloatContainer className={className}>{children}</BottomFloatContainer>;
 };
 
 const BottomFloatContainer = styled.div`

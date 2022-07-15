@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { COLOR } from '../../constants';
+
 function MyPage() {
   const navigate = useNavigate();
   const goMyRefrigeratorPage = () => {
@@ -20,7 +22,7 @@ function MyPage() {
   };
 
   return (
-    <div className="bg-secondary-1 min-h-screen bg-white dark:bg-gray-900" style={{ padding: '0px 10px' }}>
+    <div className="bg-secondary-1 min-h-screen bg-white dark:bg-gray-900" style={{ padding: '0px 0px' }}>
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
         <div className="max-w-md mx-auto w-full">
           <UserMainInfoWrapper className="min-width-400">
@@ -34,6 +36,7 @@ function MyPage() {
               </div>
             </ProfileInfo>
           </UserMainInfoWrapper>
+          <div style={{ width: '100%', height: '12px', background: COLOR.GRAY1 }}></div>
           <OptionsWrapper>
             <OptionBox onClick={goUserEditPage}>정보 수정</OptionBox>
             <OptionBox onClick={goMyRefrigeratorPage} className="">
@@ -53,38 +56,39 @@ export default MyPage;
 const UserMainInfoWrapper = styled.div`
   width: 100%;
   display: flex;
+  padding: 28px 15px;
 `;
 
 const ProfileImage = styled.img`
-  width: 150px;
-  height: 150px;
+  width: 87px;
+  height: 87px;
+  border-radius: 3px;
 `;
 
 const ProfileInfo = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 0 0 15px;
+  margin: 12px 0 0 15px;
 `;
 
 const OptionsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin: 30px 0 0 0;
 `;
 
 const OptionBox = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 12px;
-  border: 1px solid grey;
-  margin: 5px auto 0 auto;
+  padding: 12px 20px;
+  border: 1px solid ${COLOR.GRAY1};
   cursor: pointer;
+  font-size: 15px;
 `;
 
 const LogOutButton = styled.div`
-  margin: 10px 0 0 0;
+  margin: 13px 0 0 0;
   font-size: 14px;
   opacity: 0.7;
   cursor: pointer;

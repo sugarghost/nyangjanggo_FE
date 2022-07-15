@@ -88,7 +88,7 @@ const RecipeDetailPage = ({}) => {
   useEffect(() => {}, []);
   // 수정 페이지 기능
   const modifyRecipeDetail = () => {
-    navigate('/recipeRegisterPage', {state: { boardId, recipe, resourceList, stepList, type: 'modify' },});
+    navigate('/recipeRegisterPage', { state: { boardId, recipe, resourceList, stepList, type: 'modify' } });
   };
 
   const putRecipeMutation = useMutation((boardId: number) => deleteRecipeApi(boardId), {
@@ -109,82 +109,76 @@ const RecipeDetailPage = ({}) => {
   };
   return (
     <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
-        <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-          <div className="mx-auto w-90vw">
-            <div className="py-4 sticky top-0 w-full bg-light-50">
-              <FontAwesomeIcon
-                className="m-1 float-left"
-                icon={faChevronLeft}
-                color="grey"
-                size="lg"
-                onClick={goBack}
-              />
-              <span className="text-lg text-gray-700 font-bold">레시피 등록</span>
-              <hr className="mt-2" />
-            </div>
-            <div className="float-right">
-              <button className="w-10 h-10 rounded-2xl bg-gray-200 m-1" onClick={modifyRecipeDetail}>
-                <FontAwesomeIcon icon={faPenToSquare} color="white" size="lg" />
-              </button>
-              <button className="w-10 h-10 rounded-2xl bg-gray-200 m-1" onClick={deleteRecipeDetail}>
-                <FontAwesomeIcon icon={faTrashCan} color="white" size="lg" />
-              </button>
-              {recipe?.nickname === userName && (
-                <>
-                  <button onClick={modifyRecipeDetail}>수정</button>
-                  <button onClick={deleteRecipeDetail}>삭제</button>
-                </>
-              )}
-            </div>
-            <img className="min-h-80 mb-4 w-full rounded-2xl image-render-auto bg-gray-100" src={recipe?.mainImg} />
-            <p className="text-gray-700 text-left text-4xl my-1 font-900">{recipe?.title}</p>
-            <p className="text-gray-600 text-left text-lg my-1 font-600">{recipe?.subTitle}</p>
-            <div className="text-left text-lg my-1 font-300 border-gray-200 border-2 rounded-md min-h-30 p-2">
-              {recipe?.content}
-            </div>
+      <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
+        <div className="mx-auto w-90vw">
+          <div className="py-4 sticky top-0 w-full bg-light-50">
+            <FontAwesomeIcon className="m-1 float-left" icon={faChevronLeft} color="grey" size="lg" onClick={goBack} />
+            <span className="text-lg text-gray-700 font-bold">레시피 등록</span>
+            <hr className="mt-2" />
+          </div>
+          <div className="float-right">
+            <button className="w-10 h-10 rounded-2xl bg-gray-200 m-1" onClick={modifyRecipeDetail}>
+              <FontAwesomeIcon icon={faPenToSquare} color="white" size="lg" />
+            </button>
+            <button className="w-10 h-10 rounded-2xl bg-gray-200 m-1" onClick={deleteRecipeDetail}>
+              <FontAwesomeIcon icon={faTrashCan} color="white" size="lg" />
+            </button>
+            {recipe?.nickname === userName && (
+              <>
+                <button onClick={modifyRecipeDetail}>수정</button>
+                <button onClick={deleteRecipeDetail}>삭제</button>
+              </>
+            )}
+          </div>
+          <img className="min-h-80 mb-4 w-full rounded-2xl image-render-auto bg-gray-100" src={recipe?.mainImg} />
+          <p className="text-gray-700 text-left text-4xl my-1 font-900">{recipe?.title}</p>
+          <p className="text-gray-600 text-left text-lg my-1 font-600">{recipe?.subTitle}</p>
+          <div className="text-left text-lg my-1 font-300 border-gray-200 border-2 rounded-md min-h-30 p-2">
+            {recipe?.content}
+          </div>
 
-            <hr />
+          <hr />
 
-            <p className="text-gray-700 text-left text-lg my-1 font-900">재료 분류</p>
-            {resourceList.map((categorys, index) => (
-              <div key={index}>
-                <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
-                  <p className="text-lg my-1 font-500 text-left">{categorys.category}</p>
-                  {categorys.resources.map((resource, subIndex) => (
-                    <div key={`${index  }_${  subIndex}`}>
-                      <div className="flex justify-between w-full mb-4">
-                        <span className="float-left text-left text-base w-2/3 my-1 font-400">
-                          {resource.resourceName}
-                        </span>
-                        <span className="text-base my-1 font-400">:</span>
-                        <span className="float-right text-right text-base w-1/3 my-1 font-400">{resource.amount}</span>
-                      </div>
+          <p className="text-gray-700 text-left text-lg my-1 font-900">재료 분류</p>
+          {resourceList.map((categorys, index) => (
+            <div key={index}>
+              <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
+                <p className="text-lg my-1 font-500 text-left">{categorys.category}</p>
+                {categorys.resources.map((resource, subIndex) => (
+                  <div key={`${index}_${subIndex}`}>
+                    <div className="flex justify-between w-full mb-4">
+                      <span className="float-left text-left text-base w-2/3 my-1 font-400">
+                        {resource.resourceName}
+                      </span>
+                      <span className="text-base my-1 font-400">:</span>
+                      <span className="float-right text-right text-base w-1/3 my-1 font-400">{resource.amount}</span>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+          <hr />
+
+          <p className="text-gray-700 text-left text-lg my-1 font-900">조리 과정</p>
+          <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
+            {stepList.map((field, index) => (
+              <div key={index}>
+                <p className="text-lg my-1 font-500 text-left">조리과정 {index + 1}</p>
+                <RecipeInfoWrapper>
+                  <div className="flex justify-between w-full mb-4">
+                    <img src={field.imageLink} className="img-render w-2/6 rounded-lg" />
+                    <div className="w-4/6 ml-4 text-left border-gray-200 border-2 rounded-md p-1">
+                      {field.stepContent}
+                    </div>
+                  </div>
+                </RecipeInfoWrapper>
               </div>
             ))}
-            <hr />
-
-            <p className="text-gray-700 text-left text-lg my-1 font-900">조리 과정</p>
-            <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
-              {stepList.map((field, index) => (
-                <div key={index}>
-                  <p className="text-lg my-1 font-500 text-left">조리과정 {index + 1}</p>
-                  <RecipeInfoWrapper>
-                    <div className="flex justify-between w-full mb-4">
-                      <img src={field.imageLink} className="img-render w-2/6 rounded-lg" />
-                      <div className="w-4/6 ml-4 text-left border-gray-200 border-2 rounded-md p-1">
-                        {field.stepContent}
-                      </div>
-                    </div>
-                  </RecipeInfoWrapper>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </div>
+    </div>
   );
 };
 

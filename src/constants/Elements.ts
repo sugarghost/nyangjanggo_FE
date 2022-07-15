@@ -1,4 +1,4 @@
 enum REMINDER_TYPE {
-  WARNING = "warning",
-  SUCCESS = "success"
+  WARNING = 'warning',
+  SUCCESS = 'success',
 }

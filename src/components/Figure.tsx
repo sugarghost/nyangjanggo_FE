@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 export interface ImgProps {
   borderSize?: number;
@@ -15,31 +15,21 @@ export interface ImgProps {
 
 const StyledFigure = styled.figure<ImgProps>`
   display: block;
-  width: ${(props) => (props.width ? `${props.width}` : "100%")};
-  height: ${(props) => (props.height ? `${props.height}` : "auto")};
+  width: ${(props) => (props.width ? `${props.width}` : '100%')};
+  height: ${(props) => (props.height ? `${props.height}` : 'auto')};
   background: #efefef;
-  border: ${(props) =>
-    props.borderSize ? `${props.borderSize}px solid #efefef` : "none"};
-  border-radius: ${(props) => (props.round ? `${props.round}em` : "none")};
+  border: ${(props) => (props.borderSize ? `${props.borderSize}px solid #efefef` : 'none')};
+  border-radius: ${(props) => (props.round ? `${props.round}em` : 'none')};
   overflow: hidden;
   & > img {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: ${(props) => (props.fit ? "cover" : `contain`)};
+    object-fit: ${(props) => (props.fit ? 'cover' : `contain`)};
   }
 `;
 
-function Figure({
-  round = 0,
-  borderSize = 0,
-  alt = "",
-  src,
-  width,
-  height,
-  fit = true,
-  onClick,
-}: ImgProps) {
+function Figure({ round = 0, borderSize = 0, alt = '', src, width, height, fit = true, onClick }: ImgProps) {
   const figureProps = {
     borderSize,
     round,

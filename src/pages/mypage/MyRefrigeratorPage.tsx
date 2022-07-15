@@ -1,35 +1,29 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { axiosInstance } from "../../apis/axiosInstance";
-import BottomFloat from "../../components/BottomFloat";
-import Calendar from "../../components/mypage/Calendar";
+import { axiosInstance } from '../../apis/axiosInstance';
+import BottomFloat from '../../components/BottomFloat';
+import Calendar from '../../components/mypage/Calendar';
 
 const MyRefrigeratorPage = () => {
-  const [profileImage, setProfileImage] = useState(
-    "https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg"
-  );
+  const [profileImage, setProfileImage] = useState('https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg');
 
   const [showRegisterIngredient, setShowRegisterIngredient] = useState(false);
-  const [ingredientName, setIngredientName] = useState("");
+  const [ingredientName, setIngredientName] = useState('');
   const [ingredientCount, setIngredientCount] = useState<number>();
   const [startDate, setStartDate] = useState(new Date());
-  
+
   const handleOnClcikAddButton = () => {
     setShowRegisterIngredient(!showRegisterIngredient);
   };
 
-  const handleOnChangeIngredientName = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleOnChangeIngredientName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIngredientName(e.currentTarget.value);
   };
 
-  const handleOnChangeIngredientCount = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleOnChangeIngredientCount = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIngredientCount(parseInt(e.currentTarget.value));
   };
 
@@ -38,54 +32,50 @@ const MyRefrigeratorPage = () => {
   };
   return (
     <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
-        <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-          <div className="mx-auto w-full" style={{ padding: "0px 10px" }}>
-            <OptionsWrapper>
-              <IngredientAddBtnWrapper>
-                <IngredientAddBtn onPointerDown={handleOnClcikAddButton}>
-                  +
-                </IngredientAddBtn>
-              </IngredientAddBtnWrapper>
-              {showRegisterIngredient ? (
-                <>
-                  <IngredientRegisterTitleInput
-                    onChange={handleOnChangeIngredientName}
-                    value={ingredientName}
-                    placeholder="재료 이름"
-                  />
-                  <IngredientRegisterCountInput
-                    onChange={handleOnChangeIngredientCount}
-                    value={ingredientCount}
-                    placeholder="재료 수량"
-                    type="number"
-                  />
-                  {/* <DatePicker
+      <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
+        <div className="mx-auto w-full" style={{ padding: '0px 10px' }}>
+          <OptionsWrapper>
+            <IngredientAddBtnWrapper>
+              <IngredientAddBtn onPointerDown={handleOnClcikAddButton}>+</IngredientAddBtn>
+            </IngredientAddBtnWrapper>
+            {showRegisterIngredient ? (
+              <>
+                <IngredientRegisterTitleInput
+                  onChange={handleOnChangeIngredientName}
+                  value={ingredientName}
+                  placeholder="재료 이름"
+                />
+                <IngredientRegisterCountInput
+                  onChange={handleOnChangeIngredientCount}
+                  value={ingredientCount}
+                  placeholder="재료 수량"
+                  type="number"
+                />
+                {/* <DatePicker
                     selected={startDate}
                     onChange={(date: Date) => setStartDate(date)}
                   /> */}
-                </>
-              ) : (
-                <IngredientsBox className="">
-                    <div>
-                      06/01
-                      <span style={{ margin: "0 0 0 20px" }}>달걀(6개)</span>
-                    </div>
-                    <div>10일 남음</div>
-                  </IngredientsBox>
-              )}
+              </>
+            ) : (
+              <IngredientsBox className="">
+                <div>
+                  06/01
+                  <span style={{ margin: '0 0 0 20px' }}>달걀(6개)</span>
+                </div>
+                <div>10일 남음</div>
+              </IngredientsBox>
+            )}
 
-              <Calendar />
-            </OptionsWrapper>
-          </div>
+            <Calendar />
+          </OptionsWrapper>
         </div>
-        {showRegisterIngredient && (
-          <BottomFloat className="w-full">
-            <RegisterButton onClick={handleOnClickRegister}>
-              등록하기
-            </RegisterButton>
-          </BottomFloat>
-        )}
       </div>
+      {showRegisterIngredient && (
+        <BottomFloat className="w-full">
+          <RegisterButton onClick={handleOnClickRegister}>등록하기</RegisterButton>
+        </BottomFloat>
+      )}
+    </div>
   );
 };
 

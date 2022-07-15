@@ -14,7 +14,8 @@ import Button from '../components/Botton';
 import Category from '../components/recipe/Category';
 import Step from '../components/recipe/Step';
 import {
- ResourceFormData, StepFormDataWithId ,
+  ResourceFormData,
+  StepFormDataWithId,
   Recipe,
   RecipeFormData,
   recipeValidationSchema,
@@ -27,7 +28,6 @@ import {
   stepDefaultValues,
   stepValidationSchema,
 } from '../type/recipeType';
-
 
 export type StepPostFormFileds = {
   stepNum: number;
@@ -102,32 +102,28 @@ const RecipeRegisterPage = () => {
 
   // 처음 페이지 진입시 해당 유저가 작성중이었던 레시피가 있는지 확인해 조회
   // 수정 모드인 경우 작동 안함
-  const { isLoading, data: postingData } = useQuery(
-    ['getRecipePosting'],
-    async () => recipeApi.getRecipePosting(),
-    {
-      refetchOnWindowFocus: false,
-      enabled: !isModify,
-      onSuccess: (res) => {
-        console.log('getRecipePosting', res);
+  const { isLoading, data: postingData } = useQuery(['getRecipePosting'], async () => recipeApi.getRecipePosting(), {
+    refetchOnWindowFocus: false,
+    enabled: !isModify,
+    onSuccess: (res) => {
+      console.log('getRecipePosting', res);
 
-        if (res.data) {
-          setBoardId(res.data.boardId);
-          if (res.data.status == 'step 1') {
-            setRegisterStep(2);
-            setRegisterState(2);
-          } else if (res.data.status == 'step 2') {
-            setRegisterStep(3);
-            setRegisterState(3);
-          } else if (res.data.status == 'step 3') {
-            setRegisterStep(3);
-            setRegisterState(3);
-          }
+      if (res.data) {
+        setBoardId(res.data.boardId);
+        if (res.data.status == 'step 1') {
+          setRegisterStep(2);
+          setRegisterState(2);
+        } else if (res.data.status == 'step 2') {
+          setRegisterStep(3);
+          setRegisterState(3);
+        } else if (res.data.status == 'step 3') {
+          setRegisterStep(3);
+          setRegisterState(3);
         }
-        setQueryData(res.data);
-      },
+      }
+      setQueryData(res.data);
     },
-  );
+  });
 
   // 수정 모드인 경우 수정 데이터를 불러오기 위해 작동
   const { isLoading: modifyIsLoading, data: modifyData } = useQuery(
@@ -274,7 +270,7 @@ const RecipeRegisterPage = () => {
       formData.append(
         'boardId',
 
-        new Blob([JSON.stringify(boardId)], {type: 'application/json',}),
+        new Blob([JSON.stringify(boardId)], { type: 'application/json' }),
       );
       putRecipeMutation.mutate(formData);
     } else {
@@ -358,7 +354,7 @@ const RecipeRegisterPage = () => {
     const formData = new FormData();
     formData.append(
       'boardRequestDtoStepResource',
-      new Blob([JSON.stringify(resourceRequestDtoTemplate)], {type: 'application/json',}),
+      new Blob([JSON.stringify(resourceRequestDtoTemplate)], { type: 'application/json' }),
     );
     // 수정 모드 이거나 이미 2 단계를 지나서 3단계에 도달한 상태라면 Put 명령으로 변경
     if (isModify || registerState == 3) {
@@ -401,7 +397,7 @@ const RecipeRegisterPage = () => {
       RegistData.append(
         'boardId',
 
-        new Blob([JSON.stringify(boardId)], {type: 'application/json',}),
+        new Blob([JSON.stringify(boardId)], { type: 'application/json' }),
       );
       postRegistMutation.mutate(RegistData);
     },
@@ -422,14 +418,8 @@ const RecipeRegisterPage = () => {
     console.log('stepDelete :', isModify, stepMethods.getValues(`boardRequestDtoStepRecipe.${index}.fromServer`));
     if (stepMethods.getValues(`boardRequestDtoStepRecipe.${index}.fromServer`)) {
       const formData = new FormData();
-      formData.append(
-        'boardId',
-        new Blob([JSON.stringify(boardId)], {type: 'application/json',}),
-      );
-      formData.append(
-        'stepNum',
-        new Blob([JSON.stringify(index)], {type: 'application/json',}),
-      );
+      formData.append('boardId', new Blob([JSON.stringify(boardId)], { type: 'application/json' }));
+      formData.append('stepNum', new Blob([JSON.stringify(index)], { type: 'application/json' }));
       deleteStepMutation.mutate(formData);
     }
     stepRemove(index);
@@ -461,128 +451,122 @@ const RecipeRegisterPage = () => {
   };
   return (
     <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
-        <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-          <div className="mx-auto w-90vw">
-            <div className="py-4 sticky top-0 w-full bg-light-50">
-              <FontAwesomeIcon
-                className="m-1 float-left"
-                icon={faChevronLeft}
-                color="grey"
-                size="lg"
-                onClick={goBack}
-              />
-              <span className="text-lg text-gray-700 font-bold">레시피 등록</span>
-              <hr className="mt-2" />
-            </div>
-            {registerStep === 1 ? (
-              <FormProvider {...recipeMethods}>
-                <form onSubmit={recipeHandleSubmit(onSubmitRecipe, onErrorRecipe)}>
-                  <p className="text-gray-700 text-left text-lg my-1 font-900">요리 메인 이미지</p>
-                  <img
-                    className="min-h-80 w-full rounded-2xl image-render-auto bg-gray-100"
-                    src={mainImageUrl}
-                    onClick={mainImageClick}
-                  />
+      <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
+        <div className="mx-auto w-90vw">
+          <div className="py-4 sticky top-0 w-full bg-light-50">
+            <FontAwesomeIcon className="m-1 float-left" icon={faChevronLeft} color="grey" size="lg" onClick={goBack} />
+            {/* <span className="text-lg text-gray-700 font-bold">레시피 등록</span> */}
+            {/* <hr className="mt-2" /> */}
+          </div>
+          {registerStep === 1 ? (
+            <FormProvider {...recipeMethods}>
+              <form onSubmit={recipeHandleSubmit(onSubmitRecipe, onErrorRecipe)}>
+                <p className="text-gray-700 text-left text-lg my-1 font-900">요리 메인 이미지</p>
+                <img
+                  className="min-h-80 w-full rounded-2xl image-render-auto bg-gray-100"
+                  src={mainImageUrl}
+                  onClick={mainImageClick}
+                />
 
-                  <input
-                    type="file"
-                    onChange={onSaveMainImageFile}
-                    accept="image/jpg,impge/png,image/jpeg"
-                    ref={mainImageRef}
-                    hidden
-                  />
-                  <input
-                    className="p-4 my-4 w-full rounded-md border border-gray-300"
-                    placeholder="요리 이름"
-                    {...recipeRegister('boardRequestDtoStepMain.title', {required: true,})}
-                  />
-                  <input
-                    className="p-4 my-4 w-full rounded-md border border-gray-300"
-                    placeholder="요리 소개"
-                    {...recipeRegister('boardRequestDtoStepMain.subTitle', {required: true,})}
-                  />
+                <input
+                  type="file"
+                  onChange={onSaveMainImageFile}
+                  accept="image/jpg,impge/png,image/jpeg"
+                  ref={mainImageRef}
+                  hidden
+                />
+                <input
+                  className="p-4 my-4 w-full rounded-md border border-gray-300"
+                  placeholder="요리 이름"
+                  {...recipeRegister('boardRequestDtoStepMain.title', { required: true })}
+                />
+                <input
+                  className="p-4 my-4 w-full rounded-md border border-gray-300"
+                  placeholder="요리 소개"
+                  {...recipeRegister('boardRequestDtoStepMain.subTitle', { required: true })}
+                />
 
-                  <textarea
-                    className="p-4 my-4 w-full rounded-md border border-gray-300"
-                    placeholder="요리 설명"
-                    rows={6}
-                    {...recipeRegister('boardRequestDtoStepMain.content', {required: true,})}
-                  />
-                  <div>
-                    <button type="submit" className=" rounded-md h-10 w-full text-white bg-red-600 items-center">
-                      등록하기
-                    </button>
-                  </div>
-                </form>
-              </FormProvider>
-            ) : registerStep === 2 ? (
-              <FormProvider {...resourceMethods}>
-                <form onSubmit={resourceHandleSubmit(onSubmitResource, onErrorResource)}>
-                  <span className="text-gray-700 text-left float-left text-lg my-1 font-900">재료 분류</span>
-
-                  <button
-                    className="m-1 float-right"
-                    onClick={() =>
-                      resourceAppend({
-                        name: '',
-                        resources: [{ resourceName: '', amount: '' }],
-                      })
-                    }
-                  >
-                    <FontAwesomeIcon icon={faPlus} color="grey" size="lg" />
+                <textarea
+                  className="p-4 my-4 w-full rounded-md border border-gray-300"
+                  placeholder="요리 설명"
+                  rows={6}
+                  {...recipeRegister('boardRequestDtoStepMain.content', { required: true })}
+                />
+                <div>
+                  <button type="submit" className=" rounded-md h-10 w-full text-white bg-red-600 items-center">
+                    등록하기
                   </button>
-                  {resourceFields.map((item, index) => (
+                </div>
+              </form>
+            </FormProvider>
+          ) : registerStep === 2 ? (
+            <FormProvider {...resourceMethods}>
+              <form onSubmit={resourceHandleSubmit(onSubmitResource, onErrorResource)}>
+                <span className="text-gray-700 text-left float-left text-lg my-1 font-900">재료 분류</span>
+
+                <button
+                  className="m-1 float-right"
+                  onClick={() =>
+                    resourceAppend({
+                      name: '',
+                      resources: [{ resourceName: '', amount: '' }],
+                    })
+                  }
+                >
+                  <FontAwesomeIcon icon={faPlus} color="grey" size="lg" />
+                </button>
+                {resourceFields.map((item, index) => (
+                  <div key={index}>
+                    <Category name={item.name} index={index} onDelete={() => resourceRemove(index)} />
+                  </div>
+                ))}
+
+                <div>
+                  <input
+                    type="button"
+                    className=" rounded-md h-10 w-full text-white my-1 bg-red-300 items-center"
+                    onClick={resourcePreStepBtnClick}
+                    value="되돌아가기"
+                  />
+                  <button type="submit" className=" rounded-md h-10 w-full text-white my-1 bg-red-600 items-center">
+                    등록하기
+                  </button>
+                </div>
+              </form>
+            </FormProvider>
+          ) : (
+            <FormProvider {...stepMethods}>
+              <form onSubmit={stepHandleSubmit(onSubmitStep, onErrorStep)}>
+                <span className="text-gray-700 text-left float-left text-lg my-1 font-900">조리 과정</span>
+
+                <button className="m-1 float-right" onClick={() => stepAppend({})}>
+                  <FontAwesomeIcon icon={faPlus} color="grey" size="lg" />
+                </button>
+                <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
+                  {stepFields.map((item, index) => (
                     <div key={index}>
-                      <Category name={item.name} index={index} onDelete={() => resourceRemove(index)} />
+                      <Step index={index} onDelete={() => stepDelete(index)} />
                     </div>
                   ))}
+                </div>
 
-                  <div>
-                    <input
-                      type="button"
-                      className=" rounded-md h-10 w-full text-white my-1 bg-red-300 items-center"
-                      onClick={resourcePreStepBtnClick}
-                      value="되돌아가기"
-                    />
-                    <button type="submit" className=" rounded-md h-10 w-full text-white my-1 bg-red-600 items-center">
-                      등록하기
-                    </button>
-                  </div>
-                </form>
-              </FormProvider>
-            ) : (
-              <FormProvider {...stepMethods}>
-                <form onSubmit={stepHandleSubmit(onSubmitStep, onErrorStep)}>
-                  <span className="text-gray-700 text-left float-left text-lg my-1 font-900">조리 과정</span>
-
-                  <button className="m-1 float-right" onClick={() => stepAppend({})}>
-                    <FontAwesomeIcon icon={faPlus} color="grey" size="lg" />
+                <div>
+                  <input
+                    type="button"
+                    className=" rounded-md h-10 w-full text-white my-1 bg-red-300 items-center"
+                    onClick={stepPreStepBtnClick}
+                    value="되돌아가기"
+                  />
+                  <button type="submit" className=" rounded-md h-10 w-full text-white my-1 bg-red-600 items-center">
+                    등록하기
                   </button>
-                  <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
-                    {stepFields.map((item, index) => (
-                      <div key={index}>
-                        <Step index={index} onDelete={() => stepDelete(index)} />
-                      </div>
-                    ))}
-                  </div>
-
-                  <div>
-                    <input
-                      type="button"
-                      className=" rounded-md h-10 w-full text-white my-1 bg-red-300 items-center"
-                      onClick={stepPreStepBtnClick}
-                      value="되돌아가기"
-                    />
-                    <button type="submit" className=" rounded-md h-10 w-full text-white my-1 bg-red-600 items-center">
-                      등록하기
-                    </button>
-                  </div>
-                </form>
-              </FormProvider>
-            )}
-          </div>
+                </div>
+              </form>
+            </FormProvider>
+          )}
         </div>
       </div>
+    </div>
   );
 };
 
