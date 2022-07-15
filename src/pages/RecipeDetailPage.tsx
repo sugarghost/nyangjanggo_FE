@@ -50,9 +50,9 @@ const RecipeDetailPage = ({}) => {
       // 넘겨온 데이터에서 resource 내용을 열거함
       e.data.resourceResponseDtoList.map((fields: any, index: number) => {
         // 기존 resourceListTemp에 저장된 Category 값과 반환된 resourceResponseDtoList 속에 category 데이터와 일치하는 경우 해당 인덱스를 반환
-        const categoryIndex = resourceListTemp.findIndex((item) => item.category == fields.category);
+        const categoryIndex = resourceListTemp.findIndex((item) => item.category === fields.category);
         // 일치하는 category가 있어서 인덱스가 -1이 아닌 경우 실행
-        if (categoryIndex != -1) {
+        if (categoryIndex !== -1) {
           // 일치하는 category가 있는 위치에 resources(리스트 형태) 값에 push를 통해 데이터를 추가해줌
           resourceListTemp[categoryIndex].resources.push({
             resourceName: fields.resourceName,

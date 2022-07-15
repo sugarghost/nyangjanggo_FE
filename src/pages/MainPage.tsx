@@ -52,7 +52,7 @@ const MainPage = () => {
 
   // 게시글 목록 기능
   const chagneMode = () => {
-    if (boardType == 'date')
+    if (boardType === 'date')
       setAxiosParam({
         page: 0,
         size: 5,
