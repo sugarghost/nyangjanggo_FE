@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import boardPostApi from '../apis/RecipeApi';
 import Card from '../components/Card';
 import useIntersectionObserver from '../hook/intersectionObserver';
+import RecipeSearchIcon from '../images/recipe_search_icon.png';
 
 export type Pageable = {
   page: number;
@@ -150,11 +151,20 @@ const MainPage = () => {
           <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
             <div className="mx-auto w-full">
               <div className="p-4 sticky top-0 w-100vw">
-                <div className="rounded-md bg-gray-100 flex flex-row p-1vw">
-                  <FontAwesomeIcon className="m-1" icon={faSearch} color="grey" />
-                  <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
-                  <div className="cursor-pointer mr-1" onClick={() => setSearchValue('')}>
-                    &times;
+                <div className="flex flex-row" style={{justifyContent: "space-between", alignItems:"center"}}>
+                  <div
+                    className="rounded-md flex flex-row p-1vw"
+                    style={{ background: '#EFEFF0', padding: '10px', width: '88%' }}
+                  >
+                    <FontAwesomeIcon className="m-1" icon={faSearch} color="grey" />
+                    <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
+                    <div className="cursor-pointer mr-1" onClick={() => setSearchValue('')}>
+                      &times;
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent:"center" }}>
+                    <RecipeSearchIconWrapper src={RecipeSearchIcon} className="img-render" />
+                    <RecipeSearchTitle>재료검색</RecipeSearchTitle>
                   </div>
                 </div>
                 {isSearchedValue && (
@@ -225,6 +235,23 @@ const MainPage = () => {
   );
 };
 
+const RecipeSearchIconWrapper = styled.img`
+  width: 20px;
+  height: 14px;
+  margin: 0 auto;
+`
+
+const RecipeSearchTitle = styled.p`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 11px;
+  text-align: center;
+  /* Main */
+  color: #eb3120;
+  margin: 5px auto 0 auto;
+`;
+
 const ContentTitle = styled.div`
   text-align: left;
   padding: 0px 15px 0px 15px;
@@ -273,7 +300,6 @@ const InputBox = styled.div`
 const Input = styled.input`
   flex: 1 0 0;
   margin: 0;
-  padding: 0;
   background-color: transparent;
   border: none;
   outline: none;
