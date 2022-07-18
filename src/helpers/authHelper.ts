@@ -4,13 +4,13 @@ const kakaoLoginRedirect = () => {
   const params: any = useParams();
 
   localStorage.clear();
-  localStorage.setItem('token', params.token);
+  localStorage.setItem('accessToken', params.token);
 };
 
 const authCheck = () => {
-  const token = localStorage.getItem('token');
+  const accessToken = localStorage.getItem('accessToken');
 
-  if (!token) {
+  if (!accessToken) {
     window.location.href = '/';
   }
 };
