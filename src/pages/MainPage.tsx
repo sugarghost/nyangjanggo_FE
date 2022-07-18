@@ -81,7 +81,7 @@ const MainPage = () => {
     const res = await boardPostApi.getRecipeListByDate(paramTemplate);
     const { content, last } = res.data;
     // 페이지 번호를 증가시키는 용도로 사용 될 nextPage는 기존 pageParam(페이지 넘버)에 +1을 해줌
-    return { content, nextPage: pageParam + 1, last };
+    return { content, nextPage: pageParam + 1, last: last === undefined || last === true };
   };
 
   // 무한 스크롤을 위해 useInfiniteQuery를 사용함,
@@ -188,7 +188,7 @@ const MainPage = () => {
               <CardsContainer className="flex flex-row">
                 {data?.pages?.map((page, index) => (
                   <>
-                    {page.content.map((content: any, subIndex: number) => (
+                    {page?.content?.map((content: any, subIndex: number) => (
                       <Card
                         cardTitle={content.title}
                         subTitle={content.nickname}

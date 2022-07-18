@@ -18,7 +18,7 @@ const RecipeDetailPage = ({}) => {
   const state = location.state as { boardId: number };
 
   // 페이지 조회 처리
-  const userName = getNickname(getToken('userToken'));
+  const userName = getNickname(getToken());
   const [userInfo, setUserInfo] = useState<RecipeView>();
   const [boardId, setBoardId] = useState<number>(state.boardId);
   const [recipe, setRecipe] = useState<RecipeView>();

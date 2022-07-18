@@ -28,12 +28,12 @@ function App() {
     // console.log(access_token)
     if (userInfoArr.length > 2) {
       const accessToken = userInfoArr[0].split('?')[1].replace('Access-Token=', '');
-      const refreshToken = userInfoArr[1].replace('Refresh-Token=', '');
+      const expireDate = userInfoArr[1].replace('expireDate=', '');
       const isNew = userInfoArr[2].replace('isNew=', '');
 
       localStorage.clear();
-      localStorage.setItem('token', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('expireDate', expireDate);
 
       axios.defaults.headers.common.accessToken = accessToken;
       if (isNew === 'true') {

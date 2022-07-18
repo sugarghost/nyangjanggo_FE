@@ -80,12 +80,7 @@ module.exports = {
         ignoreComments: true,
       },
     ],
-    'object-curly-newline': [
-      'error',
-      {
-        multiline: true,
-      },
-    ],
+    'object-curly-newline': 0,
     'jsx-a11y/label-has-associated-control': 'off',
     'no-underscore-dangle': 'off',
     'no-param-reassign': [
