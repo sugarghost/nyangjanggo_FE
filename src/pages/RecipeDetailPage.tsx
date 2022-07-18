@@ -113,7 +113,7 @@ const RecipeDetailPage = ({}) => {
         <div className="mx-auto w-90vw">
           <div className="py-4 sticky top-0 w-full bg-light-50">
             <FontAwesomeIcon className="m-1 float-left" icon={faChevronLeft} color="grey" size="lg" onClick={goBack} />
-            <span className="text-lg text-gray-700 font-bold">레시피 등록</span>
+            <span className="text-lg text-gray-700 font-bold">레시피 상세보기</span>
             <hr className="mt-2" />
           </div>
           <div className="float-right">
