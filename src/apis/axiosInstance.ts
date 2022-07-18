@@ -1,34 +1,28 @@
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 import { PRODUCTION } from '../constants';
-
-const getToken = (tokenName: string) => {
-  const localToken = localStorage.getItem('recoil-persist');
-  if (localToken) {
-    const tokenParseJson = JSON.parse(localToken);
-    if (tokenParseJson !== '') {
-      const token = tokenParseJson[tokenName];
-      return token;
-    }
-  }
-};
+import { getToken } from '../utils/jwt';
 
 export const axiosInstance = axios.create();
 
 axiosInstance.defaults.validateStatus = (status) => status < 400;
-axiosInstance.defaults.baseURL = PRODUCTION ? 'http://13.125.36.183/api' : 'http://13.125.36.183/api';
+axiosInstance.defaults.baseURL = PRODUCTION ? 'http://15.165.84.237/api' : 'http://15.165.84.237/api';
 axiosInstance.defaults.timeout = 30000;
 
 export const authInstance = axios.create();
 
 authInstance.defaults.validateStatus = (status) => status < 400;
-authInstance.defaults.baseURL = PRODUCTION ? 'http://13.125.36.183/api' : 'http://13.125.36.183/api';
+authInstance.defaults.baseURL = PRODUCTION ? 'http://15.165.84.237/api' : 'http://15.165.84.237/api';
 authInstance.defaults.timeout = 30000;
 
 authInstance.interceptors.request.use((config) => {
-  const token = getToken('userToken');
-  if (token) {
-    config.headers = { 'Access-Token': `${token}` };
+  // 리퀘스트 전에 토큰을 가져다 꺼내는데, axios.defaults.headers.common.Authorization를 활용하는 방안으로 변경 예정
+  const accessToken = getToken();
+  console.log('accessToken :', accessToken);
+  if (accessToken) {
+    config.headers = { 'Access-Token': `${accessToken}` };
   }
   try {
     return config;
@@ -37,3 +31,64 @@ authInstance.interceptors.request.use((config) => {
   }
   return config;
 });
+
+authInstance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const {
+      config,
+      response: { status },
+    } = error;
+    const accessToken = getToken();
+
+    if (status === 401) {
+      if (error.response.data.code === 'TA002') {
+        const originalRequest = config;
+        // token refresh 요청
+        console.log('TA002');
+        await axios
+          .post(
+            `http://15.165.84.237/refresh`, // token refresh api
+            {},
+            { headers: { 'Access-Token': `${accessToken}` } },
+          )
+          .then((result) => {
+            console.log('result :', result);
+            const { accessToken: newAccessToken, accessTokenExpireDate: newAccessTokenExpireDate } = result.data;
+            axios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+            // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
+            return axios(originalRequest);
+          })
+          .catch((refreshError) => {
+            console.log('refreshError: ', refreshError);
+            localStorage.removeItem('accessToken');
+            ReactSwal.fire({
+              title: '<p>로그인 정보가 유효하지 않습니다!</p>',
+              html: '<p>로그인으로 이동합니다</p>',
+              icon: 'info',
+            }).then(() => {
+              window.location.href = '/signUpPage';
+            });
+            return false;
+          });
+        // 새로운 토큰 저장
+      }
+
+      localStorage.removeItem('accessToken');
+
+      const ReactSwal = withReactContent(Swal);
+      console.log('result :', error.response.data);
+      // navigate 방식은 여기서 호출이 안되서 다른 방식으로 이용
+      ReactSwal.fire({
+        title: '<p>로그인 정보가 유효하지 않습니다!</p>',
+        html: '<p>로그인으로 이동합니다</p>',
+        icon: 'info',
+      }).then(() => {
+        window.location.href = '/signUpPage';
+      });
+      return false;
+    }
+    return Promise.reject(error);
+  },
+);

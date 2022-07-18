@@ -1,10 +1,10 @@
 /* eslint-disable react/no-unused-prop-types */
-import React, { ReactElement } from "react";
-import { Navigate, Outlet } from "react-router-dom";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
+import React, { ReactElement } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
-import { isExist, getToken } from "./jwt";
+import { isExist, getToken } from './jwt';
 
 interface PrivateRouteProps {
   children?: ReactElement; // Router.tsx에서 PrivateRoute가 감싸고 있는 Componet Element
@@ -12,11 +12,11 @@ interface PrivateRouteProps {
 }
 
 // 타입 스크립트 첫 글자가 대문자여야지 인식을 함
-export default function PrivateRoutes({authentication,}: PrivateRouteProps): React.ReactElement | null {
+export default function PrivateRoutes({ authentication }: PrivateRouteProps): React.ReactElement | null {
   //   const token = localToken ? JSON.parse(localToken) : "";
   const ReactSwal = withReactContent(Swal);
-  //const isAuthenticated = isExist(getToken("userToken") ?? "");
-  const isAuthenticated = isExist(localStorage.getItem("token") ?? "");
+  // const isAuthenticated = isExist(getToken("userToken") ?? "");
+  const isAuthenticated = isExist();
   // authentication = true : 이 페이지에 접근하려면 인증이 되어있어야 함
   // authentication = false : 이 페이지에 접근하려면 인증이 안 되어있어야 함
   if (authentication) {
@@ -26,7 +26,7 @@ export default function PrivateRoutes({authentication,}: PrivateRouteProps): Rea
       ReactSwal.fire({
         title: <p>로그인 필요 합니다!</p>,
         html: <p>로그인으로 이동합니다</p>,
-        icon: "info",
+        icon: 'info',
         timer: 3000,
       });
       return <Navigate to="/signUpPage" />;
@@ -44,7 +44,7 @@ export default function PrivateRoutes({authentication,}: PrivateRouteProps): Rea
     ReactSwal.fire({
       title: <p>이미 로그인 되어 있습니다!</p>,
       html: <p>메인으로 이동합니다!</p>,
-      icon: "info",
+      icon: 'info',
       timer: 3000,
     });
     // 인증이 필요없는 페이지에서 인증이 되어있는 경우 메인 페이지로

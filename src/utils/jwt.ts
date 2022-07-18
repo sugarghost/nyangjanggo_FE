@@ -1,20 +1,18 @@
-import jwtDecode from "jwt-decode";
+import jwtDecode from 'jwt-decode';
 
-import { TokenType } from "../interfaces/token";
+import { TokenType } from '../interfaces/token';
 
-export const getToken = (tokenName: string) => {
-  const localToken = localStorage.getItem("recoil-persist");
+export const getToken = () => {
+  const localToken = localStorage.getItem('accessToken');
   if (localToken) {
-    const tokenParseJson = JSON.parse(localToken);
-    if (tokenParseJson !== "") {
-      const token = tokenParseJson[tokenName];
-      return token;
-    }
+    return localToken;
   }
+  return null;
 };
 
-export const isExist = (token: string) => {
-  if (!token) return false;
+export const isExist = () => {
+  const accessToken = getToken();
+  if (!accessToken) return false;
   // const decode = jwtDecode<TokenType>(token);
   // if(!decode) return false
   return true;
@@ -37,6 +35,6 @@ export const getEmail = (token: string) => {
 };
 export const getNickname = (token: string) => {
   const decode = jwtDecode<TokenType>(token);
-  console.log("decode:", decode);
+  console.log('decode:', decode);
   return decode.nickname;
 };
