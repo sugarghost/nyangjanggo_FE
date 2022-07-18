@@ -151,7 +151,7 @@ const MainPage = () => {
           <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
             <div className="mx-auto w-full">
               <div className="p-4 sticky top-0 w-100vw">
-                <div className="flex flex-row" style={{justifyContent: "space-between", alignItems:"center"}}>
+                <div className="flex flex-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
                   <div
                     className="rounded-md flex flex-row p-1vw"
                     style={{ background: '#EFEFF0', padding: '10px', width: '88%' }}
@@ -162,7 +162,7 @@ const MainPage = () => {
                       &times;
                     </div>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent:"center" }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <RecipeSearchIconWrapper src={RecipeSearchIcon} className="img-render" />
                     <RecipeSearchTitle>재료검색</RecipeSearchTitle>
                   </div>
@@ -239,7 +239,7 @@ const RecipeSearchIconWrapper = styled.img`
   width: 20px;
   height: 14px;
   margin: 0 auto;
-`
+`;
 
 const RecipeSearchTitle = styled.p`
   font-style: normal;

@@ -36,7 +36,7 @@ function MyPage() {
               </div>
             </ProfileInfo>
           </UserMainInfoWrapper>
-          <div style={{ width: '100%', height: '12px', background: COLOR.GRAY1 }}></div>
+          <div style={{ width: '100%', height: '12px', background: COLOR.GRAY1 }} />
           <OptionsWrapper>
             <OptionBox onClick={goUserEditPage}>정보 수정</OptionBox>
             <OptionBox onClick={goMyRefrigeratorPage} className="">

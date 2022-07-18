@@ -130,7 +130,11 @@ const RecipeDetailPage = ({}) => {
               </>
             )}
           </div>
-          <img className="min-h-80 mb-4 w-full rounded-2xl image-render-auto bg-gray-100" src={recipe?.mainImg} />
+          <img
+            className="min-h-80 mb-4 w-full rounded-2xl image-render-auto bg-gray-100"
+            src={recipe?.mainImg}
+            alt=""
+          />
           <p className="text-gray-700 text-left text-4xl my-1 font-900">{recipe?.title}</p>
           <p className="text-gray-600 text-left text-lg my-1 font-600">{recipe?.subTitle}</p>
           <div className="text-left text-lg my-1 font-300 border-gray-200 border-2 rounded-md min-h-30 p-2">
@@ -140,6 +144,7 @@ const RecipeDetailPage = ({}) => {
           <hr />
 
           <p className="text-gray-700 text-left text-lg my-1 font-900">재료 분류</p>
+          {/* index를 key로 사용중이지만, 나중에 다른 고유키를 고려해야함 */}
           {resourceList.map((categorys, index) => (
             <div key={index}>
               <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
@@ -167,7 +172,7 @@ const RecipeDetailPage = ({}) => {
                 <p className="text-lg my-1 font-500 text-left">조리과정 {index + 1}</p>
                 <RecipeInfoWrapper>
                   <div className="flex justify-between w-full mb-4">
-                    <img src={field.imageLink} className="img-render w-2/6 rounded-lg" />
+                    <img src={field.imageLink} className="img-render w-2/6 rounded-lg" alt="" />
                     <div className="w-4/6 ml-4 text-left border-gray-200 border-2 rounded-md p-1">
                       {field.stepContent}
                     </div>

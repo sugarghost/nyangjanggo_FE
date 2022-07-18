@@ -53,7 +53,7 @@ function Card(props: IProps) {
           activeColor={COLOR_V2.PRIMARY_ACTIVE}
           disabledColor={COLOR_V2.PRIMARY_DISABLED}
           src={cardImg}
-        ></CardImgWrapper>
+        />
         <RankWrapper> {rank}</RankWrapper>
       </div>
       <CardContentWrapper>
@@ -116,7 +116,7 @@ const RankWrapper = styled.div`
   text-align: center;
   padding: 4px 0 0 0;
   font-size: 15px;
-  color: #EB3120;
+  color: #eb3120;
   font-weight: bold;
 `;
 
