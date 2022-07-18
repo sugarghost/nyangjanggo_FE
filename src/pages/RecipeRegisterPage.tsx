@@ -87,7 +87,7 @@ const RecipeRegisterPage = () => {
 
   const [registerType, setRegisterType] = useState('Write');
   // 레시피 정보 등록, 재료 등록, 조리 과정 등록 페이지를 나누기 위한 상태값
-  const [registerStep, setRegisterStep] = useState(3);
+  const [registerStep, setRegisterStep] = useState(1);
   // step 1 이후 반환되는 boardId를 저장하고, step2->step1으로 이동 시 수정여부를 구분을 하기 위한 용도
   const [boardId, setBoardId] = useState<number>();
   // 레시피 정보 상태
@@ -438,7 +438,7 @@ const RecipeRegisterPage = () => {
   // 레시피 등록을 종료하기 위한 API
   const postRegistMutation = useMutation((addData: FormData) => postRegistApi(addData), {
     onSuccess: (res) => {
-      console.log(res);
+      navigate('/');
     },
     onError: (e) => {
       console.log(e);
@@ -455,8 +455,8 @@ const RecipeRegisterPage = () => {
         <div className="mx-auto w-90vw">
           <div className="py-4 sticky top-0 w-full bg-light-50">
             <FontAwesomeIcon className="m-1 float-left" icon={faChevronLeft} color="grey" size="lg" onClick={goBack} />
-            {/* <span className="text-lg text-gray-700 font-bold">레시피 등록</span> */}
-            {/* <hr className="mt-2" /> */}
+            <span className="text-lg text-gray-700 font-bold">{isModify ? '레시피 수정' : '레시피 등록'}</span>
+            <hr className="mt-2" />
           </div>
           {registerStep === 1 ? (
             <FormProvider {...recipeMethods}>
