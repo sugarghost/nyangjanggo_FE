@@ -27,15 +27,15 @@ function App() {
 
     // console.log(access_token)
     if (userInfoArr.length > 2) {
-      const access_token = userInfoArr[0].split('?')[1].replace('Access-Token=', '');
-      const refreshToken = userInfoArr[1].replace('Refresh-Token=', '');
+      const accessToken = userInfoArr[0].split('?')[1].replace('Access-Token=', '');
+      const expireDate = userInfoArr[1].replace('expireDate=', '');
       const isNew = userInfoArr[2].replace('isNew=', '');
 
       localStorage.clear();
-      localStorage.setItem('token', access_token);
-      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('expireDate', expireDate);
 
-      axios.defaults.headers.common.accessToken = access_token;
+      axios.defaults.headers.common.accessToken = accessToken;
       if (isNew === 'true') {
         window.location.replace('/myPage/userEditPage');
       }
@@ -58,9 +58,9 @@ function App() {
       <BrowserRouter>
         <div className="App">
           <Header />
-          {/*<div className="bg-secondary-1 flex items-center min-h-screen bg-white dark:bg-gray-900">
+          {/* <div className="bg-secondary-1 flex items-center min-h-screen bg-white dark:bg-gray-900">
               <div className="container max-w-screen-lg xl:max-w-screen-xl mx-auto">
-              <div className="max-w-md mx-auto my-10 w-full">*/}
+              <div className="max-w-md mx-auto my-10 w-full"> */}
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/test" element={<TestPage />} />
@@ -75,7 +75,7 @@ function App() {
               <Route path="/myPage/userEditPage" element={<UserEditProfile />} />
             </Route>
           </Routes>
-          {/*</div>
+          {/* </div>
             </div>
           </div> */}
           <Footer />

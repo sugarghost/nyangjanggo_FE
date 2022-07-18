@@ -50,7 +50,7 @@ export type ResourcePostFileds = {
   ];
 };
 
-export type resourceRequestDtoTemplate = {
+export type ResourceRequestDtoTemplate = {
   boardId: number;
   resourceRequestDtoList: [
     {
@@ -81,13 +81,13 @@ const RecipeRegisterPage = () => {
   };
 
   // 수정이냐 신규 작성이냐 여부를 나누기 위한 상태값
-  const isModify = state?.type == 'modify';
+  const isModify = state?.type === 'modify';
   // 작성 단계를 알기 위한 상태 값(step 1, step 2 등... 구분)
   const [registerState, setRegisterState] = useState(1);
 
   const [registerType, setRegisterType] = useState('Write');
   // 레시피 정보 등록, 재료 등록, 조리 과정 등록 페이지를 나누기 위한 상태값
-  const [registerStep, setRegisterStep] = useState(3);
+  const [registerStep, setRegisterStep] = useState(1);
   // step 1 이후 반환되는 boardId를 저장하고, step2->step1으로 이동 시 수정여부를 구분을 하기 위한 용도
   const [boardId, setBoardId] = useState<number>();
   // 레시피 정보 상태
@@ -110,13 +110,13 @@ const RecipeRegisterPage = () => {
 
       if (res.data) {
         setBoardId(res.data.boardId);
-        if (res.data.status == 'step 1') {
+        if (res.data.status === 'step 1') {
           setRegisterStep(2);
           setRegisterState(2);
-        } else if (res.data.status == 'step 2') {
+        } else if (res.data.status === 'step 2') {
           setRegisterStep(3);
           setRegisterState(3);
-        } else if (res.data.status == 'step 3') {
+        } else if (res.data.status === 'step 3') {
           setRegisterStep(3);
           setRegisterState(3);
         }
@@ -154,9 +154,9 @@ const RecipeRegisterPage = () => {
           // 기존 resourceDefaultValues에 저장된 Category 값과 반환된 resourceResponseDtoList 속에 category 데이터와 일치하는 경우 해당 인덱스를 반환
           const categoryIndex = resourceMethods
             .getValues(`categories`)
-            .findIndex((item) => item.name == fields.category);
+            .findIndex((item) => item.name === fields.category);
           // 일치하는 category가 있어서 인덱스가 -1이 아닌 경우 실행
-          if (categoryIndex != -1) {
+          if (categoryIndex !== -1) {
             // 일치하는 category가 있는 위치에 resources(리스트 형태) 값에 push를 통해 데이터를 추가해줌
             resourceMethods.setValue(`categories.${categoryIndex}.resources`, [
               ...resourceMethods.getValues(`categories.${categoryIndex}.resources`),
@@ -195,6 +195,7 @@ const RecipeRegisterPage = () => {
     if (isModify) {
       setRegisterType(state.type);
     } else {
+      // pass
     }
   }, []);
   const postRecipeApi = recipeApi.postRecipe;
@@ -338,7 +339,7 @@ const RecipeRegisterPage = () => {
     // 화면을 그리는데 사용한 resourceList 변수에 내용을 꺼내 resourceRequestDtoList 리스트로 넣어줌
     values.categories.map((categorys, index) =>
       categorys.resources.map(
-        (resource, subIndex) =>
+        (resource) =>
           (resourceRequestDtoTemplate.resourceRequestDtoList = [
             ...resourceRequestDtoTemplate.resourceRequestDtoList,
             {
@@ -357,7 +358,7 @@ const RecipeRegisterPage = () => {
       new Blob([JSON.stringify(resourceRequestDtoTemplate)], { type: 'application/json' }),
     );
     // 수정 모드 이거나 이미 2 단계를 지나서 3단계에 도달한 상태라면 Put 명령으로 변경
-    if (isModify || registerState == 3) {
+    if (isModify || registerState === 3) {
       putResourceListMutation.mutate(formData);
     } else {
       postResourceListMutation.mutate(formData);
@@ -438,7 +439,7 @@ const RecipeRegisterPage = () => {
   // 레시피 등록을 종료하기 위한 API
   const postRegistMutation = useMutation((addData: FormData) => postRegistApi(addData), {
     onSuccess: (res) => {
-      console.log(res);
+      navigate('/');
     },
     onError: (e) => {
       console.log(e);
@@ -455,8 +456,8 @@ const RecipeRegisterPage = () => {
         <div className="mx-auto w-90vw">
           <div className="py-4 sticky top-0 w-full bg-light-50">
             <FontAwesomeIcon className="m-1 float-left" icon={faChevronLeft} color="grey" size="lg" onClick={goBack} />
-            {/* <span className="text-lg text-gray-700 font-bold">레시피 등록</span> */}
-            {/* <hr className="mt-2" /> */}
+            <span className="text-lg text-gray-700 font-bold">{isModify ? '레시피 수정' : '레시피 등록'}</span>
+            <hr className="mt-2" />
           </div>
           {registerStep === 1 ? (
             <FormProvider {...recipeMethods}>
@@ -466,6 +467,7 @@ const RecipeRegisterPage = () => {
                   className="min-h-80 w-full rounded-2xl image-render-auto bg-gray-100"
                   src={mainImageUrl}
                   onClick={mainImageClick}
+                  alt=""
                 />
 
                 <input

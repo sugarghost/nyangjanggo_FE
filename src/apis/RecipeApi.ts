@@ -50,6 +50,7 @@ export default {
 
   async loopStep(payload: StepFormDataWithId) {
     let res;
+    // eslint-disable-next-line no-restricted-syntax
     for await (const param of payload.boardRequestDtoStepRecipe) {
       const boardRequestDtoStepRecipe = {
         boardId: payload.boardId,
@@ -111,9 +112,7 @@ export default {
   },
 
   async getRecipeListByDate(payload: Pageable) {
-    const res = await axiosInstance.get(
-      `${boards}?&page=${payload.page}&page=${payload.page}&size=${payload.size}&sort=${payload.sort}`,
-    );
+    const res = await axiosInstance.get(`${boards}?&page=${payload.page}&size=${payload.size}&sort=${payload.sort}`);
     return res;
   },
   async getRecipeDetail(boardId: number) {
