@@ -1,19 +1,31 @@
-import React, { useState } from 'react';
-// import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
+import React, { useState, useEffect } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
-
+import { COLOR } from '../../constants';
 import { axiosInstance } from '../../apis/axiosInstance';
 import BottomFloat from '../../components/BottomFloat';
 import Calendar from '../../components/mypage/Calendar';
 
 const MyRefrigeratorPage = () => {
   const [profileImage, setProfileImage] = useState('https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg');
-
+  const [ingredient, setIngredient] = useState<any>();
   const [showRegisterIngredient, setShowRegisterIngredient] = useState(false);
   const [ingredientName, setIngredientName] = useState('');
   const [ingredientCount, setIngredientCount] = useState<number>();
   const [startDate, setStartDate] = useState(new Date());
+  const getRefrigerator = () => {};
+
+  useEffect(() => {
+    axiosInstance
+      .get(`/user/fridge`)
+      .then((res) => {
+        setIngredient(res);
+      })
+      .catch((err) => {
+        console.log('재료 가져오기 에러 :', err);
+      });
+  }, []);
 
   const handleOnClcikAddButton = () => {
     setShowRegisterIngredient(!showRegisterIngredient);
@@ -28,7 +40,14 @@ const MyRefrigeratorPage = () => {
   };
 
   const handleOnClickRegister = () => {
-    const res = axiosInstance.post(``);
+    axiosInstance
+      .post(`/user/fridge`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log('재료 등록에러 :', err);
+      });
   };
   return (
     <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
@@ -51,10 +70,15 @@ const MyRefrigeratorPage = () => {
                   placeholder="재료 수량"
                   type="number"
                 />
-                {/* <DatePicker
+
+                <DatePickerWrapper>
+                  유통기한 :
+                  <DatePicker
+                    style={{ margin: '0px a' }}
                     selected={startDate}
                     onChange={(date: Date) => setStartDate(date)}
-                  /> */}
+                  />
+                </DatePickerWrapper>
               </>
             ) : (
               <IngredientsBox className="">
@@ -66,7 +90,7 @@ const MyRefrigeratorPage = () => {
               </IngredientsBox>
             )}
 
-            <Calendar />
+            {/* <Calendar /> */}
           </OptionsWrapper>
         </div>
       </div>
@@ -125,9 +149,22 @@ const IngredientRegisterCountInput = styled.input`
   }
 `;
 
+const DatePickerWrapper = styled.div`
+  margin: 10px 0 0 0;
+  height: 50px;
+  width: 100%;
+  display: flex;
+  item-align: left;
+  justify-content: space-between;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
 const RegisterButton = styled.button`
   width: 100%;
-  background: grey;
+  background: ${COLOR.MAIN};
   margin: 0px auto;
   padding: 16px;
   color: white;
