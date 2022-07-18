@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-import { COLOR_V2 } from "../constants/ColorV2";
+import { COLOR_V2 } from '../constants/ColorV2';
 
 interface StyleCustom {
   width?: string;
@@ -33,65 +33,52 @@ interface IProps {
 }
 
 function Button(props: IProps) {
-  const {
-    onClick,
-    disabled = false,
-    styleCustom,
-    className,
-    isIcon,
-    children,
-    isFull = true,
-  }: IProps = props;
+  const { onClick, disabled = false, styleCustom, className, isIcon, children, isFull = true }: IProps = props;
 
   return (
-    <>
-      <ButtonWrapper
-        className={className}
-        type="button"
-        styleCustom={styleCustom}
-        onClick={onClick}
-        disabled={disabled}
-        color={COLOR_V2.WHITE1}
-        hoverColor={COLOR_V2.PRIMARY5}
-        activeColor={COLOR_V2.PRIMARY_ACTIVE}
-        disabledColor={COLOR_V2.PRIMARY_DISABLED}
-        isIcon={isIcon}
-        isFull={isFull}
-      >
-        {children}
-      </ButtonWrapper>
-    </>
+    <ButtonWrapper
+      className={className}
+      type="button"
+      styleCustom={styleCustom}
+      onClick={onClick}
+      disabled={disabled}
+      color={COLOR_V2.WHITE1}
+      hoverColor={COLOR_V2.PRIMARY5}
+      activeColor={COLOR_V2.PRIMARY_ACTIVE}
+      disabledColor={COLOR_V2.PRIMARY_DISABLED}
+      isIcon={isIcon}
+      isFull={isFull}
+    >
+      {children}
+    </ButtonWrapper>
   );
 }
 
 export default Button;
 
 const ButtonWrapper = styled.button<any>`
-  background-color: ${(props) => props.styleCustom?.background ?? "grey"};
-  color: ${(props) => props.styleCustom?.color ?? "white"};
-  border-radius: ${(props) => props.styleCustom?.borderRadius ?? "8px"};
-  padding: ${(props) => props.styleCustom?.padding ?? "0 16px"};
+  background-color: ${(props) => props.styleCustom?.background ?? 'grey'};
+  color: ${(props) => props.styleCustom?.color ?? 'white'};
+  border-radius: ${(props) => props.styleCustom?.borderRadius ?? '4px'};
+  padding: ${(props) => props.styleCustom?.padding ?? '0 16px'};
   order: 2;
-  display: ${(props) => (props.isIcon ? "flex" : "block")};
+  display: ${(props) => (props.isIcon ? 'flex' : 'block')};
   flex-grow: 0;
   font-style: normal;
   font-weight: 600;
-  font-size: ${(props) => props.styleCustom?.fontSize ?? "18px"};
-  line-height: ${(props) => props.styleCustom?.lineHeight ?? "22px"};
+  font-size: ${(props) => props.styleCustom?.fontSize ?? '18px'};
+  line-height: ${(props) => props.styleCustom?.lineHeight ?? '22px'};
   align-items: center;
   text-align: center;
   letter-spacing: -0.02em;
-  box-shadow: ${(props) => props.styleCustom?.boxShadow ?? ""};
-  width: ${(props) =>
-    props.styleCustom?.width ? props.styleCustom?.width : "100%"};
-  height: ${(props) =>
-    props.styleCustom.height ? props.styleCustom?.height : "50px"};
-  margin: ${(props) =>
-    props.styleCustom.margin ? props.styleCustom?.margin : ""};
-  max-width: ${(props) => props.styleCustom?.maxWidth ?? ""};
+  box-shadow: ${(props) => props.styleCustom?.boxShadow ?? ''};
+  width: ${(props) => (props.styleCustom?.width ? props.styleCustom?.width : '100%')};
+  height: ${(props) => (props.styleCustom.height ? props.styleCustom?.height : '50px')};
+  margin: ${(props) => (props.styleCustom.margin ? props.styleCustom?.margin : 0)};
+  max-width: ${(props) => props.styleCustom?.maxWidth ?? ''};
 
   @media screen and (max-width: 680px) {
-    width: ${(props) => (!props.isFull ? props.styleCustom?.width : "100%")};
+    width: ${(props) => (!props.isFull ? props.styleCustom?.width : '100%')};
   }
 
   &:hover {
@@ -111,4 +98,3 @@ const IconWrapper = styled.img`
   object-fit: fit;
   margin-right: 4px;
 `;
-

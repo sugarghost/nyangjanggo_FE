@@ -1,11 +1,11 @@
-import React, { Children, useCallback, useState, useEffect } from "react";
-import styled, { keyframes } from "styled-components";
+import React, { Children, useCallback, useState, useEffect } from 'react';
+import styled, { keyframes } from 'styled-components';
 
-import { COLOR_V2 } from "../constants/ColorV2";
-import LogoSimbol from "../images/side_simbol_logo.png";
-import CloseIcon from "../images/sidebar_close_btn.png";
-import ToggleArrow from "../images/toggle_arrow.png";
-import Button from "./Botton";
+import { COLOR_V2 } from '../constants/ColorV2';
+import LogoSimbol from '../images/side_simbol_logo.png';
+import CloseIcon from '../images/sidebar_close_btn.png';
+import ToggleArrow from '../images/toggle_arrow.png';
+import Button from './Botton';
 
 interface IProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,20 +45,10 @@ const SideActionBar = (props: IProps) => {
   useEffect(() => {}, [userIdInitial]);
 
   return (
-    <SideActionBarContainer
-      className={className}
-      isOpen={isOpen}
-      onClick={setIsOpen}
-    >
+    <SideActionBarContainer className={className} isOpen={isOpen} onClick={setIsOpen}>
       <SideActionBarHeader>
-        <a
-          className="text-red-400 no-underline hover:text-red-400 hover:no-underline"
-          href="#"
-        >
-          <div
-            className="flex items-center text-2xl cursor-pointer"
-            onClick={onClickLogo}
-          >
+        <a className="text-red-400 no-underline hover:text-red-400 hover:no-underline" href="#">
+          <div className="flex items-center text-2xl cursor-pointer" onClick={onClickLogo}>
             <SimbolWrapper src={LogoSimbol} alt="로고" title="로고" />
           </div>
         </a>
@@ -73,16 +63,8 @@ const SideActionBar = (props: IProps) => {
           <MenuList>가격</MenuList>
 
           <MenuList>
-            <a
-              target="_blank"
-              className=""
-              href=" https://ohoolabs.notion.site/374a6f4a0ef74956b8b22c92b9f81e97"
-            >
-              <span
-                style={{ color: COLOR_V2.GRAY3, fontWeight: 500, margin: 0 }}
-              >
-                사용자 가이드
-              </span>
+            <a target="_blank" className="" href=" https://ohoolabs.notion.site/374a6f4a0ef74956b8b22c92b9f81e97">
+              <span style={{ color: COLOR_V2.GRAY3, fontWeight: 500, margin: 0 }}>사용자 가이드</span>
             </a>
           </MenuList>
         </MenuWrapper>
@@ -91,29 +73,16 @@ const SideActionBar = (props: IProps) => {
           <UserMenuWrapper>
             <MenuProfileWrapper>
               <ProfileLeftWrapper>
-                <ProfileImage
-                  backgound={COLOR_V2.GRAY5}
-                  color={COLOR_V2.WHITE1}
-                >
+                <ProfileImage backgound={COLOR_V2.GRAY5} color={COLOR_V2.WHITE1}>
                   {userIdInitial}
                 </ProfileImage>
                 <ProfileInfo>
-                  <UserRollWrapper color={COLOR_V2.BLACK1}>
-                    {userId}
-                  </UserRollWrapper>
-                  <UserPlanWrapper color={COLOR_V2.PRIMARY3}>
-                    {licenseMessage}
-                  </UserPlanWrapper>
+                  <UserRollWrapper color={COLOR_V2.BLACK1}>{userId}</UserRollWrapper>
+                  <UserPlanWrapper color={COLOR_V2.PRIMARY3}>{licenseMessage}</UserPlanWrapper>
                 </ProfileInfo>
               </ProfileLeftWrapper>
-              <ToggleButton
-                showUserMenu={showUserMenu}
-                onClick={handleOnClickShowUserMenu}
-              >
-                <ToggleArrowWrapper
-                  showUserMenu={showUserMenu}
-                  src={ToggleArrow}
-                />
+              <ToggleButton showUserMenu={showUserMenu} onClick={handleOnClickShowUserMenu}>
+                <ToggleArrowWrapper showUserMenu={showUserMenu} src={ToggleArrow} />
               </ToggleButton>
             </MenuProfileWrapper>
             {showUserMenu && (
@@ -134,11 +103,11 @@ const SideActionBar = (props: IProps) => {
           <Button
             onClick={onClickLogout}
             styleCustom={{
-              margin: "32px 0 0 0",
-              padding: "12px 14px",
-              width: "80px",
-              height: "44px",
-              fontSize: "16px",
+              margin: '32px 0 0 0',
+              padding: '12px 14px',
+              width: '80px',
+              height: '44px',
+              fontSize: '16px',
               hoverColor: COLOR_V2.GRAY1,
               activeColor: COLOR_V2.GRAY1,
               disabledColor: COLOR_V2.PRIMARY9,
@@ -153,11 +122,11 @@ const SideActionBar = (props: IProps) => {
             <Button
               onClick={onClickSignIn}
               styleCustom={{
-                margin: "32px 0 0 0",
-                padding: "12px 14px",
-                width: "80px",
-                height: "44px",
-                fontSize: "16px",
+                margin: '32px 0 0 0',
+                padding: '12px 14px',
+                width: '80px',
+                height: '44px',
+                fontSize: '16px',
                 hoverColor: COLOR_V2.GRAY1,
                 activeColor: COLOR_V2.GRAY1,
                 disabledColor: COLOR_V2.PRIMARY9,
@@ -170,11 +139,11 @@ const SideActionBar = (props: IProps) => {
             <Button
               onClick={onClickSignUp}
               styleCustom={{
-                margin: "12px 0 0 0",
-                padding: "12px 14px",
-                width: "80px",
-                height: "44px",
-                fontSize: "16px",
+                margin: '12px 0 0 0',
+                padding: '12px 14px',
+                width: '80px',
+                height: '44px',
+                fontSize: '16px',
                 color: COLOR_V2.PRIMARY7,
                 background: COLOR_V2.PRIMARY1,
                 hoverColor: COLOR_V2.PRIMARY2,
@@ -205,9 +174,9 @@ const SideActionBarContainer = styled.div<any>`
   width: 100%;
   height: 100%;
   top: 0;
-  right: ${(props) => (props.isOpen ? 0 : "")};
+  right: ${(props) => (props.isOpen ? 0 : '')};
   opacity: ${(props) => (props.isOpen ? 1 : 0)};
-  visibility: ${(props) => (props.isOpen ? "visible" : "hidden")};
+  visibility: ${(props) => (props.isOpen ? 'visible' : 'hidden')};
   background: white;
   z-index: 9998;
   display: flex;
@@ -277,7 +246,7 @@ const UserMenuList = styled.li`
   display: flex;
   align-items: center;
   letter-spacing: -0.01em;
-  font-feature-settings: "case" on, "ss02" on;
+  font-feature-settings: 'case' on, 'ss02' on;
   color: ${COLOR_V2.GRAY3};
   border-radius: 8px;
   cursor: pointer;
@@ -301,11 +270,11 @@ const ProfileLeftWrapper = styled.div`
 
 const ProfileImage = styled.div<any>`
   border-radius: 23px;
-  background: ${(props) => props.backgound ?? ""};
+  background: ${(props) => props.backgound ?? ''};
   width: 46px;
   height: 46px;
   margin-right: 12px;
-  color: ${(props) => props.color ?? ""};
+  color: ${(props) => props.color ?? ''};
   text-align: center;
   padding: 4px 0 0 0;
   font-size: 24px;
@@ -324,7 +293,7 @@ const ProfileInfo = styled.div`
 `;
 
 const ToggleButton = styled.button<any>`
-  transform: ${(props) => (props.showUserMenu ? "scaleY(1)" : "scaleY(-1)")};
+  transform: ${(props) => (props.showUserMenu ? 'scaleY(1)' : 'scaleY(-1)')};
   transition: transform 500ms ease-in-out;
 `;
 

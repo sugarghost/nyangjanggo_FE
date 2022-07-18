@@ -1,5 +1,5 @@
-import { atom } from "recoil";
-import { selector } from "recoil";
+import { atom , selector } from "recoil";
+
 import { recoilPersist } from "recoil-persist";
 import { Test } from "../interfaces/test";
 
@@ -18,13 +18,11 @@ export const recoilStarCountState = selector({
     console.log("response", recoilProjectInfo);
     // stargazers_count 반환
     
-    return recoilProjectInfo["id"];
+    return recoilProjectInfo.id;
   },
 });
 
 export const increaseValueSelector = selector({
     key: "setStarCount",
-    get: (opt) => {
-        return opt.get(recoilStarCountState) + 1;
-    }
+    get: (opt) => opt.get(recoilStarCountState) + 1
 })

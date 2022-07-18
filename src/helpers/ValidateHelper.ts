@@ -27,9 +27,7 @@ export const validateUserId = (userId: string) => {
   return regularExpression.test(String(userId).toLowerCase());
 };
 
-export const validatePasswordV2 = (password: string) => {
-  return password.match(/.{8,16}/);
-};
+export const validatePasswordV2 = (password: string) => password.match(/.{8,16}/);
 
 /**
  * 8-20자리 영어 대,소문자 포함,
@@ -46,9 +44,7 @@ export const validatePhoneNumber = (phoneNumber: string) => {
 };
 
 // 000-0000-0000 farmat
-export const phoneFormat = (phoneNumber: string) => {
-  return phoneNumber.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
-};
+export const phoneFormat = (phoneNumber: string) => phoneNumber.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
 
 export const validateBusinessNumber = (phoneNumber: string) => {
   const regularExpression = /^[0-9]{3}[-]+[0-9]{2}[-]+[0-9]{5}$/;
@@ -58,43 +54,42 @@ export const validateBusinessNumber = (phoneNumber: string) => {
 export const validateBlank = (value: string) => {
   if (value) {
     return true;
-  } else {
-    return false;
   }
+  return false;
 };
 
 export const validateNumber = (value: number) => {
   if (isNaN(value)) {
     return false;
-  } else {
-    return;
   }
 };
 
 export const autoHypenPhone = (str: string) => {
-  str = str.replace(/[^0-9]/g, "");
-  let tmp = "";
+  str = str.replace(/[^0-9]/g, '');
+  let tmp = '';
   if (str.length < 4) {
     return str;
-  } else if (str.length < 7) {
+  }
+  if (str.length < 7) {
     tmp += str.substr(0, 3);
-    tmp += "-";
+    tmp += '-';
     tmp += str.substr(3);
     return tmp;
-  } else if (str.length < 11) {
+  }
+  if (str.length < 11) {
     tmp += str.substr(0, 3);
-    tmp += "-";
+    tmp += '-';
     tmp += str.substr(3, 3);
-    tmp += "-";
+    tmp += '-';
     tmp += str.substr(6);
     return tmp;
-  } else {
-    tmp += str.substr(0, 3);
-    tmp += "-";
-    tmp += str.substr(3, 4);
-    tmp += "-";
-    tmp += str.substr(7);
-    return tmp;
   }
+  tmp += str.substr(0, 3);
+  tmp += '-';
+  tmp += str.substr(3, 4);
+  tmp += '-';
+  tmp += str.substr(7);
+  return tmp;
+
   return str;
 };

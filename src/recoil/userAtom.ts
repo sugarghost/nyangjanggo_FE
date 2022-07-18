@@ -1,11 +1,11 @@
 import { atom } from 'recoil';
-import { recoilPersist } from "recoil-persist";
-import axiosInstance from '../apis/axiosInstance';
+import { recoilPersist } from 'recoil-persist';
+
 // recoil-persist
 const { persistAtom } = recoilPersist();
 
 export default atom<string>({
-    key: 'userToken',
-    default: '',
-    effects_UNSTABLE: [persistAtom],
+  key: 'userToken',
+  default: '',
+  effects_UNSTABLE: [persistAtom],
 });
