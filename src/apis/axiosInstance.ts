@@ -16,13 +16,13 @@ const getToken = (tokenName: string) => {
 export const axiosInstance = axios.create();
 
 axiosInstance.defaults.validateStatus = (status) => status < 400;
-axiosInstance.defaults.baseURL = PRODUCTION ? 'http://13.125.36.183/api' : 'http://13.125.36.183/api';
+axiosInstance.defaults.baseURL = PRODUCTION ? 'http://15.165.84.237/api' : 'http://15.165.84.237/api';
 axiosInstance.defaults.timeout = 30000;
 
 export const authInstance = axios.create();
 
 authInstance.defaults.validateStatus = (status) => status < 400;
-authInstance.defaults.baseURL = PRODUCTION ? 'http://13.125.36.183/api' : 'http://13.125.36.183/api';
+authInstance.defaults.baseURL = PRODUCTION ? 'http://15.165.84.237/api' : 'http://15.165.84.237/api';
 authInstance.defaults.timeout = 30000;
 
 authInstance.interceptors.request.use((config) => {
