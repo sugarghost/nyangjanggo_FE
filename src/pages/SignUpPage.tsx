@@ -10,7 +10,7 @@ import Logo from '../images/nyang_logo.png';
 function SignUpPage() {
   const kakaoAuth = async () => {
     try {
-      const res = await axiosInstance.get('http://15.165.84.237/oauth2/authorization/kakao');
+      const res = await axiosInstance.get('http://api.nyangjanggo.com/oauth2/authorization/kakao');
       return res.data;
     } catch (err) {
       console.error(err);
@@ -43,7 +43,7 @@ function SignUpPage() {
                   http://back-end-server/oauth2/authorization/kakao,
                   http://back-end-server/oauth2/authorization/naver
                 */}
-              <a href="http://15.165.84.237/oauth2/authorization/kakao">
+              <a href="http://api.nyangjanggo.com/oauth2/authorization/kakao">
                 <div>카카오 로그인</div>
               </a>
               {/* <div onClick={kakaoAuth}>카카오 로그인</div> */}
@@ -56,7 +56,7 @@ function SignUpPage() {
               }}
               onClick={() => {}}
             >
-              <a href="http://15.165.84.237/oauth2/authorization/naver">
+              <a href="http://api.nyangjanggo.com/oauth2/authorization/naver">
                 <div>네이버 로그인</div>
               </a>
             </Button>

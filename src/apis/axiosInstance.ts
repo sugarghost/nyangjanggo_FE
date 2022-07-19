@@ -8,13 +8,13 @@ import { getToken } from '../utils/jwt';
 export const axiosInstance = axios.create();
 
 axiosInstance.defaults.validateStatus = (status) => status < 400;
-axiosInstance.defaults.baseURL = PRODUCTION ? 'http://15.165.84.237/api' : 'http://15.165.84.237/api';
+axiosInstance.defaults.baseURL = PRODUCTION ? 'http://api.nyangjanggo.com/api' : 'http://api.nyangjanggo.com/api';
 axiosInstance.defaults.timeout = 30000;
 
 export const authInstance = axios.create();
 
 authInstance.defaults.validateStatus = (status) => status < 400;
-authInstance.defaults.baseURL = PRODUCTION ? 'http://15.165.84.237/api' : 'http://15.165.84.237/api';
+authInstance.defaults.baseURL = PRODUCTION ? 'http://api.nyangjanggo.com/api' : 'http://api.nyangjanggo.com/api';
 authInstance.defaults.timeout = 30000;
 
 authInstance.interceptors.request.use((config) => {
@@ -48,7 +48,7 @@ authInstance.interceptors.response.use(
         console.log('TA002');
         await axios
           .post(
-            `http://15.165.84.237/refresh`, // token refresh api
+            `http://api.nyangjanggo.com/refresh`, // token refresh api
             {},
             { headers: { 'Access-Token': `${accessToken}` } },
           )
@@ -66,7 +66,7 @@ authInstance.interceptors.response.use(
             ReactSwal.fire({
               title: '<p>로그인 정보가 유효하지 않습니다!</p>',
               html: '<p>로그인으로 이동합니다</p>',
-              icon: 'info',
+              icon: 'error',
             }).then(() => {
               window.location.href = '/signUpPage';
             });
@@ -83,7 +83,7 @@ authInstance.interceptors.response.use(
       ReactSwal.fire({
         title: '<p>로그인 정보가 유효하지 않습니다!</p>',
         html: '<p>로그인으로 이동합니다</p>',
-        icon: 'info',
+        icon: 'error',
       }).then(() => {
         window.location.href = '/signUpPage';
       });
