@@ -90,4 +90,14 @@ module.exports = {
       },
     ],
   },
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [
+          ['@', './src'],
+          ['@type', './src/type'],
+        ],
+      },
+    },
+  },
 };
