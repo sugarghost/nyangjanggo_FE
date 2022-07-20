@@ -8,13 +8,13 @@ import { getToken } from '../utils/jwt';
 export const axiosInstance = axios.create();
 
 axiosInstance.defaults.validateStatus = (status) => status < 400;
-axiosInstance.defaults.baseURL = PRODUCTION ? 'http://api.nyangjanggo.com/api' : 'http://api.nyangjanggo.com/api';
+axiosInstance.defaults.baseURL = PRODUCTION ? 'https://gyuni.shop/api' : 'https://gyuni.shop/api';
 axiosInstance.defaults.timeout = 30000;
 
 export const authInstance = axios.create();
 
 authInstance.defaults.validateStatus = (status) => status < 400;
-authInstance.defaults.baseURL = PRODUCTION ? 'http://api.nyangjanggo.com/api' : 'http://api.nyangjanggo.com/api';
+authInstance.defaults.baseURL = PRODUCTION ? 'https://gyuni.shop/api' : 'https://gyuni.shop/api';
 authInstance.defaults.timeout = 30000;
 
 authInstance.interceptors.request.use((config) => {
@@ -48,7 +48,7 @@ authInstance.interceptors.response.use(
         console.log('TA002');
         await axios
           .post(
-            `http://api.nyangjanggo.com/refresh`, // token refresh api
+            `https://gyuni.shop/refresh`, // token refresh api
             {},
             { headers: { 'Access-Token': `${accessToken}` } },
           )
