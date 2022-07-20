@@ -48,7 +48,7 @@ authInstance.interceptors.response.use(
         console.log('TA002');
         await axios
           .post(
-            `https://gyuni.shop/refresh`, // token refresh api
+            `https://api.nyangjanggo.com/refresh`, // token refresh api
             {},
             { headers: { 'Access-Token': `${accessToken}` } },
           )
