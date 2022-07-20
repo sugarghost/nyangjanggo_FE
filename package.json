@@ -67,5 +67,5 @@
   "msw": {
     "workerDirectory": "public"
   },
-  "proxy": "https://api.nyangjanggo.com"
+  "proxy": "http://api.nyangjanggo.com"
 }
