@@ -18,7 +18,6 @@ function TestPage({}) {
   testInstance.defaults.validateStatus = (status) => status < 400;
   testInstance.defaults.baseURL = 'https://api.nyangjanggo.com/refresh';
   testInstance.defaults.timeout = 30000;
-  testInstance.defaults.withCredentials = true;
 
   const accessToken = getToken();
 
