@@ -53,7 +53,7 @@ authInstance.interceptors.response.use(
         await axios
           .get(
             `https://api.nyangjanggo.com/refresh`, // token refresh api
-            { headers: { 'Access-Token': `${accessToken}` } },
+            { headers: { 'Access-Token': `${accessToken}` }, withCredentials: true },
           )
           .then((result) => {
             console.log('result :', result);
