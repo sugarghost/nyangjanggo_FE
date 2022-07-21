@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import recipeApi from '../apis/RecipeApi';
 import userToken from '../recoil/userAtom';
-import { RecipeView, ResourceList, StepList } from '../type/recipeType';
+import { RecipeDetail, ResourceForm, StepForm } from '../type/recipeType';
 import { getToken, getNickname } from '../utils/jwt';
 
 const RecipeDetailPage = ({}) => {
@@ -19,11 +19,11 @@ const RecipeDetailPage = ({}) => {
 
   // 페이지 조회 처리
   const userName = getNickname(getToken());
-  const [userInfo, setUserInfo] = useState<RecipeView>();
+  const [userInfo, setUserInfo] = useState<RecipeDetail>();
   const [boardId, setBoardId] = useState<number>(state.boardId);
-  const [recipe, setRecipe] = useState<RecipeView>();
-  const [resourceList, setResourceList] = useState<ResourceList[]>([]);
-  const [stepList, setStepList] = useState<StepList[]>([]);
+  const [recipe, setRecipe] = useState<RecipeDetail>();
+  const [ResourceForm, setResourceForm] = useState<ResourceForm[]>([]);
+  const [StepForm, setStepForm] = useState<StepForm[]>([]);
   const deleteRecipeApi = recipeApi.deleteRecipe;
 
   // 넘겨 받은 boardId를 이용해 해당 레시피의 상세 정보를 받아옴
@@ -45,22 +45,22 @@ const RecipeDetailPage = ({}) => {
 
       // 재료 정보 처리 단계
       // 화면에 그릴 때 Category 단위로 나눠서 map을 중첩해 사용하기 위해서 일치하는 Category 데이터끼리 묶음
-      const resourceListTemp: ResourceList[] = [];
+      const ResourceFormTemp: ResourceForm[] = [];
 
       // 넘겨온 데이터에서 resource 내용을 열거함
       e.data.resourceResponseDtoList.map((fields: any, index: number) => {
-        // 기존 resourceListTemp에 저장된 Category 값과 반환된 resourceResponseDtoList 속에 category 데이터와 일치하는 경우 해당 인덱스를 반환
-        const categoryIndex = resourceListTemp.findIndex((item) => item.category === fields.category);
+        // 기존 ResourceFormTemp에 저장된 Category 값과 반환된 resourceResponseDtoList 속에 category 데이터와 일치하는 경우 해당 인덱스를 반환
+        const categoryIndex = ResourceFormTemp.findIndex((item) => item.category === fields.category);
         // 일치하는 category가 있어서 인덱스가 -1이 아닌 경우 실행
         if (categoryIndex !== -1) {
           // 일치하는 category가 있는 위치에 resources(리스트 형태) 값에 push를 통해 데이터를 추가해줌
-          resourceListTemp[categoryIndex].resources.push({
+          ResourceFormTemp[categoryIndex].resources.push({
             resourceName: fields.resourceName,
             amount: fields.amount,
           });
         } else {
           // 만약 반환된 인덱스가 없으면 일치하는 카테고리가 없다는 뜻으로 신규로 만들어줌
-          resourceListTemp.push({
+          ResourceFormTemp.push({
             category: fields.category,
             resources: [
               {
@@ -71,14 +71,14 @@ const RecipeDetailPage = ({}) => {
           });
         }
       });
-      setResourceList(resourceListTemp);
+      setResourceForm(ResourceFormTemp);
 
       // 조리 과정 처리 단계
-      const stepListTemp: StepList[] = [];
+      const StepFormTemp: StepForm[] = [];
       e.data.recipeStepResponseDtoList.map((fields: any, index: number) => {
-        stepListTemp[fields.stepNum] = fields;
+        StepFormTemp[fields.stepNum] = fields;
       });
-      setStepList(stepListTemp);
+      setStepForm(StepFormTemp);
     },
     onError: (e) => {
       console.log(e);
@@ -88,7 +88,7 @@ const RecipeDetailPage = ({}) => {
   useEffect(() => {}, []);
   // 수정 페이지 기능
   const modifyRecipeDetail = () => {
-    navigate('/recipeRegisterPage', { state: { boardId, recipe, resourceList, stepList, type: 'modify' } });
+    navigate('/recipeRegisterPage', { state: { boardId, recipe, ResourceForm, StepForm, type: 'modify' } });
   };
 
   const putRecipeMutation = useMutation((boardId: number) => deleteRecipeApi(boardId), {
@@ -111,11 +111,6 @@ const RecipeDetailPage = ({}) => {
     <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
         <div className="mx-auto w-90vw">
-          <div className="py-4 sticky top-0 w-full bg-light-50">
-            <FontAwesomeIcon className="m-1 float-left" icon={faChevronLeft} color="grey" size="lg" onClick={goBack} />
-            <span className="text-lg text-gray-700 font-bold">레시피 상세보기</span>
-            <hr className="mt-2" />
-          </div>
           <div className="float-right">
             <button className="w-10 h-10 rounded-2xl bg-gray-200 m-1" onClick={modifyRecipeDetail}>
               <FontAwesomeIcon icon={faPenToSquare} color="white" size="lg" />
@@ -145,7 +140,7 @@ const RecipeDetailPage = ({}) => {
 
           <p className="text-gray-700 text-left text-lg my-1 font-900">재료 분류</p>
           {/* index를 key로 사용중이지만, 나중에 다른 고유키를 고려해야함 */}
-          {resourceList.map((categorys, index) => (
+          {ResourceForm.map((categorys, index) => (
             <div key={index}>
               <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
                 <p className="text-lg my-1 font-500 text-left">{categorys.category}</p>
@@ -167,7 +162,7 @@ const RecipeDetailPage = ({}) => {
 
           <p className="text-gray-700 text-left text-lg my-1 font-900">조리 과정</p>
           <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
-            {stepList.map((field, index) => (
+            {StepForm.map((field, index) => (
               <div key={index}>
                 <p className="text-lg my-1 font-500 text-left">조리과정 {index + 1}</p>
                 <RecipeInfoWrapper>
