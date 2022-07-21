@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { ChangeEvent, InputHTMLAttributes, Suspense, useEffect, useState } from 'react';
+import React, { ChangeEvent, InputHTMLAttributes, Suspense, useEffect, useRef, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import userToken from '../recoil/userAtom';
@@ -14,6 +14,7 @@ function TestPage({}) {
   );
   */
   const testInstance = axios.create();
+  const targetApiRef = useRef<HTMLInputElement>(null);
 
   testInstance.defaults.validateStatus = (status) => status < 400;
   testInstance.defaults.timeout = 30000;
@@ -21,9 +22,11 @@ function TestPage({}) {
   const accessToken = getToken();
 
   const token = () => {
+    const api = targetApiRef.current.value;
+    console.log('api', api);
     testInstance
       .get(
-        `https://api.nyangjanggo.com/refresh`, // token refresh api
+        `${api}`, // token refresh api
         { headers: { 'Access-Token': `${accessToken}` } },
       )
       .then((result) => {
@@ -35,6 +38,8 @@ function TestPage({}) {
   };
   return (
     <div>
+      <input ref={targetApiRef} value="https://api.nyangjanggo.com/refresh" />: 연결 API 입력
+      <br />
       <button onClick={token}> 토큰 테스트 </button>
     </div>
   );
