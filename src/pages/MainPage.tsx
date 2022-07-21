@@ -159,7 +159,7 @@ const MainPage = () => {
           <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
             <div className="mx-auto w-full">
               {searchType ? (
-                <div className="p-4 sticky top-0 w-100vw z-100">
+                <div className="p-4 top-0 w-100vw z-100">
                   <div className="flex flex-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
                     <div
                       className="rounded-md flex flex-row p-1vw"

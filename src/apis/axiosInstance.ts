@@ -16,6 +16,7 @@ export const authInstance = axios.create();
 authInstance.defaults.validateStatus = (status) => status < 400;
 authInstance.defaults.baseURL = PRODUCTION ? 'https://gyuni.shop/api' : 'https://gyuni.shop/api';
 authInstance.defaults.timeout = 30000;
+authInstance.defaults.withCredentials = true;
 
 authInstance.interceptors.request.use((config) => {
   // 리퀘스트 전에 토큰을 가져다 꺼내는데, axios.defaults.headers.common.Authorization를 활용하는 방안으로 변경 예정
