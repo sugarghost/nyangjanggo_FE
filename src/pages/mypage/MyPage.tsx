@@ -42,7 +42,7 @@ function MyPage() {
             <OptionBox onClick={goMyRefrigeratorPage} className="">
               냉장고
             </OptionBox>
-            <OptionBox className="">이건뭘까</OptionBox>
+            {/* <OptionBox className="">이건뭘까</OptionBox> */}
           </OptionsWrapper>
           <LogOutButton onClick={handleOnClickLogOut}>로그아웃</LogOutButton>
         </div>

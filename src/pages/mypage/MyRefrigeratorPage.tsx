@@ -2,25 +2,28 @@ import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
-import { COLOR } from '../../constants';
+
+import { authInstance } from '../../apis/axiosInstance';
 import { axiosInstance } from '../../apis/axiosInstance';
 import BottomFloat from '../../components/BottomFloat';
 import Calendar from '../../components/mypage/Calendar';
+import { COLOR } from '../../constants';
 
 const MyRefrigeratorPage = () => {
   const [profileImage, setProfileImage] = useState('https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg');
-  const [ingredient, setIngredient] = useState<any>();
+  const [ingredients, setIngredients] = useState<any>([]);
   const [showRegisterIngredient, setShowRegisterIngredient] = useState(false);
   const [ingredientName, setIngredientName] = useState('');
-  const [ingredientCount, setIngredientCount] = useState<number>();
-  const [startDate, setStartDate] = useState(new Date());
+  const [ingredientCount, setIngredientCount] = useState<number>(1);
+  const [expirationDate, setExpirationDate] = useState(new Date());
+
   const getRefrigerator = () => {};
 
   useEffect(() => {
     axiosInstance
       .get(`/user/fridge`)
       .then((res) => {
-        setIngredient(res);
+        setIngredients(res);
       })
       .catch((err) => {
         console.log('재료 가져오기 에러 :', err);
@@ -39,9 +42,63 @@ const MyRefrigeratorPage = () => {
     setIngredientCount(parseInt(e.currentTarget.value));
   };
 
+  const handleOnClickDelete = (e) => {
+    const id = e.target;
+
+    authInstance
+      .delete(`/user/fridge/${id}`)
+      .then((res) => {
+        const _ingredients = ingredients.filter((item) => item.id !== id);
+
+        setIngredients(_ingredients);
+      })
+      .catch((err) => {
+        console.log('재료 가져오기 에러 :', err);
+      });
+  };
+
+  const handleOnClickEdit = (e) => {
+    const id = e.target;
+    authInstance
+      .delete(`/user/fridge/${id}`)
+      .then((res) => {
+        const idx = ingredients.findIndex(id);
+
+        setIngredients([...ingredients]);
+      })
+      .catch((err) => {
+        console.log('재료 가져오기 에러 :', err);
+      });
+  };
+
   const handleOnClickRegister = () => {
-    axiosInstance
-      .post(`/user/fridge`)
+    console.log({
+      category: '',
+      resourceName: ingredientName,
+      amount: ingredientCount,
+      endTime: String(expirationDate.toISOString()).substr(0, 10),
+    });
+
+    if (!ingredientName) {
+      alert('재료 이름을 확인해 주세요!');
+      return;
+    }
+
+    authInstance
+      .post(
+        `/user/fridge`,
+        {
+          category: '',
+          resourceName: ingredientName,
+          amount: ingredientCount,
+          endTime: String(expirationDate.toISOString()).substr(0, 10),
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem('accessToken'),
+          },
+        },
+      )
       .then((res) => {
         console.log(res);
       })
@@ -59,7 +116,9 @@ const MyRefrigeratorPage = () => {
             </IngredientAddBtnWrapper>
             {showRegisterIngredient ? (
               <>
+                <Title style={{ textAlign: 'left' }}>재료 등록</Title>
                 <IngredientRegisterTitleInput
+                  style={{ margin: '32px 0 0 0' }}
                   onChange={handleOnChangeIngredientName}
                   value={ingredientName}
                   placeholder="재료 이름"
@@ -71,23 +130,34 @@ const MyRefrigeratorPage = () => {
                   type="number"
                 />
 
-                <DatePickerWrapper>
-                  유통기한 :
+                <Time style={{ textAlign: 'left' }}>유통기한</Time>
+                <DatePickerWrapper style={{ margin: '20px 0 0 -90px' }}>
                   <DatePicker
-                    style={{ margin: '0px a' }}
-                    selected={startDate}
-                    onChange={(date: Date) => setStartDate(date)}
+                    style={{ margin: '0 0 0 -100px' }}
+                    selected={expirationDate}
+                    onChange={(date: Date) => setExpirationDate(date)}
                   />
                 </DatePickerWrapper>
               </>
             ) : (
-              <IngredientsBox className="">
-                <div>
-                  06/01
-                  <span style={{ margin: '0 0 0 20px' }}>달걀(6개)</span>
-                </div>
-                <div>10일 남음</div>
-              </IngredientsBox>
+              <>
+                <EditOption>
+                  <div>수정</div>
+                  <div onClick={handleOnClickEdit} style={{ margin: '0 4px' }}>
+                    |
+                  </div>
+                  <div onClick={handleOnClickDelete} style={{}}>
+                    삭제
+                  </div>
+                </EditOption>
+                <IngredientsBox className="">
+                  <div>
+                    06/01
+                    <span style={{ margin: '0 0 0 20px' }}>달걀(6개)</span>
+                  </div>
+                  <div>10일 남음</div>
+                </IngredientsBox>
+              </>
             )}
 
             {/* <Calendar /> */}
@@ -105,6 +175,14 @@ const MyRefrigeratorPage = () => {
 
 export default MyRefrigeratorPage;
 
+const Title = styled.div`
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 20px;
+  color: #676767;
+`;
+
 const OptionsWrapper = styled.div`
   min-width: 350px;
   display: flex;
@@ -118,9 +196,21 @@ const IngredientsBox = styled.div`
   justify-content: space-between;
   width: 100%;
   padding: 12px;
-  border: 1px solid grey;
   margin: 5px 0 0 0;
   pointer: cursor;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px;
+`;
+
+const EditOption = styled.div`
+  display: flex;
+  justify-content: end;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 17px;
+  color: #797979;
+  padding: 0 0 2px 0;
 `;
 
 const IngredientAddBtnWrapper = styled.div`
@@ -147,6 +237,15 @@ const IngredientRegisterCountInput = styled.input`
   &:focus {
     outline: none;
   }
+`;
+
+const Time = styled.div`
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 20px;
+  color: #676767;
+  margin: 50px 0 0 0;
 `;
 
 const DatePickerWrapper = styled.div`

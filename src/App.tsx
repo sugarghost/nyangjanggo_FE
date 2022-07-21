@@ -17,7 +17,10 @@ import MyPage from './pages/mypage/MyPage';
 import MyRefrigeratorPage from './pages/mypage/MyRefrigeratorPage';
 import UserEditProfile from './pages/mypage/UserEditProfile';
 import { isExp } from './utils/jwt';
+import { axiosInstance } from './apis/axiosInstance';
 import PrivateRoutes from './utils/privateRoutes';
+
+
 
 const queryClient = new QueryClient();
 
@@ -35,7 +38,7 @@ function App() {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('expireDate', expireDate);
 
-      axios.defaults.headers.common.accessToken = accessToken;
+      //axiosInstance.defaults.headers.common["accessToken"] = accessToken;
       if (isNew === 'true') {
         window.location.replace('/myPage/userEditPage');
       }
