@@ -40,23 +40,25 @@ authInstance.interceptors.response.use(
       response: { status },
     } = error;
     const accessToken = getToken();
+    // 이후 유효하지 않은 토큰 결과가 나오면 로그인으로 이동시키는 안내를 보내기 위해 선언
+    const ReactSwal = withReactContent(Swal);
 
     if (status === 401) {
       if (error.response.data.code === 'TA002') {
         const originalRequest = config;
+        console.log('originalRequest: ', originalRequest);
         // token refresh 요청
         console.log('TA002');
         await axios
-          .post(
+          .get(
             `https://api.nyangjanggo.com/refresh`, // token refresh api
-            {},
             { headers: { 'Access-Token': `${accessToken}` } },
           )
           .then((result) => {
             console.log('result :', result);
             const { accessToken: newAccessToken, accessTokenExpireDate: newAccessTokenExpireDate } = result.data;
-            axios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
-            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+            axios.defaults.headers.common.accessToken = `Access-Token ${newAccessToken}`;
+            originalRequest.headers.accessToken = `Access-Token ${newAccessToken}`;
             // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
             return axios(originalRequest);
           })
@@ -77,7 +79,6 @@ authInstance.interceptors.response.use(
 
       localStorage.removeItem('accessToken');
 
-      const ReactSwal = withReactContent(Swal);
       console.log('result :', error.response.data);
       // navigate 방식은 여기서 호출이 안되서 다른 방식으로 이용
       ReactSwal.fire({
