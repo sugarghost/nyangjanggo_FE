@@ -24,10 +24,12 @@ const queryClient = new QueryClient();
 
 function App() {
   useLayoutEffect(() => {
+    /*
     localStorage.setItem(
       'accessToken',
       'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodHNsdHM5NUBnbWFpbC5jb20iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2NTczMzI5NjUsImV4cCI6MTY1ODU0MjU2NX0.eZl4GB5_swQw7nGQV4YhBdq3Uswc7Vtixb5FdBObgls',
     );
+    */
     const userInfoArr = window.location.href.split('&');
 
     // console.log(access_token)
@@ -40,7 +42,7 @@ function App() {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('expireDate', expireDate);
 
-      //axiosInstance.defaults.headers.common["accessToken"] = accessToken;
+      // axiosInstance.defaults.headers.common["accessToken"] = accessToken;
       if (isNew === 'true') {
         window.location.replace('/myPage/userEditPage');
       }
