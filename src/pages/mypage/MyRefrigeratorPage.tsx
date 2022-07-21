@@ -12,22 +12,22 @@ import { COLOR } from '../../constants';
 const MyRefrigeratorPage = () => {
   const [profileImage, setProfileImage] = useState('https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg');
   const [ingredients, setIngredients] = useState<any>([]);
-  const [showRegisterIngredient, setShowRegisterIngredient] = useState(false);
+  const [showRegisterIngredient, setShowRegisterIngredient] = useState(true);
   const [ingredientName, setIngredientName] = useState('');
-  const [ingredientCount, setIngredientCount] = useState<number>(1);
+  const [ingredientCount, setIngredientCount] = useState<number>(null);
   const [expirationDate, setExpirationDate] = useState(new Date());
 
   const getRefrigerator = () => {};
 
   useEffect(() => {
-    axiosInstance
-      .get(`/user/fridge`)
-      .then((res) => {
-        setIngredients(res);
-      })
-      .catch((err) => {
-        console.log('재료 가져오기 에러 :', err);
-      });
+    // axiosInstance
+    //   .get(`/user/fridge`)
+    //   .then((res) => {
+    //     setIngredients(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log('재료 가져오기 에러 :', err);
+    //   });
   }, []);
 
   const handleOnClcikAddButton = () => {
@@ -112,18 +112,46 @@ const MyRefrigeratorPage = () => {
         <div className="mx-auto w-full" style={{ padding: '0px 10px' }}>
           <OptionsWrapper>
             <IngredientAddBtnWrapper>
-              <IngredientAddBtn onPointerDown={handleOnClcikAddButton}>+</IngredientAddBtn>
+              {showRegisterIngredient ? (
+                <IngredientAddBtn onPointerDown={handleOnClcikAddButton}>←</IngredientAddBtn>
+              ) : (
+                <IngredientAddBtn onPointerDown={handleOnClcikAddButton}>+</IngredientAddBtn>
+              )}
             </IngredientAddBtnWrapper>
             {showRegisterIngredient ? (
               <>
                 <Title style={{ textAlign: 'left' }}>재료 등록</Title>
+
+                <label
+                  style={{
+                    textAlign: 'left',
+                    color: '#676767',
+                    fontWeight: 'bold',
+                    fontSize: '15px',
+                    margin: '32px 0 0 0',
+                  }}
+                >
+                  재료 이름
+                </label>
                 <IngredientRegisterTitleInput
-                  style={{ margin: '32px 0 0 0' }}
+                  style={{ margin: '10px 0 0 0' }}
                   onChange={handleOnChangeIngredientName}
                   value={ingredientName}
                   placeholder="재료 이름"
                 />
+                <label
+                  style={{
+                    textAlign: 'left',
+                    color: '#676767',
+                    fontWeight: 'bold',
+                    fontSize: '15px',
+                    margin: '29px 0 0 0',
+                  }}
+                >
+                  재료 수량
+                </label>
                 <IngredientRegisterCountInput
+                  style={{ margin: '10px 0 0 0' }}
                   onChange={handleOnChangeIngredientCount}
                   value={ingredientCount}
                   placeholder="재료 수량"
@@ -152,8 +180,7 @@ const MyRefrigeratorPage = () => {
                 </EditOption>
                 <IngredientsBox className="">
                   <div>
-                    06/01
-                    <span style={{ margin: '0 0 0 20px' }}>달걀(6개)</span>
+                    <span style={{ margin: '0 0 0 0' }}>달걀(6개)</span>
                   </div>
                   <div>10일 남음</div>
                 </IngredientsBox>
@@ -198,6 +225,7 @@ const IngredientsBox = styled.div`
   padding: 12px;
   margin: 5px 0 0 0;
   pointer: cursor;
+  padding: 26px 21px;
   border: 1px solid #e2e2e2;
   border-radius: 10px;
 `;
@@ -225,15 +253,21 @@ const IngredientAddBtn = styled.button`
 `;
 
 const IngredientRegisterTitleInput = styled.input`
-  height: 50px;
-  border-bottom: 1px solid grey;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  padding: 12px;
   &:focus {
     outline: none;
   }
 `;
 const IngredientRegisterCountInput = styled.input`
   height: 50px;
-  border-bottom: 1px solid grey;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  padding: 12px;
+
   &:focus {
     outline: none;
   }

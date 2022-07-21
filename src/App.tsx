@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import './App.css';
 import { refreshToken } from './apis/AuthApi';
+import { axiosInstance } from './apis/axiosInstance';
 import Footer from './containers/Footer';
 import Header from './containers/Header';
 import MainPage from './pages/MainPage';
@@ -17,15 +18,16 @@ import MyPage from './pages/mypage/MyPage';
 import MyRefrigeratorPage from './pages/mypage/MyRefrigeratorPage';
 import UserEditProfile from './pages/mypage/UserEditProfile';
 import { isExp } from './utils/jwt';
-import { axiosInstance } from './apis/axiosInstance';
 import PrivateRoutes from './utils/privateRoutes';
-
-
 
 const queryClient = new QueryClient();
 
 function App() {
   useLayoutEffect(() => {
+    localStorage.setItem(
+      'accessToken',
+      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodHNsdHM5NUBnbWFpbC5jb20iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2NTczMzI5NjUsImV4cCI6MTY1ODU0MjU2NX0.eZl4GB5_swQw7nGQV4YhBdq3Uswc7Vtixb5FdBObgls',
+    );
     const userInfoArr = window.location.href.split('&');
 
     // console.log(access_token)
