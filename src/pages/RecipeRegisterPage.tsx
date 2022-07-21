@@ -9,6 +9,8 @@ import { useMutation, useQueryClient, useQuery } from 'react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { DefaultValue } from 'recoil';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 import recipeApi from '../apis/RecipeApi';
 import Button from '../components/Botton';
@@ -73,9 +75,14 @@ const RecipeRegisterPage = () => {
     boardId: number;
     type: string;
   };
+  // 안내 처리를 위해 선언
+  const ReactSwal = withReactContent(Swal);
 
   // 수정이냐 신규 작성이냐 여부를 나누기 위한 상태값
   const isModify = state?.type === 'modify';
+
+  // 저장 버튼 비활성화 여부를 나누기 위한 상태값
+  const [isDisabled, setDisabled] = useState(true);
 
   const [registerType, setRegisterType] = useState('Write');
   // step 1 이후 반환되는 boardId를 저장하고, step2->step1으로 이동 시 수정여부를 구분을 하기 위한 용도
@@ -95,7 +102,7 @@ const RecipeRegisterPage = () => {
   const recipeMethods = useForm<RecipeForm>({
     resolver: yupResolver(recipeValidationSchema),
     // 형식 맞춰도 계속 오류나서 그냥 비활성화 시켜버림....
-    // defaultValues: recipeDefaultValues,
+    defaultValues: recipeDefaultValues,
     mode: 'onChange',
   });
 
@@ -105,8 +112,30 @@ const RecipeRegisterPage = () => {
     handleSubmit: recipeHandleSubmit,
     setValue: setRecipeValue,
     control: recipeControl,
+    watch: recipeWatch,
   } = recipeMethods;
 
+  // 입력 요소들이 잘 입력되었는지 확인하는 용도
+  const watchAll = Object.values(recipeWatch());
+
+  useEffect(() => {
+    if (
+      recipeWatch('title') !== '' &&
+      recipeWatch('subTitle') !== '' &&
+      recipeWatch('content') !== '' &&
+      recipeWatch('mainImageLink') !== '' &&
+      recipeWatch('resourceRequestDtoList').every((el) => el.category !== '') &&
+      recipeWatch('resourceRequestDtoList').every((el) =>
+        el.resources.every((subEl) => subEl.resourceName !== '' && subEl.amount !== ''),
+      ) &&
+      recipeWatch('recipeStepRequestDtoList').every((el) => el.imageLink !== '' && el.stepContent !== '')
+    ) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  }, [watchAll]);
+  // 요리 재료를 유동적으로 관리하기 위해 사용
   const {
     fields: resourceFields,
     append: resourceAppend,
@@ -116,6 +145,7 @@ const RecipeRegisterPage = () => {
     name: 'resourceRequestDtoList', // categories 에서 resourceRequestDtoList로 변경됨
   });
 
+  // 조리과정을 유동적으로 관리하기 위해 사용
   const {
     fields: stepFields,
     append: stepAppend,
@@ -124,6 +154,8 @@ const RecipeRegisterPage = () => {
     control: recipeControl,
     name: 'recipeStepRequestDtoList', // recipeStepRequestDtoList 에서 recipeStepRequestDtoList로 변경됬으니 한번 다시 변경해야함
   });
+
+  // 입력값들의 유효성을 체크하기 위해 사용
 
   // 뒤로 돌아가기 용
   const goBack = () => {
@@ -153,7 +185,6 @@ const RecipeRegisterPage = () => {
       refetchOnWindowFocus: false,
       enabled: isModify,
       onSuccess: (res) => {
-        console.log('getRecipeModify', res);
         setQueryData(res.data);
       },
     },
@@ -169,7 +200,7 @@ const RecipeRegisterPage = () => {
       setMainImageUrl(data.mainImg);
 
       // 재료 정보가 있는 경우 서버에서 넘어오는 데이터가 View 형식과는 다르기 때문에 처리 과정이 필요
-      if (data.resourceResponseDtoList) {
+      if (data.resourceResponseDtoList.length !== 0) {
         recipeMethods.setValue('resourceRequestDtoList', []);
         data.resourceResponseDtoList.map((fields: any, index: number) => {
           // 기존 resourceDefaultValues에 저장된 Category 값과 반환된 resourceResponseDtoList 속에 category 데이터와 일치하는 경우 해당 인덱스를 반환
@@ -204,7 +235,7 @@ const RecipeRegisterPage = () => {
         });
       }
 
-      if (data.recipeStepResponseDtoList) {
+      if (data.recipeStepResponseDtoList.length !== 0) {
         recipeMethods.setValue(`recipeStepRequestDtoList`, []);
         data.recipeStepResponseDtoList.map((fields: any, index: number) => {
           recipeMethods.setValue(`recipeStepRequestDtoList.${fields.stepNum}`, {
@@ -218,7 +249,6 @@ const RecipeRegisterPage = () => {
   };
   // 최초 1회 실행되어 작성 모드가 수정인지 여부를 확인해 같이 들어온 값을 매핑 시키기 위함
   useEffect(() => {
-    console.log('useEffect', state);
     if (isModify) {
       setRegisterType(state.type);
     } else {
@@ -243,41 +273,51 @@ const RecipeRegisterPage = () => {
 
   const postRecipeMutation = useMutation((addData: FormData) => postRecipeApi(addData), {
     onSuccess: (res) => {
-      console.log('postRecipeMutation:', res);
       setBoardId(res.data.boardId);
       window.scrollTo(0, 0);
     },
     onError: (e) => {
+      ReactSwal.fire({
+        title: '<p>레시피 등록에 실패했습니다!</p>',
+        html: '<p>다시 시도해 주세요</p>',
+        icon: 'error',
+      });
       console.log('postRecipeMutation Error:', e);
     },
   });
 
   const putRecipeMutation = useMutation((addData: FormData) => putRecipeApi(addData), {
     onSuccess: (res) => {
-      console.log('putRecipeMutation:', res);
       // setBoardId(res.data.boardId);
       window.scrollTo(0, 0);
     },
     onError: (e) => {
+      ReactSwal.fire({
+        title: '<p>레시피 수정에 실패했습니다!</p>',
+        html: '<p>다시 시도해 주세요</p>',
+        icon: 'error',
+      });
       console.log('putRecipeMutation Error:', e);
     },
   });
 
   // 이미지 변경시 DB에 저장하고 Url을 받아오기 위한 API
-  const postStepImageMutation = useMutation((addData: FormData) => postImageApi(addData), {
+  const postImageMutation = useMutation((addData: FormData) => postImageApi(addData), {
     onSuccess: (res) => {
       setMainImageUrl(res.data.imageLink);
       setRecipeValue('mainImageLink', res.data.imageLink);
     },
     onError: () => {
-      // 예외처리 필요!
+      ReactSwal.fire({
+        title: '<p>이미지 등록에 실패했습니다!</p>',
+        html: '<p>다시 시도해 주세요</p>',
+        icon: 'error',
+      });
     },
   });
 
   // 레시피 정보 등록 단계에서 저장 버튼 클릭 시 실행
   const onSubmitRecipe = (values: RecipeForm) => {
-    console.log(JSON.stringify(values, null, 2));
-
     // 화면에서 그려주는 구조와 서버에서 받는 구조가 조금 다르기 때문에 별도의 list로 재정의
     let resourceList: any = [];
     const stepList: any = [];
@@ -335,9 +375,13 @@ const RecipeRegisterPage = () => {
         const formData = new FormData();
         formData.append('boardId', String(boardId));
         formData.append('multipartFile', file);
-        postStepImageMutation.mutate(formData);
+        postImageMutation.mutate(formData);
       } else {
-        // 예외처리 필요!
+        ReactSwal.fire({
+          title: '<p>이미지 정보가 유효하지 않습니다!</p>',
+          html: '<p>다시 시도해 주세요</p>',
+          icon: 'error',
+        });
       }
     }
   };
@@ -435,9 +479,9 @@ const RecipeRegisterPage = () => {
                 ))}
               </div>
               <div>
-                <button type="submit" className=" rounded-md h-10 w-full text-white my-1 bg-red-600 items-center">
+                <SaveButton type="submit" disabled={isDisabled}>
                   등록하기
-                </button>
+                </SaveButton>
               </div>
             </form>
           </FormProvider>
@@ -448,6 +492,24 @@ const RecipeRegisterPage = () => {
 };
 
 export default RecipeRegisterPage;
+
+const SaveButton = styled.button`
+  border-radius: 0.375rem;
+  height: 2.5rem;
+  width: 100%;
+  --tw-text-opacity: 1;
+  color: rgba(255, 255, 255, var(--tw-text-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgba(235, 49, 32, var(--tw-bg-opacity));
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+
+  &:disabled {
+    background-color: rgba(154, 154, 154, var(--tw-bg-opacity));
+  }
+`;
 
 const MainImgWrapperLabel = styled.div`
   text-align: left;
