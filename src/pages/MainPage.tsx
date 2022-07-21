@@ -51,7 +51,15 @@ const MainPage = () => {
   const [isSearchedValue, setIsSearchedValue] = useState<boolean>(false);
   const [searchedList, setSearchedList] = useState(wholeTextArray);
   const [searchedItemIndex, setSearchedItemIndex] = useState(-1);
+  // 재료 검색, 요리 이름 검색을 전환하기 위한 state
+  const [searchType, setSearchType] = useState(1);
 
+  const switchSearchType = () => {
+    setSearchValue('');
+    setIsSearchedValue(false);
+    if (searchType) setSearchType(0);
+    else setSearchType(1);
+  };
   // 게시글 목록 기능
   const chagneMode = () => {
     if (boardType === 'date')
@@ -150,39 +158,51 @@ const MainPage = () => {
         <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
           <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
             <div className="mx-auto w-full">
-              <div className="p-4 sticky top-0 w-100vw">
-                <div className="flex flex-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div
-                    className="rounded-md flex flex-row p-1vw"
-                    style={{ background: '#EFEFF0', padding: '10px', width: '88%' }}
-                  >
-                    <FontAwesomeIcon className="m-1" icon={faSearch} color="grey" />
-                    <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
-                    <div className="cursor-pointer mr-1" onClick={() => setSearchValue('')}>
-                      &times;
+              {searchType ? (
+                <div className="p-4 sticky top-0 w-100vw z-100">
+                  <div className="flex flex-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div
+                      className="rounded-md flex flex-row p-1vw"
+                      style={{ background: '#EFEFF0', padding: '10px', width: '88%' }}
+                    >
+                      <FontAwesomeIcon className="m-1" icon={faSearch} color="grey" />
+                      <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
+                      <div className="cursor-pointer mr-1" onClick={() => setSearchValue('')}>
+                        &times;
+                      </div>
+                    </div>
+                    <div className="flex flex-col justify-center" onClick={switchSearchType}>
+                      <RecipeSearchIconWrapper src={RecipeSearchIcon} className="img-render" />
+                      <RecipeSearchTitle>재료검색</RecipeSearchTitle>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  {isSearchedValue && (
+                    <DropDownBox>
+                      {searchedList.length === 0 && <DropDownItem>해당하는 단어가 없습니다</DropDownItem>}
+                      {searchedList.map((searchedItem, searchedIndex) => (
+                        <DropDownItem
+                          key={searchedIndex}
+                          onClick={() => clickDropDownItem(searchedItem)}
+                          onMouseOver={() => setSearchedItemIndex(searchedIndex)}
+                          className={searchedItemIndex === searchedIndex ? 'selected' : ''}
+                        >
+                          {searchedItem}
+                        </DropDownItem>
+                      ))}
+                    </DropDownBox>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  <div
+                    style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+                    onClick={switchSearchType}
+                  >
                     <RecipeSearchIconWrapper src={RecipeSearchIcon} className="img-render" />
-                    <RecipeSearchTitle>재료검색</RecipeSearchTitle>
+                    <RecipeSearchTitle>이름검색</RecipeSearchTitle>
                   </div>
                 </div>
-                {isSearchedValue && (
-                  <DropDownBox>
-                    {searchedList.length === 0 && <DropDownItem>해당하는 단어가 없습니다</DropDownItem>}
-                    {searchedList.map((searchedItem, searchedIndex) => (
-                      <DropDownItem
-                        key={searchedIndex}
-                        onClick={() => clickDropDownItem(searchedItem)}
-                        onMouseOver={() => setSearchedItemIndex(searchedIndex)}
-                        className={searchedItemIndex === searchedIndex ? 'selected' : ''}
-                      >
-                        {searchedItem}
-                      </DropDownItem>
-                    ))}
-                  </DropDownBox>
-                )}
-              </div>
+              )}
               <hr />
               <ContentTitle>인기도</ContentTitle>
               <CardsContainer className="flex flex-row">

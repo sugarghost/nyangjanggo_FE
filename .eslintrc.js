@@ -90,4 +90,27 @@ module.exports = {
       },
     ],
   },
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [
+          ['@', './src'],
+          ['@apis', './src/apis'],
+          ['@components', './src/components'],
+          ['@constants', './src/constants'],
+          ['@containers', './src/containers'],
+          ['@helpers', './src/helpers'],
+          ['@hook', './src/hook'],
+          ['@icon', './src/icon'],
+          ['@images', './src/images'],
+          ['@interfaces', './src/interfaces'],
+          ['@pages', './src/pages'],
+          ['@recoil', './src/recoil'],
+          ['@styles', './src/styles'],
+          ['@type', './src/type'],
+          ['@utils', './src/utils'],
+        ],
+      },
+    },
+  },
 };

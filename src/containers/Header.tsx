@@ -103,7 +103,7 @@ const Header = () => {
           </div>
           <UserIconWrapper className="img-render" onClick={goMypage} src={UserIcon} />
         </>
-      ) : (
+      ) : window.location.pathname !== '/' ? (
         <MobileHeader className="w-full  text-center flex justify-between">
           <BackButton
             onClick={() => {
@@ -114,6 +114,8 @@ const Header = () => {
           {/* <div>&nbsp;&nbsp;</div> */}
           <UserIconWrapper className="img-render" onClick={goMypage} src={UserIcon} />
         </MobileHeader>
+      ) : (
+        <></>
       )}
     </header>
   );
