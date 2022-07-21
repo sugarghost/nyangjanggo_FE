@@ -64,14 +64,9 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
     if (e.target.files?.length) {
       // 요소에 지정 된 파일을 가져옴
       const uploadFile = e.target.files[0];
-      console.log('step boardId: ', boardId);
       const compressedImage = await compressImage(uploadFile);
-
-      console.log('uploadFile:', uploadFile);
-      console.log('compressedImage:', compressedImage);
       if (compressedImage) {
         const file = new File([compressedImage], compressedImage.name, { type: compressedImage.type });
-        console.log('file:', file);
         const formData = new FormData();
         formData.append('boardId', String(boardId));
         formData.append('multipartFile', file);
