@@ -1,6 +1,6 @@
 import { FieldValues } from 'react-hook-form';
 
-import { Step, StepFormData, StepFormDataWithId } from '../type/recipeType';
+import { Step } from '../type/recipeType';
 import { authInstance, axiosInstance } from './axiosInstance';
 
 const board = '/board';
@@ -30,56 +30,34 @@ export default {
   },
 
   async getRecipePosting() {
-    const res = await authInstance.get(`${board}${step}/0`);
+    const res = await authInstance.get(`${board}/check`);
     return res;
   },
 
   async postRecipe(payload: FormData) {
-    const res = await authInstance.post(`${board}${step}/1`, payload, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
-    return res;
-  },
-
-  async postResourceList(payload: FormData) {
-    const res = await authInstance.post(`${board}${step}/2`, payload, {
+    const boardId = payload.get('boardId');
+    payload.delete('boardId');
+    const res = await authInstance.post(`${board}?boardId=${boardId}`, payload, {
       headers: { 'Content-Type': 'application/json' },
     });
     return res;
   },
 
-  async loopStep(payload: StepFormDataWithId) {
-    let res;
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const param of payload.boardRequestDtoStepRecipe) {
-      const boardRequestDtoStepRecipe = {
-        boardId: payload.boardId,
-        recipeStepRequestDto: {
-          stepNum: param.stepNum,
-          stepContent: param.stepContent,
-        },
-      };
+  async putRecipe(payload: FormData) {
+    const boardId = payload.get('boardId');
+    payload.delete('boardId');
+    const res = await authInstance.put(`${board}?boardId=${boardId}`, payload, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return res;
+  },
 
-      console.log(
-        `loop stepNum:${param.stepNum}, multipart: ${!!param.multipartFile}, fromServer: ${param.fromServer}`,
-      );
-      console.log(JSON.stringify(boardRequestDtoStepRecipe, null, 2));
-      const formData = new FormData();
-      if (param.multipartFile) formData.append('multipartFile', param.multipartFile);
-      else formData.append('multipartFile', new File([], '', { type: 'multipart/form-data' }));
-
-      formData.append(
-        'boardRequestDtoStepRecipe',
-        new Blob([JSON.stringify(boardRequestDtoStepRecipe)], { type: 'application/json' }),
-      );
-
-      res = !param.fromServer ? await postStep(formData) : await putStep(formData);
-      // 실패한 경우 break
-      if (res.status !== 200) {
-        console.log('status:', res.status, res.statusText);
-        break;
-      }
-    }
+  async postImage(payload: FormData) {
+    const boardId = payload.get('boardId');
+    payload.delete('boardId');
+    const res = await authInstance.post(`${board}/image?boardId=${boardId}`, payload, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
     return res;
   },
 
@@ -90,19 +68,6 @@ export default {
     return res;
   },
 
-  async putRecipe(payload: FormData) {
-    const res = await authInstance.put(`${board}${step}/1`, payload, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
-    return res;
-  },
-
-  async putResourceList(payload: FormData) {
-    const res = await authInstance.put(`${board}${step}/2`, payload, {
-      headers: { 'Content-Type': 'application/json' },
-    });
-    return res;
-  },
   async deleteStep(payload: FormData) {
     const res = await authInstance.delete(`${board}${step}/3`, {
       data: payload,
@@ -125,14 +90,4 @@ export default {
     });
     return res;
   },
-};
-
-const postStep = (payload: FormData) => {
-  const res = authInstance.post(`${board}${step}/3`, payload, { headers: { 'Content-Type': 'multipart/form-data' } });
-  return res;
-};
-
-const putStep = (payload: FormData) => {
-  const res = authInstance.put(`${board}${step}/3`, payload, { headers: { 'Content-Type': 'multipart/form-data' } });
-  return res;
 };
