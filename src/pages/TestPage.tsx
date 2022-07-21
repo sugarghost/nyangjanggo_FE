@@ -38,7 +38,7 @@ function TestPage({}) {
   };
   return (
     <div>
-      <input ref={targetApiRef} value="https://api.nyangjanggo.com/refresh" />: 연결 API 입력
+      <input ref={targetApiRef} />: 연결 API 입력
       <br />
       <button onClick={token}> 토큰 테스트 </button>
     </div>
