@@ -16,7 +16,6 @@ function TestPage({}) {
   const testInstance = axios.create();
 
   testInstance.defaults.validateStatus = (status) => status < 400;
-  testInstance.defaults.baseURL = 'https://api.nyangjanggo.com/refresh';
   testInstance.defaults.timeout = 30000;
 
   const accessToken = getToken();
@@ -25,7 +24,7 @@ function TestPage({}) {
     testInstance
       .get(
         `https://api.nyangjanggo.com/refresh`, // token refresh api
-        { headers: { 'Access-Token': `${accessToken}` }, withCredentials: true },
+        { headers: { 'Access-Token': `${accessToken}` } },
       )
       .then((result) => {
         console.log('result :', result);
