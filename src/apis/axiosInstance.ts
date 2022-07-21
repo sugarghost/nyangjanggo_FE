@@ -57,8 +57,8 @@ authInstance.interceptors.response.use(
           .then((result) => {
             console.log('result :', result);
             const { accessToken: newAccessToken, accessTokenExpireDate: newAccessTokenExpireDate } = result.data;
-            axios.defaults.headers.common.accessToken = `Access-Token ${newAccessToken}`;
-            originalRequest.headers.accessToken = `Access-Token ${newAccessToken}`;
+            axios.defaults.headers.common.Authorization = `Access-Token ${newAccessToken}`;
+            originalRequest.headers.Authorization = `Access-Token ${newAccessToken}`;
             // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
             return axios(originalRequest);
           })
