@@ -1,10 +1,9 @@
-import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import { useFormContext, useFieldArray } from "react-hook-form";
-import styled from "styled-components";
-
-import { ResourceFormData } from "../../type/recipeType";
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { RecipeForm } from '@type/recipeType';
+import React from 'react';
+import { useFormContext, useFieldArray } from 'react-hook-form';
+import styled from 'styled-components';
 
 type CategoryProps = {
   name: string;
@@ -13,10 +12,10 @@ type CategoryProps = {
 };
 
 const Category = ({ name, index, onDelete }: CategoryProps) => {
-  const { register, control } = useFormContext<ResourceFormData>();
+  const { register, control } = useFormContext<RecipeForm>();
   const { fields, append, remove } = useFieldArray({
     control,
-    name: `categories.${index}.resources`,
+    name: `resourceRequestDtoList.${index}.resources`,
   });
   const deleteCategory = () => {
     remove();
@@ -29,7 +28,7 @@ const Category = ({ name, index, onDelete }: CategoryProps) => {
           defaultValue={name}
           placeholder="재료 분류"
           className="text-lg my-1 font-500 float-left"
-          {...register(`categories.${index}.name`, { required: true })}
+          {...register(`resourceRequestDtoList.${index}.category`, { required: true })}
         />
         <span className="float-right" onClick={deleteCategory}>
           <FontAwesomeIcon icon={faMinus} color="grey" size="lg" />
@@ -42,13 +41,13 @@ const Category = ({ name, index, onDelete }: CategoryProps) => {
               className="float-left text-base w-1/3 my-1 font-400"
               defaultValue={item.resourceName}
               placeholder="재료명"
-              {...register(`categories.${index}.resources.${i}.resourceName`, {required: true,})}
+              {...register(`resourceRequestDtoList.${index}.resources.${i}.resourceName`, { required: true })}
             />
             <input
               className="float-left text-base w-1/3 my-1 font-400"
               defaultValue={item.amount}
               placeholder="재료량"
-              {...register(`categories.${index}.resources.${i}.amount`, {required: true,})}
+              {...register(`resourceRequestDtoList.${index}.resources.${i}.amount`, { required: true })}
             />
             <span className="float-right" onClick={() => remove(i)}>
               <FontAwesomeIcon icon={faMinus} color="grey" size="sm" />
