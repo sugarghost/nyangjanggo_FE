@@ -1,14 +1,12 @@
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Search from '@components/search/Search';
 import React, { Suspense, useEffect, useState, useRef, useCallback } from 'react';
-import { useInfiniteQuery, useQuery } from 'react-query';
+import { useInfiniteQuery } from 'react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import boardPostApi from '../apis/RecipeApi';
 import Card from '../components/Card';
 import useIntersectionObserver from '../hook/intersectionObserver';
-import RecipeSearchIcon from '../images/recipe_search_icon.png';
 
 export type Pageable = {
   page: number;
@@ -45,21 +43,6 @@ const MainPage = () => {
   const preventRef = useRef(true);
   const obsRef = useRef(null);
 
-  // 검색어 전처리
-  const wholeTextArray = ['양파', '바나나', '쌀', '당근', '파', '대파', '파프리카', '다시마', '파슬리'];
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [isSearchedValue, setIsSearchedValue] = useState<boolean>(false);
-  const [searchedList, setSearchedList] = useState(wholeTextArray);
-  const [searchedItemIndex, setSearchedItemIndex] = useState(-1);
-  // 재료 검색, 요리 이름 검색을 전환하기 위한 state
-  const [searchType, setSearchType] = useState(1);
-
-  const switchSearchType = () => {
-    setSearchValue('');
-    setIsSearchedValue(false);
-    if (searchType) setSearchType(0);
-    else setSearchType(1);
-  };
   // 게시글 목록 기능
   const chagneMode = () => {
     if (boardType === 'date')
@@ -106,104 +89,21 @@ const MainPage = () => {
       },
     },
   );
-  console.log(data);
+
   // 상세 페이지 기능
   const viewRecipeDetail = (boardId: number) => {
     navigate('/recipeDetailPage', { state: { boardId } });
   };
 
-  // 검색창 기능
-  const changeSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
-    setIsSearchedValue(true);
-  };
-
-  const showSearchedList = () => {
-    if (searchValue === '') {
-      setIsSearchedValue(false);
-      setSearchedList([]);
-    } else {
-      const choosenTextList = wholeTextArray.filter((textItem) => textItem.includes(searchValue));
-      setSearchedList(choosenTextList);
-    }
-  };
-
-  const clickDropDownItem = (clickedItem: any) => {
-    setSearchValue(clickedItem);
-    setIsSearchedValue(false);
-  };
-
-  const handleDropDownKey = (event: any) => {
-    // input에 값이 있을때만 작동
-    if (isSearchedValue) {
-      if (event.key === 'ArrowDown' && searchedList.length - 1 > searchedItemIndex) {
-        setSearchedItemIndex(searchedItemIndex + 1);
-      }
-
-      if (event.key === 'ArrowUp' && searchedItemIndex >= 0) setSearchedItemIndex(searchedItemIndex - 1);
-      if (event.key === 'Enter' && searchedItemIndex >= 0) {
-        clickDropDownItem(searchedList[searchedItemIndex]);
-        setSearchedItemIndex(-1);
-      }
-    }
-  };
-
-  useEffect(showSearchedList, [searchValue]);
-
   //
   return (
     <>
+      <Search />
       {/* Suspense를 사용하면 컴포넌트가 렌더링되기 전까지 기다릴 수 있습니다 */}
       <Suspense fallback={<div>로딩중입니다.</div>}>
         <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
-          <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
+          <div className="max-w-screen-md mx-auto">
             <div className="mx-auto w-full">
-              {searchType ? (
-                <div className="p-4 top-0 w-100vw z-100">
-                  <div className="flex flex-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div
-                      className="rounded-md flex flex-row p-1vw"
-                      style={{ background: '#EFEFF0', padding: '10px', width: '88%' }}
-                    >
-                      <FontAwesomeIcon className="m-1" icon={faSearch} color="grey" />
-                      <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
-                      <div className="cursor-pointer mr-1" onClick={() => setSearchValue('')}>
-                        &times;
-                      </div>
-                    </div>
-                    <div className="flex flex-col justify-center" onClick={switchSearchType}>
-                      <RecipeSearchIconWrapper src={RecipeSearchIcon} className="img-render" />
-                      <RecipeSearchTitle>재료검색</RecipeSearchTitle>
-                    </div>
-                  </div>
-                  {isSearchedValue && (
-                    <DropDownBox>
-                      {searchedList.length === 0 && <DropDownItem>해당하는 단어가 없습니다</DropDownItem>}
-                      {searchedList.map((searchedItem, searchedIndex) => (
-                        <DropDownItem
-                          key={searchedIndex}
-                          onClick={() => clickDropDownItem(searchedItem)}
-                          onMouseOver={() => setSearchedItemIndex(searchedIndex)}
-                          className={searchedItemIndex === searchedIndex ? 'selected' : ''}
-                        >
-                          {searchedItem}
-                        </DropDownItem>
-                      ))}
-                    </DropDownBox>
-                  )}
-                </div>
-              ) : (
-                <div>
-                  <div
-                    style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
-                    onClick={switchSearchType}
-                  >
-                    <RecipeSearchIconWrapper src={RecipeSearchIcon} className="img-render" />
-                    <RecipeSearchTitle>이름검색</RecipeSearchTitle>
-                  </div>
-                </div>
-              )}
-              <hr />
               <ContentTitle>인기도</ContentTitle>
               <CardsContainer className="flex flex-row">
                 {data?.pages?.map((page, index) => (
@@ -255,23 +155,6 @@ const MainPage = () => {
   );
 };
 
-const RecipeSearchIconWrapper = styled.img`
-  width: 20px;
-  height: 14px;
-  margin: 0 auto;
-`;
-
-const RecipeSearchTitle = styled.p`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 11px;
-  text-align: center;
-  /* Main */
-  color: #eb3120;
-  margin: 5px auto 0 auto;
-`;
-
 const ContentTitle = styled.div`
   text-align: left;
   padding: 0px 15px 0px 15px;
@@ -296,58 +179,5 @@ const CardsContainer = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   padding: 0px 15px 0px 15px;
-`;
-
-const activeBorderRadius = '1vw 1vw 0 0';
-const inactiveBorderRadius = '1vw 1vw 1vw 1vw';
-
-const WholeBox = styled.div`
-  padding: 1vw;
-  width: 90vw;
-`;
-
-const InputBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 1vw;
-  z-index: 3;
-
-  &:focus-within {
-    box-shadow: 0 10px 10px rgb(0, 0, 0, 0.3);
-  }
-`;
-
-const Input = styled.input`
-  flex: 1 0 0;
-  margin: 0;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  font-size: 16px;
-`;
-
-const DeleteButton = styled.div`
-  cursor: pointer;
-`;
-
-const DropDownBox = styled.ul`
-  display: block;
-  margin: 0 auto;
-  padding: 0.5vw 0;
-  background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  border-top: none;
-  border-radius: 0 0 16px 16px;
-  box-shadow: 0 10px 10px rgb(0, 0, 0, 0.3);
-  list-style-type: none;
-  z-index: 3;
-`;
-
-const DropDownItem = styled.li`
-  padding: 0 1vw;
-
-  &.selected {
-    background-color: lightgray;
-  }
 `;
 export default MainPage;
