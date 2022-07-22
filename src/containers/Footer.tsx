@@ -48,7 +48,7 @@ function Footer() {
           <p className="text-sm">홈</p>
         </div>
         <div className="m-auto py-1 w-1/5" onClick={frigeButtonClick}>
-          <Frige className="m-auto" stroke={currentPathName === '/myPage/myRefrigeratorPage' ? '#EB3120' : '#676767'} />
+          <Frige className="m-auto" fill={currentPathName === '/myPage/myRefrigeratorPage' ? '#EB3120' : '#676767'} />
           <p className="text-sm">냉장고</p>
         </div>
         <div className="m-auto py-1 w-1/5" onClick={recipeButtonClick}>
