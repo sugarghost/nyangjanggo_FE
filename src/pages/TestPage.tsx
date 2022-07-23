@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { ChangeEvent, InputHTMLAttributes, Suspense, useEffect, useState } from 'react';
+import React, { ChangeEvent, InputHTMLAttributes, Suspense, useEffect, useRef, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import userToken from '../recoil/userAtom';
@@ -13,20 +13,25 @@ function TestPage({}) {
     'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodHNsdHM5NUBnbWFpbC5jb20iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2NTc1NDIzOTMsImV4cCI6MTY1ODc1MTk5M30.IVoFRLjsMx_TevanNPKkJRoPzlXXxffPju1gzCn6ato',
   );
   */
+  const [isCredentials, setIsCredentials] = useState(true);
   const testInstance = axios.create();
+  const targetApiRef = useRef<HTMLInputElement>(null);
 
   testInstance.defaults.validateStatus = (status) => status < 400;
-  testInstance.defaults.baseURL = 'https://api.nyangjanggo.com/refresh';
   testInstance.defaults.timeout = 30000;
-  testInstance.defaults.withCredentials = true;
 
   const accessToken = getToken();
 
+  const credentials = () => {
+    setIsCredentials(!isCredentials);
+  };
   const token = () => {
+    const api = targetApiRef.current.value;
+    console.log('api', api);
     testInstance
       .get(
-        `https://api.nyangjanggo.com/refresh`, // token refresh api
-        { headers: { 'Access-Token': `${accessToken}` }, withCredentials: true },
+        `${api}`, // token refresh api
+        { headers: { 'Access-Token': `${accessToken}` }, withCredentials: isCredentials },
       )
       .then((result) => {
         console.log('result :', result);
@@ -37,7 +42,13 @@ function TestPage({}) {
   };
   return (
     <div>
+      <input ref={targetApiRef} />: 연결 API 입력
+      <br />
       <button onClick={token}> 토큰 테스트 </button>
+      <br />
+      <button onClick={credentials}> Credentials 테스트 </button>
+      <br />
+      isCredentials: {isCredentials ? 'true' : 'false'}
     </div>
   );
 }

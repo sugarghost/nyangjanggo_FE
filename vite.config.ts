@@ -1,6 +1,7 @@
 import reactRefresh from '@vitejs/plugin-react-refresh';
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
+import svgr from 'vite-plugin-svgr';
 import WindiCSS from 'vite-plugin-windicss';
 
 // https://vitejs.dev/config/
@@ -8,7 +9,7 @@ export default defineConfig({
   server: {
     port: 3000,
   },
-  plugins: [reactRefresh(), WindiCSS()],
+  plugins: [reactRefresh(), WindiCSS(), svgr()],
   resolve: {
     alias: [
       { find: '@', replacement: resolve(__dirname, 'src') },

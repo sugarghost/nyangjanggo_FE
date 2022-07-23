@@ -54,7 +54,6 @@ function Card(props: IProps) {
           disabledColor={COLOR_V2.PRIMARY_DISABLED}
           src={cardImg}
         />
-        <RankWrapper> {rank}</RankWrapper>
       </div>
       <CardContentWrapper>
         <CardContentLeft>
