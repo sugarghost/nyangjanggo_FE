@@ -1,28 +1,33 @@
 import { postResource, getResource } from '@/apis/ResourceApi';
+import { Ingredient } from '@/apis/ResourceApi';
+import { textState, ingredientsSelector } from '@/recoil/ingredient';
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 import { authInstance } from '../../apis/axiosInstance';
-import { axiosInstance } from '../../apis/axiosInstance';
 import BottomFloat from '../../components/BottomFloat';
 import Calendar from '../../components/mypage/Calendar';
 import { COLOR } from '../../constants';
 
 const MyRefrigeratorPage = () => {
   const [profileImage, setProfileImage] = useState('https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg');
-  const [ingredients, setIngredients] = useState<any>([]);
+  const currentUser = useRecoilValue(textState);
+  const currentIngredient = useRecoilValue(ingredientsSelector);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [showRegisterIngredient, setShowRegisterIngredient] = useState(false);
   const [ingredientName, setIngredientName] = useState('');
   const [ingredientCount, setIngredientCount] = useState<number>(null);
   const [expirationDate, setExpirationDate] = useState(new Date());
-
-  const getRefrigerator = () => {};
+  const [loading, setLoading] = useState(false);
+  // const getRefrigerator = () => {};
 
   useEffect(() => {
-    getResource();
-  }, [showRegisterIngredient]);
+    setIngredients([...currentIngredient]);
+    console.log('currentIngredient : ',currentIngredient)
+  }, []);
 
   const handleOnClcikAddButton = () => {
     setShowRegisterIngredient(!showRegisterIngredient);
@@ -37,24 +42,33 @@ const MyRefrigeratorPage = () => {
   };
 
   const handleOnClickDelete = (e) => {
-    const id = e.target;
+    const deleteItemIdx = e.target.id;
+
+    console.log("deleteItem : ",deleteItemIdx)
+
+    let deletedIngredients  = Array.from(ingredients)
+     deletedIngredients.splice(deleteItemIdx,1 )
+
+    console.log("deletedIngredients :: ",deletedIngredients)
+
+    const formData = new FormData();
+    formData.append('fridgeRequestDtoList', new Blob([JSON.stringify(deletedIngredients)], { type: 'application/json' }));
 
     authInstance
-      .delete(`/user/fridge/${id}`)
+      .put(`/user/fridge`, deletedIngredients)
       .then((res) => {
-        const _ingredients = ingredients.filter((item) => item.id !== id);
-
-        setIngredients(_ingredients);
+        setIngredients([...deletedIngredients])
       })
       .catch((err) => {
         console.log('재료 가져오기 에러 :', err);
       });
   };
 
+  // 삭제와 수정을 둘다 
   const handleOnClickEdit = (e) => {
     const id = e.target;
     authInstance
-      .delete(`/user/fridge/${id}`)
+      .put(`/user/fridge/${id}`)
       .then((res) => {
         const idx = ingredients.findIndex(id);
 
@@ -65,11 +79,12 @@ const MyRefrigeratorPage = () => {
       });
   };
 
-  const handleOnClickRegister = () => {
+  const handleOnClickRegister = async () => {
     if (!ingredientName) {
       alert('재료 이름을 확인해 주세요!');
       return;
     }
+    setLoading(true);
 
     const formData = new FormData();
 
@@ -83,7 +98,22 @@ const MyRefrigeratorPage = () => {
     ];
 
     formData.append('fridgeRequestDtoList', new Blob([JSON.stringify(requestList)], { type: 'application/json' }));
-    postResource(formData);
+
+    authInstance
+      .post(`/user/fridge`, formData, {
+        headers: { 'Content-Type': 'application/json' },
+      })
+      .then((res) => {
+        console.log('재료등록 : ', [...ingredients, ...requestList]);
+        setIngredients([...ingredients, ...requestList]);
+        alert('재료등록이 완료 되었습니다!');
+      })
+      .catch((err) => {
+        alert('재료등록에 실패했습니다!');
+        console.log('재료 등록에러 :', err);
+      });
+
+    setLoading(false);
   };
   return (
     <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
@@ -92,14 +122,16 @@ const MyRefrigeratorPage = () => {
           <OptionsWrapper>
             <IngredientAddBtnWrapper>
               {showRegisterIngredient ? (
-                <IngredientAddBtn onPointerDown={handleOnClcikAddButton}>←</IngredientAddBtn>
+                <IngredientAddBtn style={{ userSelect: 'none' }} onPointerDown={handleOnClcikAddButton}>
+                  ←
+                </IngredientAddBtn>
               ) : (
                 <IngredientAddBtn onPointerDown={handleOnClcikAddButton}>+</IngredientAddBtn>
               )}
             </IngredientAddBtnWrapper>
             {showRegisterIngredient ? (
               <>
-                <Title style={{ textAlign: 'left' }}>재료 등록</Title>
+                <Title style={{ textAlign: 'left', userSelect: 'none' }}>재료 등록</Title>
 
                 <label
                   style={{
@@ -148,21 +180,35 @@ const MyRefrigeratorPage = () => {
               </>
             ) : (
               <>
-                <EditOption>
-                  <div>수정</div>
-                  <div onClick={handleOnClickEdit} style={{ margin: '0 4px' }}>
-                    |
-                  </div>
-                  <div onClick={handleOnClickDelete} style={{}}>
-                    삭제
-                  </div>
-                </EditOption>
-                <IngredientsBox className="">
+                {Array.from(ingredients).map((item, idx) => {
+                  return (
+                    <>
+                      <EditOption key={idx}>
+                        {/* <div>수정</div>
+                        <div onClick={handleOnClickEdit} style={{ margin: '0 4px' }}>
+                          |
+                        </div> */}
+                        <div id={String(idx)} onClick={handleOnClickDelete} style={{}}>
+                          삭제
+                        </div>
+                      </EditOption>
+                      <IngredientsBox className="">
+                        <div>
+                          <span style={{ margin: '0 0 0 0' }}>
+                            {item.resourceName}({item.amount}개)
+                          </span>
+                        </div>
+                        <div>{item.endTime}일 남음</div>
+                      </IngredientsBox>
+                    </>
+                  );
+                })}
+                {/* <IngredientsBox className="">
                   <div>
                     <span style={{ margin: '0 0 0 0' }}>달걀(6개)</span>
                   </div>
                   <div>10일 남음</div>
-                </IngredientsBox>
+                </IngredientsBox> */}
               </>
             )}
 
@@ -172,7 +218,9 @@ const MyRefrigeratorPage = () => {
       </div>
       {showRegisterIngredient && (
         <BottomFloat className="w-full">
-          <RegisterButton onClick={handleOnClickRegister}>등록하기</RegisterButton>
+          <RegisterButton disabled={loading} onClick={handleOnClickRegister}>
+            {loading ? '등록중' : '등록하기'}{' '}
+          </RegisterButton>
         </BottomFloat>
       )}
     </div>
@@ -210,6 +258,7 @@ const IngredientsBox = styled.div`
 `;
 
 const EditOption = styled.div`
+  margin-top: 10px;
   display: flex;
   justify-content: end;
   font-style: normal;

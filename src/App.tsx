@@ -24,12 +24,12 @@ const queryClient = new QueryClient();
 
 function App() {
   useLayoutEffect(() => {
-    /*
+    
     localStorage.setItem(
       'accessToken',
-      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodHNsdHM5NUBnbWFpbC5jb20iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2NTczMzI5NjUsImV4cCI6MTY1ODU0MjU2NX0.eZl4GB5_swQw7nGQV4YhBdq3Uswc7Vtixb5FdBObgls',
+      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnZ3l1bmlAa2FrYW8uY29tIiwicm9sZXMiOiJVU0VSIiwiaWF0IjoxNjU4NDcwMTY0LCJleHAiOjE2NTk2Nzk3NjR9.oas7xljIBHXPPyvztSHB8twlgtS7AEG6eoputNY2Ld8',
     );
-    */
+    
     const userInfoArr = window.location.href.split('&');
 
     // console.log(access_token)
@@ -75,12 +75,12 @@ function App() {
             <Route path="/signUpPage" element={<SignUpPage />} />
             <Route path="/recipeDetailPage" element={<RecipeDetailPage />} />
             {/* 로그인이 필요한 페이지 */}
-            <Route element={<PrivateRoutes authentication />}>
+            {/* <Route element={<PrivateRoutes authentication />}> */}
               <Route path="/recipeRegisterPage" element={<RecipeRegisterPage />} />
               <Route path="/myPage" element={<MyPage />} />
               <Route path="/myPage/myRefrigeratorPage" element={<MyRefrigeratorPage />} />
               <Route path="/myPage/userEditPage" element={<UserEditProfile />} />
-            </Route>
+            {/* </Route> */}
           </Routes>
           {/* </div>
             </div>

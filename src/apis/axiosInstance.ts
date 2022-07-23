@@ -66,31 +66,31 @@ authInstance.interceptors.response.use(
             return axios(originalRequest);
           })
           .catch((refreshError) => {
-            console.log('refreshError: ', refreshError);
-            localStorage.removeItem('accessToken');
-            ReactSwal.fire({
-              title: '<p>로그인 정보가 유효하지 않습니다!</p>',
-              html: '<p>로그인으로 이동합니다</p>',
-              icon: 'error',
-            }).then(() => {
-              window.location.href = '/signUpPage';
-            });
-            return false;
+            // console.log('refreshError: ', refreshError);
+            // localStorage.removeItem('accessToken');
+            // ReactSwal.fire({
+            //   title: '<p>로그인 정보가 유효하지 않습니다!</p>',
+            //   html: '<p>로그인으로 이동합니다</p>',
+            //   icon: 'error',
+            // }).then(() => {
+            //   window.location.href = '/signUpPage';
+            // });
+            // return false;
           });
         // 새로운 토큰 저장
       }
 
-      localStorage.removeItem('accessToken');
+      // localStorage.removeItem('accessToken');
 
-      console.log('result :', error.response.data);
-      // navigate 방식은 여기서 호출이 안되서 다른 방식으로 이용
-      ReactSwal.fire({
-        title: '<p>로그인 정보가 유효하지 않습니다!</p>',
-        html: '<p>로그인으로 이동합니다</p>',
-        icon: 'error',
-      }).then(() => {
-        window.location.href = '/signUpPage';
-      });
+      // console.log('result :', error.response.data);
+      // // navigate 방식은 여기서 호출이 안되서 다른 방식으로 이용
+      // ReactSwal.fire({
+      //   title: '<p>로그인 정보가 유효하지 않습니다!</p>',
+      //   html: '<p>로그인으로 이동합니다</p>',
+      //   icon: 'error',
+      // }).then(() => {
+      //   window.location.href = '/signUpPage';
+      // });
       return false;
     }
     return Promise.reject(error);
