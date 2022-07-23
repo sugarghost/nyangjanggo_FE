@@ -16,6 +16,7 @@ export const authInstance = axios.create();
 authInstance.defaults.validateStatus = (status) => status < 400;
 authInstance.defaults.baseURL = PRODUCTION ? 'https://gyuni.shop/api' : 'https://gyuni.shop/api';
 authInstance.defaults.timeout = 30000;
+authInstance.defaults.withCredentials = true;
 
 authInstance.interceptors.request.use((config) => {
   // 리퀘스트 전에 토큰을 가져다 꺼내는데, axios.defaults.headers.common.Authorization를 활용하는 방안으로 변경 예정
@@ -52,11 +53,13 @@ authInstance.interceptors.response.use(
         await axios
           .get(
             `https://api.nyangjanggo.com/refresh`, // token refresh api
-            { headers: { 'Access-Token': `${accessToken}` } },
+            { headers: { 'Access-Token': `${accessToken}` }, withCredentials: true },
           )
           .then((result) => {
             console.log('result :', result);
-            const { accessToken: newAccessToken, accessTokenExpireDate: newAccessTokenExpireDate } = result.data;
+            const newAccessToken = result.data.accessToken;
+            localStorage.setItem('accessToken', newAccessToken);
+
             axios.defaults.headers.common.Authorization = `Access-Token ${newAccessToken}`;
             originalRequest.headers.Authorization = `Access-Token ${newAccessToken}`;
             // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
