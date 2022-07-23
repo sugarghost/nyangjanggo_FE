@@ -2,7 +2,7 @@ import searchApi from '@apis/SearchApi';
 import Tag from '@components/search/Tag';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ResourceSearchIcon from '@icon/search.svg';
+import { ReactComponent as ResourceSearchIcon } from '@icon/search.svg';
 import RecipeSearchIcon from '@images/recipe_search_icon.png';
 import React, { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
@@ -16,19 +16,9 @@ const Search = () => {
   // 검색창에 값이 입력되었는지 여부
   const [isSearchedValue, setIsSearchedValue] = useState<boolean>(false);
   // 검색된 태그 리스트
-  const [searchedTagList, setSearchedTagList] = useState([
-    '양파',
-    '바나나',
-    '쌀',
-    '당근',
-    '파',
-    '대파',
-    '파프리카',
-    '다시마',
-    '파슬리',
-  ]);
+  const [searchedTagList, setSearchedTagList] = useState([]);
   // 재료 검색을 위해 선택 된 tag list
-  const [selectedTagList, setSelectedTagList] = useState(['양파', '바나나']);
+  const [selectedTagList, setSelectedTagList] = useState([]);
   // 요리이름 검색된 결과들 리스트
   const [searchedList, setSearchedList] = useState(wholeTextArray);
   const [searchedItemIndex, setSearchedItemIndex] = useState(-1);
@@ -53,19 +43,26 @@ const Search = () => {
       onSuccess: (res) => {
         console.log('getResourceRecommend', res);
         // 테스트를 위해 임시로 비활성화
-        // setSearchedTagList(res.data.resourceRecommendList);
+        setSearchedTagList(res.data.resourceRecommendList);
       },
     },
   );
 
   // 검색창 기능
-  const changeSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
-    setIsSearchedValue(true);
+  const changeSearchValue = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
+    await setSearchValue(event.target.value);
 
     if (searchType) {
-      // 검색어가 변화하면 재료 추천 태그들을 가져와 searchedTagList에 넣어줌
-      resourceRecommendRefetch();
+      if (event.target.value.length === 0) {
+        setIsSearchedValue(false);
+        // 나중에 냉장고 연결해서 냉장고 데이터 있으면 여기에 연결함
+        setSearchedTagList(['양파', '바나나', '쌀', '당근', '파', '대파', '파프리카', '다시마', '파슬리']);
+      } else {
+        setIsSearchedValue(true);
+        // 검색어가 변화하면 재료 추천 태그들을 가져와 searchedTagList에 넣어줌
+        await resourceRecommendRefetch();
+      }
     }
   };
 
@@ -102,8 +99,13 @@ const Search = () => {
 
   useEffect(showSearchedList, [searchValue]);
 
-  const addTags = (tag: string) => {};
+  const addTags = (tag: string) => {
+    if (!selectedTagList.includes(tag)) setSelectedTagList([...selectedTagList, tag]);
+  };
 
+  const removeTags = (tag: string) => {
+    setSelectedTagList(selectedTagList.filter((element) => element !== tag));
+  };
   return (
     <>
       {searchType ? (
@@ -129,17 +131,21 @@ const Search = () => {
           </div>
 
           <SearchedBox>
-            {searchedTagList.map((tags: string, index: number) => (
-              <Tag key={index} tag={tags} onClick={() => addTags(tags)} />
-            ))}
+            {searchedTagList.map((tags: string, index: number) =>
+              !selectedTagList.includes(tags) ? (
+                <Tag key={index} tag={tags} onClick={() => addTags(tags)} bgColor="bg-box" />
+              ) : (
+                ''
+              ),
+            )}
           </SearchedBox>
 
           <ResourceSearchWrapper>
             {selectedTagList.map((tags: string, index: number) => (
-              <Tag key={index} tag={tags} onClick={() => addTags(tags)} />
+              <Tag key={index} tag={tags} onClick={() => removeTags(tags)} bgColor="bg-white" isCancle />
             ))}
             <ResourceSearchButton className={selectedTagList.length === 0 ? 'bg-empty' : 'bg-main'}>
-              <img src={ResourceSearchIcon} alt="" className="m-auto" />
+              <ResourceSearchIcon className="m-auto" fill="white" />
             </ResourceSearchButton>
           </ResourceSearchWrapper>
         </>

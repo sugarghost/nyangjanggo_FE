@@ -62,7 +62,6 @@ export type ResourceRequestDtoTemplate = {
 
 export type BoardPostFormFileds = {
   title: string;
-  subTitle: string;
   content: string;
   frontImageLink: File;
 };
@@ -121,7 +120,6 @@ const RecipeRegisterPage = () => {
   useEffect(() => {
     if (
       recipeWatch('title') !== '' &&
-      recipeWatch('subTitle') !== '' &&
       recipeWatch('content') !== '' &&
       recipeWatch('mainImageLink') !== '' &&
       recipeWatch('resourceRequestDtoList').every((el) => el.category !== '') &&
@@ -195,7 +193,6 @@ const RecipeRegisterPage = () => {
       setBoardId(data.boardId);
 
       recipeMethods.setValue('title', data.title);
-      recipeMethods.setValue('subTitle', data.subTitle);
       recipeMethods.setValue('content', data.content);
       setMainImageUrl(data.mainImg);
 
@@ -345,7 +342,6 @@ const RecipeRegisterPage = () => {
         [
           JSON.stringify({
             title: values.title,
-            subTitle: values.subTitle,
             content: values.content,
             mainImageLink: values.mainImageLink,
             resourceRequestDtoList: resourceList,
@@ -432,12 +428,6 @@ const RecipeRegisterPage = () => {
                 placeholder="요리 이름"
                 {...recipeRegister('title', { required: true })}
               />
-              <input
-                className="p-4 my-4 w-full rounded-md border border-gray-300"
-                placeholder="요리 소개"
-                {...recipeRegister('subTitle', { required: true })}
-              />
-
               <textarea
                 className="p-4 my-4 w-full rounded-md border border-gray-300"
                 placeholder="요리 설명"

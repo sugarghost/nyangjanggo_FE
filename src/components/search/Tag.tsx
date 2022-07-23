@@ -5,11 +5,18 @@ export interface TagProps {
   tag: string;
   onClick?: (e: React.MouseEvent<HTMLSpanElement>) => void;
   [prop: string]: any;
+  bgColor?: string;
+  isCancle?: boolean;
 }
 
-const Tag = ({ tag, onClick }: TagProps) => {
+const Tag = ({ tag, onClick, bgColor, isCancle = false }: TagProps) => {
   const needProps = '';
-  return <TagContent onClick={onClick}>{tag}</TagContent>;
+  return (
+    <TagContent className={`${bgColor} active:( bg-main )`} onClick={onClick}>
+      {tag}
+      {isCancle ? <span className="float-right">X</span> : ''}
+    </TagContent>
+  );
 };
 
 const TagContent = styled.div`
@@ -21,9 +28,7 @@ const TagContent = styled.div`
   padding-left: 0.75rem;
   padding-right: 0.75rem;
   margin: 0.5rem;
-  background-color: rgba(239, 239, 240, 1);
   :active {
-    background-color: rgba(235, 49, 32, 1);
     color: white;
   }
 `;
