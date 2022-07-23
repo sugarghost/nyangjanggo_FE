@@ -18,7 +18,7 @@ const RecipeDetailPage = ({}) => {
   const state = location.state as { boardId: number };
 
   // 페이지 조회 처리
-  const userName = getNickname(getToken());
+  const userName = getToken() ? getNickname(getToken()) : '';
   const [userInfo, setUserInfo] = useState<RecipeDetail>();
   const [boardId, setBoardId] = useState<number>(state.boardId);
   const [recipe, setRecipe] = useState<RecipeDetail>();
@@ -36,7 +36,6 @@ const RecipeDetailPage = ({}) => {
       // 레시피 정보 처리 단계
       setRecipe({
         title: e.data.title,
-        subTitle: e.data.subTitle,
         content: e.data.content,
         mainImg: e.data.mainImg,
         nickname: e.data.nickname,
@@ -48,7 +47,7 @@ const RecipeDetailPage = ({}) => {
       const ResourceFormTemp: ResourceForm[] = [];
 
       // 넘겨온 데이터에서 resource 내용을 열거함
-      e.data.resourceResponseDtoList.map((fields: any, index: number) => {
+      e.data.resourceResponseDtoList?.map((fields: any, index: number) => {
         // 기존 ResourceFormTemp에 저장된 Category 값과 반환된 resourceResponseDtoList 속에 category 데이터와 일치하는 경우 해당 인덱스를 반환
         const categoryIndex = ResourceFormTemp.findIndex((item) => item.category === fields.category);
         // 일치하는 category가 있어서 인덱스가 -1이 아닌 경우 실행
@@ -131,7 +130,6 @@ const RecipeDetailPage = ({}) => {
             alt=""
           />
           <p className="text-gray-700 text-left text-4xl my-1 font-900">{recipe?.title}</p>
-          <p className="text-gray-600 text-left text-lg my-1 font-600">{recipe?.subTitle}</p>
           <div className="text-left text-lg my-1 font-300 border-gray-200 border-2 rounded-md min-h-30 p-2">
             {recipe?.content}
           </div>
