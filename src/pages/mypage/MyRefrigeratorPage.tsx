@@ -1,3 +1,4 @@
+import { postResource, getResource } from '@/apis/ResourceApi';
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -12,7 +13,7 @@ import { COLOR } from '../../constants';
 const MyRefrigeratorPage = () => {
   const [profileImage, setProfileImage] = useState('https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg');
   const [ingredients, setIngredients] = useState<any>([]);
-  const [showRegisterIngredient, setShowRegisterIngredient] = useState(true);
+  const [showRegisterIngredient, setShowRegisterIngredient] = useState(false);
   const [ingredientName, setIngredientName] = useState('');
   const [ingredientCount, setIngredientCount] = useState<number>(null);
   const [expirationDate, setExpirationDate] = useState(new Date());
@@ -20,15 +21,8 @@ const MyRefrigeratorPage = () => {
   const getRefrigerator = () => {};
 
   useEffect(() => {
-    // axiosInstance
-    //   .get(`/user/fridge`)
-    //   .then((res) => {
-    //     setIngredients(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log('재료 가져오기 에러 :', err);
-    //   });
-  }, []);
+    getResource();
+  }, [showRegisterIngredient]);
 
   const handleOnClcikAddButton = () => {
     setShowRegisterIngredient(!showRegisterIngredient);
@@ -72,39 +66,24 @@ const MyRefrigeratorPage = () => {
   };
 
   const handleOnClickRegister = () => {
-    console.log({
-      category: '',
-      resourceName: ingredientName,
-      amount: ingredientCount,
-      endTime: String(expirationDate.toISOString()).substr(0, 10),
-    });
-
     if (!ingredientName) {
       alert('재료 이름을 확인해 주세요!');
       return;
     }
 
-    authInstance
-      .post(
-        `/user/fridge`,
-        {
-          category: '',
-          resourceName: ingredientName,
-          amount: ingredientCount,
-          endTime: String(expirationDate.toISOString()).substr(0, 10),
-        },
-        {
-          headers: {
-            Authorization: localStorage.getItem('accessToken'),
-          },
-        },
-      )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log('재료 등록에러 :', err);
-      });
+    const formData = new FormData();
+
+    const requestList = [
+      {
+        category: '',
+        resourceName: ingredientName,
+        amount: String(ingredientCount),
+        endTime: String(expirationDate.toISOString()).substr(0, 10),
+      },
+    ];
+
+    formData.append('fridgeRequestDtoList', new Blob([JSON.stringify(requestList)], { type: 'application/json' }));
+    postResource(formData);
   };
   return (
     <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
