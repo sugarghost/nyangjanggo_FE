@@ -111,7 +111,7 @@ const MainPage = () => {
               <br></br>
               <br></br>
               <ContentTitle>최신순</ContentTitle>
-              <ScrollMenuWrapper>
+              <ScrollMenuWrapper className="flex">
                 <ScrollMenu>
                   <div style={{ width: '175px', height: '175px', background: 'red', margin: '0 10px 0 0' }}></div>
                   <div style={{ width: '175px', height: '175px', background: 'red', margin: '0 10px 0 0' }}></div>
@@ -178,11 +178,8 @@ const ContentTitle = styled.div`
   font-weight: 700;
   font-size: 20px;
   line-height: 23px;
-  /* identical to box height */
-
-  /* Main */
-
-  padding: 16px 16px 0 16px;
+  max-width: inherit;
+  padding: 16px 0 0 16px;
   color: #eb3120;
 `;
 
@@ -199,6 +196,11 @@ const CardsContainer = styled.div`
 const ScrollMenuWrapper = styled.div`
   margin: 8px 0 0 0;
   padding: 0 0 30px 16px;
+  overflow: scroll;
+
+  @media screen and (max-width: 500px) {
+    max-width: 410px;
+  }
 `;
 
 export default MainPage;

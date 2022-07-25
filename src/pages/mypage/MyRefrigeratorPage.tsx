@@ -1,6 +1,6 @@
 import { postResource, getResource } from '@/apis/ResourceApi';
 import { Ingredient } from '@/apis/ResourceApi';
-import { textState, ingredientsSelector } from '@/recoil/ingredient';
+import {  ingredientsSelector } from '@/recoil/ingredient';
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -14,7 +14,6 @@ import { COLOR } from '../../constants';
 
 const MyRefrigeratorPage = () => {
   const [profileImage, setProfileImage] = useState('https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg');
-  const currentUser = useRecoilValue(textState);
   const currentIngredient = useRecoilValue(ingredientsSelector);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [showRegisterIngredient, setShowRegisterIngredient] = useState(false);
@@ -59,7 +58,7 @@ const MyRefrigeratorPage = () => {
     );
 
     authInstance
-      .put(`/user/fridge`, deletedIngredients)
+      .put(`/user/fridge`, formData)
       .then((res) => {
         setIngredients([...deletedIngredients]);
       })
