@@ -1,3 +1,4 @@
+import Carousel from '@/components/Carousel';
 import Search from '@components/search/Search';
 import React, { Suspense, useEffect, useState, useRef, useCallback } from 'react';
 import { useInfiniteQuery } from 'react-query';
@@ -103,6 +104,27 @@ const MainPage = () => {
         <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
           <div className="max-w-screen-md mx-auto">
             <div className="mx-auto w-full">
+              <br></br>
+              <br></br>
+              <br></br>
+              <ContentTitle>최신순</ContentTitle>
+              <Carousel>
+                {data?.pages?.map((page, index) => (
+                  <>
+                    {page?.content?.map((content: any, subIndex: number) => (
+                      <Card
+                        cardTitle={content.title}
+                        subTitle={content.nickname}
+                        key={`${index}_${subIndex}`}
+                        cardImg={content.mainImg}
+                        styleCustom={{ width: '50%', margin: '16px 0 0 0' }}
+                        onClick={(e) => viewRecipeDetail(content.boardId)}
+                        rank={subIndex + 1}
+                      />
+                    ))}
+                  </>
+                ))}
+              </Carousel>
               <ContentTitle>인기도</ContentTitle>
               <CardsContainer className="flex flex-row">
                 {data?.pages?.map((page, index) => (
