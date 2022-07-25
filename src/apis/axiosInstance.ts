@@ -61,8 +61,6 @@ authInstance.interceptors.response.use(
             console.log('origin Token :', accessToken);
             console.log('new Token :', newAccessToken);
             localStorage.setItem('accessToken', newAccessToken);
-            authInstance.defaults.headers.common.authInstance = `Access-Token ${newAccessToken}`;
-            originalRequest.defaults.headers.common.authInstance = `Access-Token ${newAccessToken}`;
             originalRequest.headers = {
               'Access-Token': `${newAccessToken}`,
               test: 'test',
