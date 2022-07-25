@@ -48,6 +48,7 @@ authInstance.interceptors.response.use(
       if (error.response.data.code === 'TA002') {
         const originalRequest = config;
         console.log('originalRequest: ', originalRequest);
+        console.log('originalRequest headers: ', originalRequest.headers);
         // token refresh 요청
         console.log('TA002');
         await axios
@@ -61,10 +62,7 @@ authInstance.interceptors.response.use(
             console.log('origin Token :', accessToken);
             console.log('new Token :', newAccessToken);
             localStorage.setItem('accessToken', newAccessToken);
-            originalRequest.headers = {
-              'Access-Token': `${newAccessToken}`,
-              test: 'test',
-            };
+            originalRequest.headers['Access-Token'] = `${newAccessToken}`;
 
             // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
             return axios(originalRequest);
