@@ -60,8 +60,8 @@ authInstance.interceptors.response.use(
             const newAccessToken = result.data.accessToken;
             localStorage.setItem('accessToken', newAccessToken);
 
-            axios.defaults.headers.common.Authorization = `Access-Token ${newAccessToken}`;
-            originalRequest.headers.Authorization = `Access-Token ${newAccessToken}`;
+            authInstance.defaults.headers.common.accessToken = newAccessToken;
+            originalRequest.headers.common.accessToken = newAccessToken;
             // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
             return axios(originalRequest);
           })
