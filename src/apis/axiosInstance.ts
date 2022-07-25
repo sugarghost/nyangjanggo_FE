@@ -58,11 +58,14 @@ authInstance.interceptors.response.use(
           .then((result) => {
             console.log('result :', result);
             const newAccessToken = result.data.accessToken;
+            console.log('origin Token :', accessToken);
+            console.log('new Token :', newAccessToken);
             localStorage.setItem('accessToken', newAccessToken);
             authInstance.defaults.headers.common.authInstance = `Access-Token ${newAccessToken}`;
             originalRequest.defaults.headers.common.authInstance = `Access-Token ${newAccessToken}`;
             originalRequest.headers['Access-Token'] = newAccessToken;
             // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
+            console.log('request agin :', originalRequest);
             return axios(originalRequest);
           })
           .catch((refreshError) => {
