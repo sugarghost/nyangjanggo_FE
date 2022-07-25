@@ -65,7 +65,7 @@ authInstance.interceptors.response.use(
             originalRequest.defaults.headers.common.authInstance = `Access-Token ${newAccessToken}`;
             originalRequest.headers['Access-Token'] = newAccessToken;
             // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
-            console.log('request agin :', originalRequest);
+            console.log('request agin :', originalRequest.headers);
             return axios(originalRequest);
           })
           .catch((refreshError) => {
