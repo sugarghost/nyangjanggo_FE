@@ -22,11 +22,11 @@ const MyRefrigeratorPage = () => {
   const [ingredientCount, setIngredientCount] = useState<number>(null);
   const [expirationDate, setExpirationDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
-  // const getRefrigerator = () => {};
+  //// const getRefrigerator = () => {};
 
   useEffect(() => {
     setIngredients([...currentIngredient]);
-    console.log('currentIngredient : ',currentIngredient)
+    console.log('currentIngredient : ', currentIngredient);
   }, []);
 
   const handleOnClcikAddButton = () => {
@@ -44,27 +44,31 @@ const MyRefrigeratorPage = () => {
   const handleOnClickDelete = (e) => {
     const deleteItemIdx = e.target.id;
 
-    console.log("deleteItem : ",deleteItemIdx)
+    console.log('deleteItem : ', deleteItemIdx);
 
-    let deletedIngredients  = Array.from(ingredients)
-     deletedIngredients.splice(deleteItemIdx,1 )
+    let deletedIngredients = Array.from(ingredients);
+    deletedIngredients.splice(deleteItemIdx, 1);
 
-    console.log("deletedIngredients :: ",deletedIngredients)
+    console.log('deletedIngredients :: ', deletedIngredients);
 
     const formData = new FormData();
-    formData.append('fridgeRequestDtoList', new Blob([JSON.stringify(deletedIngredients)], { type: 'application/json' }));
+
+    formData.append(
+      'fridgeRequestDtoList',
+      new Blob([JSON.stringify(deletedIngredients)], { type: 'application/json' }),
+    );
 
     authInstance
       .put(`/user/fridge`, deletedIngredients)
       .then((res) => {
-        setIngredients([...deletedIngredients])
+        setIngredients([...deletedIngredients]);
       })
       .catch((err) => {
         console.log('재료 가져오기 에러 :', err);
       });
   };
 
-  // 삭제와 수정을 둘다 
+  // 삭제와 수정을 둘다
   const handleOnClickEdit = (e) => {
     const id = e.target;
     authInstance

@@ -39,7 +39,7 @@ interface IProps {
 }
 
 function Card(props: IProps) {
-  const { onClick, rank, styleCustom, cardTitle, subTitle, cardImg, className }: IProps = props;
+  const { onClick, rank, styleCustom, cardTitle, cardImg, className }: IProps = props;
 
   return (
     <CardContainer onClick={onClick}>
@@ -58,10 +58,9 @@ function Card(props: IProps) {
       <CardContentWrapper>
         <CardContentLeft>
           <CardTitleWrapper styleCustom={styleCustom}>{cardTitle}</CardTitleWrapper>
-          <CardDescWrapper styleCustom={styleCustom}>{subTitle}</CardDescWrapper>
         </CardContentLeft>
         <CardContentRight>
-          <img style={{ width: '21px', height: '18px' }} src={LikeIcon} className="img-render" />
+          <img style={{ width: '21px', height: '18px' }} src={LikeIcon} className="img-render" alt="" />
         </CardContentRight>
       </CardContentWrapper>
     </CardContainer>

@@ -24,7 +24,6 @@ export type PostContent = {
   mainImg: string;
   modifiedAt: string;
   nickname: string;
-  subTitle: string;
   title: string;
   userImg: string;
 };
@@ -114,7 +113,6 @@ const MainPage = () => {
                   <>
                     {page?.content?.map((content: any, subIndex: number) => (
                       <Card
-              
                         cardTitle={content.title}
                         subTitle={content.nickname}
                         key={`${index}_${subIndex}`}
@@ -134,7 +132,6 @@ const MainPage = () => {
                     {page?.content?.map((content: any, subIndex: number) => (
                       <Card
                         cardTitle={content.title}
-                        subTitle={content.nickname}
                         key={`${index}_${subIndex}`}
                         cardImg={content.mainImg}
                         styleCustom={{ width: '50%', margin: '16px 0 0 0' }}
@@ -149,7 +146,6 @@ const MainPage = () => {
                       //   <img src={content.mainImg} className="w-2/5" />
                       //   <div className="w-full">
                       //     <p>{content.title}</p>
-                      //     <p>{content.subTitle}</p>
                       //     <div className="flex">
                       //       <div>
                       //         <p>{content.nickname}</p>좋아요: {content.goodCount}

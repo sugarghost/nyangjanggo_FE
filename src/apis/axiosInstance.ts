@@ -21,7 +21,6 @@ authInstance.defaults.withCredentials = true;
 authInstance.interceptors.request.use((config) => {
   // 리퀘스트 전에 토큰을 가져다 꺼내는데, axios.defaults.headers.common.Authorization를 활용하는 방안으로 변경 예정
   const accessToken = getToken();
-  //console.log('accessToken :', accessToken);
   if (accessToken) {
     config.headers = { 'Access-Token': `${accessToken}` };
   }
@@ -47,51 +46,44 @@ authInstance.interceptors.response.use(
     if (status === 401) {
       if (error.response.data.code === 'TA002') {
         const originalRequest = config;
-        console.log('originalRequest: ', originalRequest);
         // token refresh 요청
-        console.log('TA002');
-        await axios
-          .get(
-            `https://api.nyangjanggo.com/refresh`, // token refresh api
-            { headers: { 'Access-Token': `${accessToken}` }, withCredentials: true },
-          )
-          .then((result) => {
-            console.log('result :', result);
-            const newAccessToken = result.data.accessToken;
-            localStorage.setItem('accessToken', newAccessToken);
-
-            axios.defaults.headers.common.Authorization = `Access-Token ${newAccessToken}`;
-            originalRequest.headers.Authorization = `Access-Token ${newAccessToken}`;
-            // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
-            return axios(originalRequest);
-          })
-          .catch((refreshError) => {
-            // console.log('refreshError: ', refreshError);
-            // localStorage.removeItem('accessToken');
-            // ReactSwal.fire({
-            //   title: '<p>로그인 정보가 유효하지 않습니다!</p>',
-            //   html: '<p>로그인으로 이동합니다</p>',
-            //   icon: 'error',
-            // }).then(() => {
-            //   window.location.href = '/signUpPage';
-            // });
-            // return false;
-          });
+        const { data, status } = await axios.get(
+          `https://api.nyangjanggo.com/refresh`, // token refresh api
+          { headers: { 'Access-Token': `${accessToken}` }, withCredentials: true },
+        );
         // 새로운 토큰 저장
+
+        if (status === 200) {
+          const newAccessToken = data.accessToken;
+          localStorage.setItem('accessToken', newAccessToken);
+          originalRequest.headers['Access-Token'] = `${newAccessToken}`;
+
+          // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
+          return axios(originalRequest);
+        }
+
+        localStorage.removeItem('accessToken');
+        ReactSwal.fire({
+          title: '<p>로그인 정보가 유효하지 않습니다!</p>',
+          html: '<p>로그인으로 이동합니다</p>',
+          icon: 'error',
+        }).then(() => {
+          window.location.href = '/signUpPage';
+        });
+        return Promise.reject(error);
       }
 
       // localStorage.removeItem('accessToken');
 
-      // console.log('result :', error.response.data);
-      // // navigate 방식은 여기서 호출이 안되서 다른 방식으로 이용
-      // ReactSwal.fire({
-      //   title: '<p>로그인 정보가 유효하지 않습니다!</p>',
-      //   html: '<p>로그인으로 이동합니다</p>',
-      //   icon: 'error',
-      // }).then(() => {
-      //   window.location.href = '/signUpPage';
-      // });
-      return false;
+      // navigate 방식은 여기서 호출이 안되서 다른 방식으로 이용
+      ReactSwal.fire({
+        title: '<p>로그인 정보가 유효하지 않습니다!</p>',
+        html: '<p>로그인으로 이동합니다</p>',
+        icon: 'error',
+      }).then(() => {
+        window.location.href = '/signUpPage';
+      });
+      return Promise.reject(error);
     }
     return Promise.reject(error);
   },

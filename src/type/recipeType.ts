@@ -2,7 +2,6 @@ import * as yup from 'yup';
 
 export type RecipeDetail = {
   title: string;
-  subTitle: string;
   content: string;
   mainImg: string;
   nickname: string;
@@ -12,7 +11,6 @@ export type RecipeDetail = {
 // 레시피
 export type RecipeRegister = {
   title: string;
-  subTitle: string;
   content: string;
   mainImageLink: string;
   resourceRequestDtoList: Resource[];
@@ -33,7 +31,6 @@ export type Step = {
 
 export type RecipeForm = {
   title: string;
-  subTitle: string;
   content: string;
   mainImageLink: string;
   resourceRequestDtoList: ResourceForm[];
@@ -57,7 +54,6 @@ export type StepForm = {
 
 export const recipeValidationSchema = yup.object().shape({
   title: yup.string().required('요리명을 입력해 주세요'),
-  subTitle: yup.string().required('소제목을 입력해 주세요'),
   content: yup.string().required('요리 설명을 입력해 주세요'),
   mainImageLink: yup.string().required('이미지 등록은 필수 입니다'),
   resourceRequestDtoList: yup.array(
@@ -82,7 +78,6 @@ export const recipeValidationSchema = yup.object().shape({
 
 export const recipeDefaultValues = {
   title: '',
-  subTitle: '',
   content: '',
   mainImageLink: '',
   resourceRequestDtoList: [
