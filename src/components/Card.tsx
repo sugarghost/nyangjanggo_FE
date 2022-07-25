@@ -36,15 +36,17 @@ interface IProps {
   styleCustom?: StyleCustom;
   cardPromotionValue?: string;
   rank?: number;
+  key?: any;
 }
 
 function Card(props: IProps) {
-  const { onClick, rank, styleCustom, cardTitle, cardImg, className }: IProps = props;
+  const { onClick, rank, styleCustom, key, cardTitle, cardImg, className }: IProps = props;
 
   return (
     <CardContainer onClick={onClick}>
       <div style={{ position: 'relative' }}>
         <CardImgWrapper
+          key={key}
           className={className}
           styleCustom={styleCustom}
           onClick={onClick}
@@ -86,6 +88,7 @@ const CardContainer = styled.div<any>`
   margin: ${(props) => props.styleCustom?.margin ?? ''};
   display: flex;
   flex-direction: column;
+  max-width:${(props) => props.styleCustom?.width ?? ''};
 `;
 
 const CardImgWrapper = styled.img<any>`
