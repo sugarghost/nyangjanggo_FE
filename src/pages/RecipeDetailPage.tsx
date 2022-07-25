@@ -1,5 +1,8 @@
 import { faChevronLeft, faPlus, faTrashCan, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactComponent as Edit } from '@icon/edit.svg';
+import { ReactComponent as Heart } from '@icon/heart.svg';
+import { ReactComponent as Trash } from '@icon/x.svg';
 import React, { Suspense, useEffect, useState } from 'react';
 import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -24,7 +27,10 @@ const RecipeDetailPage = ({}) => {
   const [recipe, setRecipe] = useState<RecipeDetail>();
   const [ResourceForm, setResourceForm] = useState<ResourceForm[]>([]);
   const [StepForm, setStepForm] = useState<StepForm[]>([]);
+  // 좋아요 여부 확인
+  const [isLike, setIsLike] = useState(false);
   const deleteRecipeApi = recipeApi.deleteRecipe;
+  const likeRecipeApi = recipeApi.likeRecipe;
 
   // 넘겨 받은 boardId를 이용해 해당 레시피의 상세 정보를 받아옴
   const { isLoading, data } = useQuery(['postDetail', boardId], async () => recipeApi.getRecipeDetail(boardId), {
@@ -90,7 +96,7 @@ const RecipeDetailPage = ({}) => {
     navigate('/recipeRegisterPage', { state: { boardId, recipe, ResourceForm, StepForm, type: 'modify' } });
   };
 
-  const putRecipeMutation = useMutation((boardId: number) => deleteRecipeApi(boardId), {
+  const deleteRecipeMutation = useMutation((boardId: number) => deleteRecipeApi(boardId), {
     onSuccess: (res) => {
       navigate(-1);
     },
@@ -101,8 +107,23 @@ const RecipeDetailPage = ({}) => {
 
   // 삭제 버튼 클릭시 삭제
   const deleteRecipeDetail = () => {
-    putRecipeMutation.mutate(boardId);
+    deleteRecipeMutation.mutate(boardId);
   };
+
+  const likeRecipeMutation = useMutation((boardId: number) => likeRecipeApi(boardId), {
+    onSuccess: (res) => {
+      setIsLike(!isLike);
+    },
+    onError: (e) => {
+      console.log('likeRecipeMutation Error:', e);
+    },
+  });
+
+  // 좋아요 버튼
+  const likeRecipeDetail = () => {
+    likeRecipeMutation.mutate(boardId);
+  };
+
   const goBack = () => {
     navigate(-1);
   };
@@ -111,11 +132,14 @@ const RecipeDetailPage = ({}) => {
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
         <div className="mx-auto w-90vw">
           <div className="float-right">
-            <button className="w-10 h-10 rounded-2xl bg-gray-200 m-1" onClick={modifyRecipeDetail}>
-              <FontAwesomeIcon icon={faPenToSquare} color="white" size="lg" />
+            <button className="w-10 h-10 rounded-2xl bg-gray-200 m-1 align-middle" onClick={modifyRecipeDetail}>
+              <Edit className="m-auto" stroke="white" />
             </button>
-            <button className="w-10 h-10 rounded-2xl bg-gray-200 m-1" onClick={deleteRecipeDetail}>
-              <FontAwesomeIcon icon={faTrashCan} color="white" size="lg" />
+            <button className="w-10 h-10 rounded-2xl bg-gray-200 m-1 align-middle" onClick={deleteRecipeDetail}>
+              <Trash className="m-auto" stroke="white" />
+            </button>
+            <button className="w-10 h-10 rounded-2xl bg-gray-200 m-1 align-middle" onClick={likeRecipeDetail}>
+              <Heart className="m-auto" stroke={isLike ? '#EB3120' : 'white'} />
             </button>
             {recipe?.nickname === userName && (
               <>
