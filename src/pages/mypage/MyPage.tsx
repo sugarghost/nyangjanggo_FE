@@ -1,11 +1,31 @@
+import userApi from '@apis/UserApi';
 import React, { useState } from 'react';
+import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 import { COLOR } from '../../constants';
 
 function MyPage() {
   const navigate = useNavigate();
+
+  const getUserApi = userApi.getUser;
+
+  const ReactSwal = withReactContent(Swal);
+
+  // 유저 정보 가져오기
+  useQuery(['getUser'], async () => getUserApi(), {
+    refetchOnWindowFocus: false,
+    onSuccess: (res) => {
+      console.log('getUser', res.data);
+      setNickName(res.data.nickname);
+      setProfileImage(res.data.userImg);
+      setUserDescription(res.data.userDescription);
+    },
+  });
+
   const goMyRefrigeratorPage = () => {
     navigate('/myPage/myRefrigeratorPage');
   };
@@ -14,7 +34,9 @@ function MyPage() {
     navigate('/myPage/userEditPage');
   };
 
-  const [profileImage, setProfileImage] = useState('https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg');
+  const [profileImage, setProfileImage] = useState('');
+  const [nickNameImage, setNickName] = useState('닉네임');
+  const [userDescription, setUserDescription] = useState('자기소개');
 
   const handleOnClickLogOut = () => {
     localStorage.clear();
@@ -29,10 +51,10 @@ function MyPage() {
             <ProfileImage className="img-render" src={profileImage} />
             <ProfileInfo>
               <div style={{ fontWeight: 'bold', fontSize: '24px' }} className="text-aling-left">
-                닉네임
+                {nickNameImage}
               </div>
               <div style={{ margin: '5px 0 0 0' }} className="text-aling-left">
-                뭐들어가지
+                {userDescription}
               </div>
             </ProfileInfo>
           </UserMainInfoWrapper>
