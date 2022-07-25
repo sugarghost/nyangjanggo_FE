@@ -26,6 +26,7 @@ interface StyleCustom {
 interface IProps {
   cardType?: CardType;
   cardTitle?: string;
+  subTitle?: string;
   cardImg?: string;
   cardExpiration?: string;
   className?: string;
