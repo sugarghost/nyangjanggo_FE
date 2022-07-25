@@ -1,5 +1,4 @@
-import React from 'react';
-import HorizontalScroll from 'react-scroll-horizontal';
+import React from 'react';;
 import styled from 'styled-components';
 
 interface IProps {

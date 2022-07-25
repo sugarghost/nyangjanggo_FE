@@ -1,6 +1,7 @@
 import Carousel from '@/components/Carousel';
 import Search from '@components/search/Search';
 import React, { Suspense, useEffect, useState, useRef, useCallback } from 'react';
+import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { useInfiniteQuery } from 'react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
@@ -27,6 +28,8 @@ export type PostContent = {
   title: string;
   userImg: string;
 };
+
+type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 const MainPage = () => {
   // 공통 처리
@@ -108,23 +111,16 @@ const MainPage = () => {
               <br></br>
               <br></br>
               <ContentTitle>최신순</ContentTitle>
-              <Carousel>
-                {data?.pages?.map((page, index) => (
-                  <>
-                    {page?.content?.map((content: any, subIndex: number) => (
-                      <Card
-                        cardTitle={content.title}
-                        subTitle={content.nickname}
-                        key={`${index}_${subIndex}`}
-                        cardImg={content.mainImg}
-                        styleCustom={{ width: '50%', margin: '16px 0 0 0' }}
-                        onClick={(e) => viewRecipeDetail(content.boardId)}
-                        rank={subIndex + 1}
-                      />
-                    ))}
-                  </>
-                ))}
-              </Carousel>
+              <ScrollMenuWrapper>
+                <ScrollMenu>
+                  <div style={{ width: '175px', height: '175px', background: 'red', margin: '0 10px 0 0' }}></div>
+                  <div style={{ width: '175px', height: '175px', background: 'red', margin: '0 10px 0 0' }}></div>
+                  <div style={{ width: '175px', height: '175px', background: 'red', margin: '0 10px 0 0' }}></div>
+                  <div style={{ width: '175px', height: '175px', background: 'red', margin: '0 10px 0 0' }}></div>
+                  <div style={{ width: '175px', height: '175px', background: 'red', margin: '0 10px 0 0' }}></div>
+                  <div style={{ width: '175px', height: '175px', background: 'red', margin: '0 10px 0 0' }}></div>
+                </ScrollMenu>
+              </ScrollMenuWrapper>
               <ContentTitle>인기도</ContentTitle>
               <CardsContainer className="flex flex-row">
                 {data?.pages?.map((page, index) => (
@@ -199,4 +195,10 @@ const CardsContainer = styled.div`
   flex-wrap: wrap;
   padding: 0px 15px 0px 15px;
 `;
+
+const ScrollMenuWrapper = styled.div`
+  margin: 8px 0 0 0;
+  padding: 0 0 30px 16px;
+`;
+
 export default MainPage;
