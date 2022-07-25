@@ -1,16 +1,53 @@
+import userApi from '@apis/UserApi';
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
+import { useMutation, useQuery } from 'react-query';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
-import { axiosInstance } from '../../apis/axiosInstance';
+import { authInstance } from '../../apis/axiosInstance';
 import Button from '../../components/Botton';
 import InputV2 from '../../components/InputV2';
 import ProfileImageUploader from '../../components/mypage/ProfileImageUploader';
 import { COLOR } from '../../constants';
 
 const UserEditProfile = () => {
-  const [nickname, setNickname] = useState('nickname');
+  const [nickname, setNickname] = useState('');
+  const [userImgUrl, setUserImgUrl] = useState('');
+  const userDescriptionRef = useRef<any>();
   const [profileImageFile, setProfileImageFile] = useState<any>();
+  const navigate = useNavigate();
+  const getUserApi = userApi.getUser;
+  const putUserApi = userApi.putUser;
+
+  const ReactSwal = withReactContent(Swal);
+
+  // 유저 정보 가져오기
+  useQuery(['getUser'], async () => getUserApi(), {
+    refetchOnWindowFocus: false,
+    onSuccess: (res) => {
+      setNickname(res.data.nickname);
+      setUserImgUrl(res.data.userImg);
+      userDescriptionRef.current.value = res.data.userDescription;
+    },
+  });
+  // 유저 정보 변경
+  const putUserMutation = useMutation((addData: FormData) => putUserApi(addData), {
+    onSuccess: (res) => {
+      console.log('putUser :', res);
+      navigate('/');
+    },
+    onError: (e) => {
+      ReactSwal.fire({
+        title: '<p>개인정보 등록에 실패했습니다!</p>',
+        html: '<p>다시 시도해 주세요</p>',
+        icon: 'error',
+      });
+      console.log('putUser Error:', e);
+    },
+  });
 
   const handleOnChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
@@ -21,34 +58,23 @@ const UserEditProfile = () => {
       alert('닉네임을 입력해 주세요!');
       return;
     }
+    if (!userDescriptionRef?.current.value) {
+      alert('자기소개를 입력해 주세요!');
+      return;
+    }
 
     const formData = new FormData();
 
-    formData.append('file', profileImageFile);
+    formData.append('userImg', profileImageFile);
     formData.append('nickname', nickname);
-
-    // @ts-ignore
-    const res = await axios({
-      method: 'PUT',
-      url: `/user`,
-      mode: 'cors',
-      headers: { 'Content-Type': 'multipart/form-data' },
-      data: formData,
-    });
-
-    console.log('유저정보 : ', res);
+    formData.append('userDescription', userDescriptionRef.current.value);
+    putUserMutation.mutate(formData);
   };
-
-  useEffect(() => {
-    const res = axiosInstance.get('/user');
-    console.log(res);
-  }, []);
-
   return (
     <div className="bg-secondary-1 min-h-screen bg-white dark:bg-gray-900" style={{ padding: '0px 10px' }}>
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
         <div className="max-w-md mx-auto w-full">
-          <ProfileImageUploader setProfileImageFile={setProfileImageFile} />
+          <ProfileImageUploader setProfileImageFile={setProfileImageFile} userImgUrl={userImgUrl} />
           <InputV2
             inputLabel="닉네임"
             styleCustom={{
@@ -58,6 +84,13 @@ const UserEditProfile = () => {
             }}
             value={nickname}
             onChange={handleOnChangeNickname}
+          />
+
+          <textarea
+            className="p-4 my-4 w-full rounded-md border border-gray-300"
+            placeholder="자기 소개를 입력해주세요!"
+            rows={6}
+            ref={userDescriptionRef}
           />
 
           <Button onClick={handleOnClickUserProfileEdit} styleCustom={{ background: COLOR.MAIN, margin: '10px 0 0 0' }}>
