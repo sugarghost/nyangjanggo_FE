@@ -1,6 +1,6 @@
 import userApi from '@apis/UserApi';
 import axios from 'axios';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
@@ -28,6 +28,7 @@ const UserEditProfile = () => {
   useQuery(['getUser'], async () => getUserApi(), {
     refetchOnWindowFocus: false,
     onSuccess: (res) => {
+      console.log('getUser', res.data);
       setNickname(res.data.nickname);
       setUserImgUrl(res.data.userImg);
       userDescriptionRef.current.value = res.data.userDescription;
@@ -65,11 +66,22 @@ const UserEditProfile = () => {
 
     const formData = new FormData();
 
-    formData.append('userImg', profileImageFile);
-    formData.append('nickname', nickname);
-    formData.append('userDescription', userDescriptionRef.current.value);
+    formData.append('multipartFile', profileImageFile);
+    formData.append(
+      'userDto',
+      new Blob(
+        [
+          JSON.stringify({
+            nickname,
+            userDescription: userDescriptionRef.current.value,
+          }),
+        ],
+        { type: 'application/json' },
+      ),
+    );
     putUserMutation.mutate(formData);
   };
+
   return (
     <div className="bg-secondary-1 min-h-screen bg-white dark:bg-gray-900" style={{ padding: '0px 10px' }}>
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">

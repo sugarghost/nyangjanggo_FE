@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 interface IProps {
@@ -10,6 +10,7 @@ function ProfileImageUploader(props: IProps) {
   const { setProfileImageFile, userImgUrl } = props;
 
   const [fileImage, setFileImage] = useState(userImgUrl);
+  const fileRef = useRef<any>();
   const saveFileImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     // @ts-ignore
     setFileImage(URL.createObjectURL(event.target.files[0]));
@@ -20,6 +21,12 @@ function ProfileImageUploader(props: IProps) {
     URL.revokeObjectURL(fileImage);
     setFileImage('');
   };
+
+  // 이미지 클릭 시 Click 이벤트를 연결된 input 요소로 옮겨줌
+  const imageClick = () => {
+    fileRef.current.click();
+  };
+  useEffect(() => {}, [fileImage]);
   return (
     <>
       <h1>이미지 업로드 </h1>
@@ -29,24 +36,15 @@ function ProfileImageUploader(props: IProps) {
           justifyContent: 'center',
         }}
       >
-        <input name="imggeUpload" type="file" accept="image/*" onChange={saveFileImage} />
+        <input name="imggeUpload" type="file" accept="image/*" onChange={saveFileImage} ref={fileRef} hidden />
       </div>
-
-      <div>
-        {fileImage && (
-          <ProfileImageWrapper alt="sample" src={fileImage} className="img-render" style={{ margin: 'auto' }} />
-        )}
-        {/* <button
-          style={{
-            width: "50px",
-            height: "30px",
-            cursor: "pointer",
-          }}
-          onClick={() => deleteFileImage()}
-        >
-          삭제
-        </button> */}
-      </div>
+      <ProfileImageWrapper
+        alt=""
+        src={fileImage}
+        className="img-render"
+        style={{ margin: 'auto' }}
+        onClick={imageClick}
+      />
     </>
   );
 }
