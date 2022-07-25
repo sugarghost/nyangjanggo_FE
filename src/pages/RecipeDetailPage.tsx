@@ -154,9 +154,11 @@ const RecipeDetailPage = ({}) => {
             alt=""
           />
           <p className="text-gray-700 text-left text-4xl my-1 font-900">{recipe?.title}</p>
-          <div className="text-left text-lg my-1 font-300 border-gray-200 border-2 rounded-md min-h-30 p-2">
-            {recipe?.content}
-          </div>
+          <textarea
+            className="text-left text-lg w-full my-1 font-300 border-gray-200 border-2 rounded-md min-h-30 p-2"
+            readOnly
+            value={recipe?.content}
+          />
 
           <hr />
 
