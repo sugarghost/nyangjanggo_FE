@@ -90,4 +90,11 @@ export default {
     });
     return res;
   },
+
+  async likeRecipe(boardId: number) {
+    const res = await authInstance.get(`${board}/${boardId}/good`, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return res;
+  },
 };
