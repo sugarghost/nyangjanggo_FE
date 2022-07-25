@@ -21,8 +21,6 @@ authInstance.defaults.withCredentials = true;
 authInstance.interceptors.request.use((config) => {
   // 리퀘스트 전에 토큰을 가져다 꺼내는데, axios.defaults.headers.common.Authorization를 활용하는 방안으로 변경 예정
   const accessToken = getToken();
-  console.log('accessToken :', accessToken);
-  console.log('request interceptors :', config);
   if (accessToken) {
     config.headers = { 'Access-Token': `${accessToken}` };
   }
@@ -48,10 +46,7 @@ authInstance.interceptors.response.use(
     if (status === 401) {
       if (error.response.data.code === 'TA002') {
         const originalRequest = config;
-        console.log('originalRequest: ', originalRequest);
-        console.log('originalRequest headers: ', originalRequest.headers);
         // token refresh 요청
-        console.log('TA002');
         const { data, status } = await axios.get(
           `https://api.nyangjanggo.com/refresh`, // token refresh api
           { headers: { 'Access-Token': `${accessToken}` }, withCredentials: true },
@@ -59,10 +54,7 @@ authInstance.interceptors.response.use(
         // 새로운 토큰 저장
 
         if (status === 200) {
-          console.log('result :', data);
           const newAccessToken = data.accessToken;
-          console.log('origin Token :', accessToken);
-          console.log('new Token :', newAccessToken);
           localStorage.setItem('accessToken', newAccessToken);
           originalRequest.headers['Access-Token'] = `${newAccessToken}`;
 
@@ -83,7 +75,6 @@ authInstance.interceptors.response.use(
 
       localStorage.removeItem('accessToken');
 
-      console.log('result :', error.response.data);
       // navigate 방식은 여기서 호출이 안되서 다른 방식으로 이용
       ReactSwal.fire({
         title: '<p>로그인 정보가 유효하지 않습니다!</p>',
