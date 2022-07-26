@@ -52,14 +52,14 @@ const MainSearched = () => {
       setSearchQueryState({
         type: 'entity',
         query: 'createdAt,desc',
-        size: 5,
+        size: 10,
         page: 0,
       });
     } else if (type === 'like') {
       setSearchQueryState({
         type: 'entity',
         query: 'goodCount,desc',
-        size: 5,
+        size: 10,
         page: 0,
       });
     }

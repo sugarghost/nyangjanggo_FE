@@ -46,7 +46,7 @@ const ResourceSearched = () => {
     // 추후에 다른 모드(좋아요 정렬 등)를 지원 시 재 사용성을 높이기 위해 선언
     const paramTemplate = {
       page: pageParam,
-      size: 5,
+      size: searchQueryState.size,
       query: searchQueryState.query,
     };
     const res = await getRecipeListByResourceApi(paramTemplate);

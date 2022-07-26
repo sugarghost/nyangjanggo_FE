@@ -99,7 +99,7 @@ const Search = () => {
     setSearchQueryState({
       type: 'resource',
       query: selectedTagList.join(),
-      size: 5,
+      size: 10,
       page: 0,
     });
   };

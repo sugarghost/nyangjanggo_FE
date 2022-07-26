@@ -52,7 +52,7 @@ const EntitySearched = () => {
     // 추후에 다른 모드(좋아요 정렬 등)를 지원 시 재 사용성을 높이기 위해 선언
     const paramTemplate = {
       page: pageParam,
-      size: 5,
+      size: searchQueryState.size,
       query: searchQueryState.query,
     };
     // API가 명확하지 않은 시점이라 getPostsByDate라는 함수로 호출 중
