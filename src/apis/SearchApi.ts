@@ -8,6 +8,7 @@ const resource = '/resource';
 const recommend = '/recommend';
 const boards = '/boards';
 const board = '/board';
+const preview = '/preview';
 
 export type ResourcePostTemplate = {
   boardId: number;
@@ -23,16 +24,30 @@ export type ResourcePostTemplate = {
 export type Pageable = {
   page: number;
   size: number;
-  sort: string;
+  query: string;
 };
 
 export default {
   get() {
-    return authInstance.get(board).then((res) => res.data);
+    return axiosInstance.get(board).then((res) => res.data);
+  },
+
+  async getEntity(payload: Pageable) {
+    const res = await axiosInstance.get(`${boards}?&page=${payload.page}&size=${payload.size}&sort=${payload.query}`);
+    return res;
+  },
+  async getEntity10(entityName: string) {
+    const res = await axiosInstance.get(`${boards}${preview}?entityName=${entityName}`);
+    return res;
   },
 
   async getResourceRecommend(resourceName: string) {
-    const res = await authInstance.get(`${board}${resource}${recommend}?resourceName=${resourceName}`);
+    const res = await axiosInstance.get(`${board}${resource}${recommend}?resourceName=${resourceName}`);
+    return res;
+  },
+
+  async getTitleRecommend(titleWord: string) {
+    const res = await axiosInstance.get(`${board}${title}${recommend}?titleWords=${titleWord}`);
     return res;
   },
 };
