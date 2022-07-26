@@ -34,7 +34,7 @@ const EntitySearched = () => {
   // 게시글 목록 전처리
   const [boardType, setBoardType] = useState<string>('date');
   const [axiosParam, setAxiosParam] = useState<any>({
-    size: 5,
+    size: 10,
     sort: 'createdAt,desc',
   });
   // 검색을 위한 API
@@ -100,7 +100,7 @@ const EntitySearched = () => {
                         cardTitle={content.title}
                         key={`${index}_${subIndex}`}
                         cardImg={content.mainImg}
-                        styleCustom={{ width: '50%', margin: '16px 0 0 0' }}
+                        styleCustom={{ width: '40vw', margin: 'auto' }}
                         onClick={(e) => viewRecipeDetail(content.boardId)}
                       />
                       // <div
