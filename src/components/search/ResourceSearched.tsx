@@ -91,11 +91,11 @@ const ResourceSearched = () => {
               <ContentTitle>재료 검색결과</ContentTitle>
               <CardsContainer className="flex flex-row">
                 {data?.pages?.map((page, index) => (
-                  <>
+                  <React.Fragment key={index}>
                     {page?.content?.map((content: any, subIndex: number) => (
                       <Card
                         cardTitle={content.title}
-                        key={`${index}_${subIndex}`}
+                        key={content.boardId}
                         cardImg={content.mainImg}
                         styleCustom={{ width: '50%', margin: '16px 0 0 0' }}
                         onClick={(e) => viewRecipeDetail(content.boardId)}
@@ -116,7 +116,7 @@ const ResourceSearched = () => {
                       //   </div>
                       // </div>
                     ))}
-                  </>
+                  </React.Fragment>
                 ))}
               </CardsContainer>
             </div>

@@ -84,11 +84,11 @@ const TitleSearched = () => {
               <ContentTitle>요리이름 검색결과</ContentTitle>
               <CardsContainer className="flex flex-row">
                 {data?.pages?.map((page, index) => (
-                  <>
+                  <React.Fragment key={index}>
                     {page?.content?.map((content: any, subIndex: number) => (
                       <Card
                         cardTitle={content.title}
-                        key={`${index}_${subIndex}`}
+                        key={content.boardId}
                         cardImg={content.mainImg}
                         styleCustom={{ width: '40vw', margin: 'auto' }}
                         onClick={(e) => viewRecipeDetail(content.boardId)}
@@ -109,7 +109,7 @@ const TitleSearched = () => {
                       //   </div>
                       // </div>
                     ))}
-                  </>
+                  </React.Fragment>
                 ))}
               </CardsContainer>
             </div>
