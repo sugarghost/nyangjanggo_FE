@@ -1,18 +1,18 @@
+import recipeApi from '@apis/RecipeApi';
+import Comment from '@components/comment/comment';
 import { faChevronLeft, faPlus, faTrashCan, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactComponent as Edit } from '@icon/edit.svg';
 import { ReactComponent as Heart } from '@icon/heart.svg';
 import { ReactComponent as Trash } from '@icon/x.svg';
-import React, { Suspense, useEffect, useState } from 'react';
+import userToken from '@recoil/userAtom';
+import { RecipeDetail, ResourceForm, StepForm } from '@type/recipeType';
+import { getToken, getNickname } from '@utils/jwt';
+import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-
-import recipeApi from '../apis/RecipeApi';
-import userToken from '../recoil/userAtom';
-import { RecipeDetail, ResourceForm, StepForm } from '../type/recipeType';
-import { getToken, getNickname } from '../utils/jwt';
 
 const RecipeDetailPage = ({}) => {
   // 공통 처리
@@ -127,6 +127,7 @@ const RecipeDetailPage = ({}) => {
   const goBack = () => {
     navigate(-1);
   };
+
   return (
     <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
@@ -200,6 +201,8 @@ const RecipeDetailPage = ({}) => {
               </div>
             ))}
           </div>
+
+          <Comment boardId={boardId} />
         </div>
       </div>
     </div>
