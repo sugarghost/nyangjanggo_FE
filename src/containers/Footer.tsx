@@ -20,7 +20,7 @@ function Footer() {
 
   // 냉장고 버튼
   const frigeButtonClick = () => {
-    navigate('/');
+    navigate('/myPage/myRefrigeratorPage');
   };
 
   // 레시피 버튼

@@ -4,7 +4,8 @@ export const searchQuery = atom<any>({
   key: 'searchQuery',
   default: {
     type: '',
-    query: [],
-    page: '',
+    query: '',
+    size: 5,
+    page: 0,
   },
 });

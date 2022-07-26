@@ -4,8 +4,11 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactComponent as ResourceSearchIcon } from '@icon/search.svg';
 import RecipeSearchIcon from '@images/recipe_search_icon.png';
+import { ingredientsNameSelector } from '@recoil/ingredient';
+import { searchQuery } from '@recoil/searchAtom';
 import React, { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 const Search = () => {
@@ -19,6 +22,9 @@ const Search = () => {
   const [searchedTagList, setSearchedTagList] = useState([]);
   // 재료 검색을 위해 선택 된 tag list
   const [selectedTagList, setSelectedTagList] = useState([]);
+  // 재료 검색이 비어있을 때 사용할 냉장고 재료 리스트
+  const ingredientsList = useRecoilValue(ingredientsNameSelector);
+
   // 요리이름 검색된 결과들 리스트
   const [searchedList, setSearchedList] = useState(wholeTextArray);
   const [searchedItemIndex, setSearchedItemIndex] = useState(-1);
@@ -26,6 +32,9 @@ const Search = () => {
   // 재료 검색, 요리 이름 검색을 전환하기 위한 state
   // 1: 재료 검색, 0: 요리 이름 검색
   const [searchType, setSearchType] = useState(1);
+
+  // 검색 이벤트 발생 시 컴포넌트간 검색 방식을 교환하기 위한 recoil
+  const [searchQueryState, setSearchQueryState] = useRecoilState(searchQuery);
 
   const switchSearchType = () => {
     setSearchValue('');
@@ -42,28 +51,57 @@ const Search = () => {
       enabled: false,
       onSuccess: (res) => {
         console.log('getResourceRecommend', res);
-        // 테스트를 위해 임시로 비활성화
         setSearchedTagList(res.data.resourceRecommendList);
+      },
+    },
+  );
+
+  const { data: titleRecommendData, refetch: titleRecommendRefetch } = useQuery(
+    ['getTitleRecommend'],
+    async () => searchApi.getTitleRecommend(searchValue),
+    {
+      refetchOnWindowFocus: false,
+      enabled: false,
+      onSuccess: (res) => {
+        console.log('getTitleRecommend', res);
+        setSearchedList(res.data.titleRecommendList);
       },
     },
   );
 
   // 검색창 기능
   const changeSearchValue = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     await setSearchValue(event.target.value);
 
     if (searchType) {
       if (event.target.value.length === 0) {
         setIsSearchedValue(false);
         // 나중에 냉장고 연결해서 냉장고 데이터 있으면 여기에 연결함
-        setSearchedTagList(['양파', '바나나', '쌀', '당근', '파', '대파', '파프리카', '다시마', '파슬리']);
+        console.log('ingredientsList :', ingredientsList);
+        setSearchedTagList(ingredientsList);
       } else {
         setIsSearchedValue(true);
         // 검색어가 변화하면 재료 추천 태그들을 가져와 searchedTagList에 넣어줌
         await resourceRecommendRefetch();
       }
+    } else if (searchType === 0) {
+      if (event.target.value.length === 0) {
+        setIsSearchedValue(false);
+      } else {
+        setIsSearchedValue(true);
+        // 검색어가 변화하면 요리 추천 목록을 가져와 searchedList에 넣어줌
+        await titleRecommendRefetch();
+      }
     }
+  };
+
+  const onSearchResource = () => {
+    setSearchQueryState({
+      type: 'resource',
+      query: selectedTagList.join(),
+      size: 10,
+      page: 0,
+    });
   };
 
   // 요리 이름 검색시 아래로 검색 목록이 나옴
@@ -91,6 +129,7 @@ const Search = () => {
 
       if (event.key === 'ArrowUp' && searchedItemIndex >= 0) setSearchedItemIndex(searchedItemIndex - 1);
       if (event.key === 'Enter' && searchedItemIndex >= 0) {
+        console.log('enter');
         clickDropDownItem(searchedList[searchedItemIndex]);
         setSearchedItemIndex(-1);
       }
@@ -144,7 +183,10 @@ const Search = () => {
             {selectedTagList.map((tags: string, index: number) => (
               <Tag key={index} tag={tags} onClick={() => removeTags(tags)} bgColor="bg-white" isCancle />
             ))}
-            <ResourceSearchButton className={selectedTagList.length === 0 ? 'bg-empty' : 'bg-main'}>
+            <ResourceSearchButton
+              className={selectedTagList.length === 0 ? 'bg-empty' : 'bg-main'}
+              onClick={onSearchResource}
+            >
               <ResourceSearchIcon className="m-auto" fill="white" />
             </ResourceSearchButton>
           </ResourceSearchWrapper>
