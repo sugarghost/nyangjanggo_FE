@@ -1,96 +1,45 @@
 import commentApi from '@apis/CommentApi';
-import useIntersectionObserver from '@hook/intersectionObserver';
+import moment from 'moment';
 import React, { Suspense, useEffect, useState, useRef } from 'react';
-import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import styled from 'styled-components';
 
 type CommentProps = {
   boardId: number;
+  content: {
+    id: number;
+    nickname: string;
+    userImg: string;
+    comment: string;
+    createAt: Date;
+    modifiedAt: Date;
+  };
+  onClick?: (e: React.MouseEvent<HTMLSpanElement>) => void;
 };
-const Comment = ({ boardId }: CommentProps) => {
-  const postCommentApi = commentApi.postComment;
-  const getCommentApi = commentApi.getComment;
-
-  // comment 처리를 위한 ref
-  const commentRef = useRef<HTMLInputElement>(null);
-
-  // 무한 스크롤을 위해 특정 요소가 보이는지 판별하기 위한 Intersection Observer
-  const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
-    // 타겟이 보이는 경우 fetchNextPage를 실행해 다음 페이지 데이터를 가져옴
-    isIntersecting && fetchNextPage();
-  };
-  const { setTarget } = useIntersectionObserver({ onIntersect });
-
-  // 서버와 통신하기 위한 axios를 실행하는 함수로, 리턴 값을 무한 스크롤에서 활용하기 위해 재가공
-  const fetchPostList = async (pageParam: number) => {
-    const paramTemplate = {
-      page: pageParam,
-      size: 10,
-      boardId,
-    };
-    const res = await getCommentApi(paramTemplate);
-    const { content, last } = res.data;
-    // 페이지 번호를 증가시키는 용도로 사용 될 nextPage는 기존 pageParam(페이지 넘버)에 +1을 해줌
-    return { content, nextPage: pageParam + 1, last: last === undefined || last === true };
-  };
-
-  // 무한 스크롤을 위해 useInfiniteQuery를 사용함,
-  const {
-    data: commentListData,
-    status,
-    fetchNextPage,
-    isFetchingNextPage,
-    hasNextPage,
-  } = useInfiniteQuery('infiniteComments', async ({ pageParam = 0 }) => fetchPostList(pageParam), {
-    refetchOnWindowFocus: false,
-    getNextPageParam: (lastPage, pages) => {
-      if (!lastPage.last) return lastPage.nextPage;
-      return undefined;
-    },
-  });
-  const postCommentMutation = useMutation((formData: FormData) => postCommentApi(formData), {
-    onSuccess: (res) => {},
-    onError: (e) => {
-      console.log('postCommentMutation Error:', e);
-    },
-  });
-  const onCommentRegister = () => {
-    const formData = new FormData();
-    formData.append('boardId', String(boardId));
-    formData.append(
-      'commentRequestDto',
-      new Blob(
-        [
-          JSON.stringify({
-            content: commentRef.current.value,
-          }),
-        ],
-        { type: 'application/json' },
-      ),
-    );
-
-    postCommentMutation.mutate(formData);
-  };
+const Comment = ({ boardId, content, onClick }: CommentProps) => {
+  const putCommentApi = commentApi.putComment;
+  const createAtString = moment(content.createAt).format('YY.MM.DD');
+  const modifiedAtString = moment(content.modifiedAt).format('YY.MM.DD');
 
   return (
-    <>
-      <CommentInputWrapper className="">
-        <CommentInput placeholder="코멘트를 입력해주세요" ref={commentRef} />
-        <CommentRegister onClick={onCommentRegister}>등록</CommentRegister>
-      </CommentInputWrapper>
-    </>
+    <CommentWrapper>
+      <CommentHeader>
+        <CommentNickname>{content.nickname}</CommentNickname>|<CommentDate>{createAtString}</CommentDate>
+        <CommentDelete onClick={onClick}>X</CommentDelete>
+      </CommentHeader>
+      <CommentContent>{content.comment}</CommentContent>
+      <hr />
+    </CommentWrapper>
   );
 };
 
-const CommentInputWrapper = styled.div`
+const CommentWrapper = styled.div`
+  padding: 0.25rem;
+`;
+
+const CommentHeader = styled.div`
+  align-items: flex-end;
   background: #ffffff;
-  border: 1px solid #d9d9d9;
-  border-radius: 0.375rem;
-  padding: 12px;
-  &:focus {
-    outline: none;
-  }
-  margin-top: 1rem;
   width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -102,20 +51,40 @@ const CommentInputWrapper = styled.div`
   -webkit-flex-direction: row;
   flex-direction: row;
 `;
+const CommentNickname = styled.span`
+  --tw-text-opacity: 1;
+  color: rgba(0, 0, 0, var(--tw-text-opacity));
 
-const CommentInput = styled.input`
-  flex: 1 0 0;
-  margin: 0;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  font-size: 16px;
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.75rem; /* 28px */
+  margin-left: 0.25rem; /* 4px */
+  margin-right: 0.25rem; /* 4px */
+  font-weight: 900;
+  text-align: left;
 `;
 
-const CommentRegister = styled.span`
+const CommentDate = styled.span`
+  color: #d9d9d9;
+
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.25rem; /* 20px */
+  margin-left: 0.25rem; /* 4px */
+  margin-right: 0.25rem; /* 4px */
+  font-weight: 300;
+  text-align: left;
+`;
+const CommentDelete = styled.span`
   float: right;
+  text-align: right;
   font-size: 16px;
-  margin: auto;
+  margin-right: 0.25rem; /* 4px */
+  margin-left: auto;
 `;
 
+const CommentContent = styled.p`
+  text-align: left;
+  font-size: 16px;
+  margin-left: 0.25rem; /* 4px */
+  margin-right: 0.25rem; /* 4px */
+`;
 export default Comment;

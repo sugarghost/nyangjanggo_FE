@@ -1,7 +1,5 @@
 import recipeApi from '@apis/RecipeApi';
-import Comment from '@components/comment/comment';
-import { faChevronLeft, faPlus, faTrashCan, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import CommentsPage from '@components/comment/CommentsPage';
 import { ReactComponent as Edit } from '@icon/edit.svg';
 import { ReactComponent as Heart } from '@icon/heart.svg';
 import { ReactComponent as Trash } from '@icon/x.svg';
@@ -202,7 +200,7 @@ const RecipeDetailPage = ({}) => {
             ))}
           </div>
 
-          <Comment boardId={boardId} />
+          <CommentsPage boardId={boardId} />
         </div>
       </div>
     </div>

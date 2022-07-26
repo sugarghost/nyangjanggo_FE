@@ -3,13 +3,14 @@ import { FieldValues } from 'react-hook-form';
 
 import { authInstance, axiosInstance } from './axiosInstance';
 
+const comments = '/comments';
 const comment = '/comment';
 const board = '/board';
 
 export default {
   async getComment(payload: Pageable) {
     const res = await axiosInstance.get(
-      `${board}/${payload.boardId}${comment}/?&page=${payload.page}&size=${payload.size}`,
+      `${board}/${payload.boardId}${comments}?&page=${payload.page}&size=${payload.size}&sort=createdAt,desc`,
     );
     return res;
   },
