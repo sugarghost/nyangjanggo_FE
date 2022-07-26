@@ -35,11 +35,10 @@ interface IProps {
   disabled?: boolean;
   styleCustom?: StyleCustom;
   cardPromotionValue?: string;
-  rank?: number;
 }
 
 function Card(props: IProps) {
-  const { onClick, rank, styleCustom, cardTitle, cardImg, className }: IProps = props;
+  const { onClick, styleCustom, cardTitle, cardImg, className }: IProps = props;
 
   return (
     <CardContainer onClick={onClick}>
@@ -59,9 +58,6 @@ function Card(props: IProps) {
         <CardContentLeft>
           <CardTitleWrapper styleCustom={styleCustom}>{cardTitle}</CardTitleWrapper>
         </CardContentLeft>
-        <CardContentRight>
-          <img style={{ width: '21px', height: '18px' }} src={LikeIcon} className="img-render" alt="" />
-        </CardContentRight>
       </CardContentWrapper>
     </CardContainer>
   );
