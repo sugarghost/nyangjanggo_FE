@@ -32,15 +32,27 @@ export default {
     return axiosInstance.get(board).then((res) => res.data);
   },
 
-  async getEntity(payload: Pageable) {
+  async getRecipeListByEntity(payload: Pageable) {
     const res = await axiosInstance.get(`${boards}?&page=${payload.page}&size=${payload.size}&sort=${payload.query}`);
     return res;
   },
-  async getEntity10(entityName: string) {
+  async getRecipeListByEntity10(entityName: string) {
     const res = await axiosInstance.get(`${boards}${preview}?entityName=${entityName}`);
     return res;
   },
 
+  async getRecipeListByResource(payload: Pageable) {
+    const res = await axiosInstance.get(
+      `${boards}${resource}?resourceName=${payload.query}&page=${payload.page}&size=${payload.size}`,
+    );
+    return res;
+  },
+  async getRecipeListByTitle(payload: Pageable) {
+    const res = await axiosInstance.get(
+      `${boards}${title}?page=${payload.page}&size=${payload.size}&titleWords=${payload.query}`,
+    );
+    return res;
+  },
   async getResourceRecommend(resourceName: string) {
     const res = await axiosInstance.get(`${board}${resource}${recommend}?resourceName=${resourceName}`);
     return res;

@@ -25,20 +25,14 @@ export type PostContent = {
   userImg: string;
 };
 
-const EntitySearched = () => {
+const TitleSearched = () => {
   // 공통 처리
   const navigate = useNavigate();
   // 검색 이벤트 발생 시 컴포넌트간 검색 방식을 교환하기 위한 recoil
   const searchQueryState = useRecoilValue(searchQuery);
 
-  // 게시글 목록 전처리
-  const [boardType, setBoardType] = useState<string>('date');
-  const [axiosParam, setAxiosParam] = useState<any>({
-    size: 5,
-    sort: 'createdAt,desc',
-  });
   // 검색을 위한 API
-  const getEntityApi = SearchApi.getRecipeListByEntity;
+  const getRecipeListByResourceApi = SearchApi.getRecipeListByResource;
 
   // 무한 스크롤을 위해 특정 요소가 보이는지 판별하기 위한 Intersection Observer
   const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
@@ -55,9 +49,7 @@ const EntitySearched = () => {
       size: 5,
       query: searchQueryState.query,
     };
-    // API가 명확하지 않은 시점이라 getPostsByDate라는 함수로 호출 중
-    // 나중에 API가 정리되면, 한개에 기능에 sort 를 기반으로 정렬 로직이 좀 달라질 예정
-    const res = await getEntityApi(paramTemplate);
+    const res = await getRecipeListByResourceApi(paramTemplate);
     const { content, last } = res.data;
     // 페이지 번호를 증가시키는 용도로 사용 될 nextPage는 기존 pageParam(페이지 넘버)에 +1을 해줌
     return { content, nextPage: pageParam + 1, last: last === undefined || last === true };
@@ -89,9 +81,7 @@ const EntitySearched = () => {
         <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
           <div className="max-w-screen-md mx-auto">
             <div className="mx-auto w-full">
-              <ContentTitle>
-                {searchQueryState.query.split(','[0]) === 'goodCount' ? '인기 레시피' : '최신 레시피'}
-              </ContentTitle>
+              <ContentTitle>요리이름 검색결과</ContentTitle>
               <CardsContainer className="flex flex-row">
                 {data?.pages?.map((page, index) => (
                   <>
@@ -172,4 +162,4 @@ const ScrollMenuWrapper = styled.div`
   }
 `;
 
-export default EntitySearched;
+export default TitleSearched;

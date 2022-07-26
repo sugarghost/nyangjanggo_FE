@@ -4,7 +4,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactComponent as ResourceSearchIcon } from '@icon/search.svg';
 import RecipeSearchIcon from '@images/recipe_search_icon.png';
-import { ingredientsSelector } from '@recoil/ingredient';
+import { ingredientsNameSelector } from '@recoil/ingredient';
 import { searchQuery } from '@recoil/searchAtom';
 import React, { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
@@ -23,7 +23,7 @@ const Search = () => {
   // 재료 검색을 위해 선택 된 tag list
   const [selectedTagList, setSelectedTagList] = useState([]);
   // 재료 검색이 비어있을 때 사용할 냉장고 재료 리스트
-  const ingredientsList = useRecoilValue(ingredientsSelector);
+  const ingredientsList = useRecoilValue(ingredientsNameSelector);
 
   // 요리이름 검색된 결과들 리스트
   const [searchedList, setSearchedList] = useState(wholeTextArray);
@@ -89,7 +89,7 @@ const Search = () => {
         setIsSearchedValue(false);
       } else {
         setIsSearchedValue(true);
-        // 검색어가 변화하면 재료 추천 태그들을 가져와 searchedTagList에 넣어줌
+        // 검색어가 변화하면 요리 추천 목록을 가져와 searchedList에 넣어줌
         await titleRecommendRefetch();
       }
     }

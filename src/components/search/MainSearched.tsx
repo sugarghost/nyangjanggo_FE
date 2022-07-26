@@ -3,11 +3,13 @@ import Card from '@components/Card';
 import Carousel from '@components/Carousel';
 import Search from '@components/search/Search';
 import useIntersectionObserver from '@hook/intersectionObserver';
+import { searchQuery } from '@recoil/searchAtom';
 import { Pageable } from '@type/searchType';
 import React, { Suspense, useEffect, useState, useRef, useCallback } from 'react';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { useInfiniteQuery, useQuery } from 'react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 export type PostContent = {
@@ -26,9 +28,10 @@ export type PostContent = {
 const MainSearched = () => {
   // 공통 처리
   const navigate = useNavigate();
-
-  const getEntity10Api = SearchApi.getEntity10;
-  // 게시글 목록 전처리
+  // 인기도순, 최신순 각각 10개씩 가져오기 위한 API
+  const getEntity10Api = SearchApi.getRecipeListByEntity10;
+  // 검색 이벤트 발생 시 컴포넌트간 검색 방식을 교환하기 위한 recoil
+  const [searchQueryState, setSearchQueryState] = useRecoilState(searchQuery);
 
   // 최신순 게시물 가져오기
   const { data: recentData } = useQuery(['getRecentData'], async () => getEntity10Api('createdAt'), {
@@ -43,6 +46,24 @@ const MainSearched = () => {
   const viewRecipeDetail = (boardId: number) => {
     navigate('/recipeDetailPage', { state: { boardId } });
   };
+  // 최신순이나 인기도 순 좀더 자세히 보는 용도
+  const viewContentDetail = (type: string) => {
+    if (type === 'recent') {
+      setSearchQueryState({
+        type: 'entity',
+        query: 'createdAt,desc',
+        size: 5,
+        page: 0,
+      });
+    } else if (type === 'like') {
+      setSearchQueryState({
+        type: 'entity',
+        query: 'goodCount,desc',
+        size: 5,
+        page: 0,
+      });
+    }
+  };
 
   return (
     <>
@@ -53,7 +74,10 @@ const MainSearched = () => {
               <br />
               <br />
               <br />
-              <ContentTitle>최신순</ContentTitle>
+              <ContentTitle>
+                최신순
+                <ContentTitleMore onClick={() => viewContentDetail('recent')}>더보기</ContentTitleMore>
+              </ContentTitle>
               <ScrollMenuWrapper className="flex">
                 <ScrollMenu>
                   {recentData?.data.map((content: any, index: number) => (
@@ -67,7 +91,9 @@ const MainSearched = () => {
                   ))}
                 </ScrollMenu>
               </ScrollMenuWrapper>
-              <ContentTitle>인기도</ContentTitle>
+              <ContentTitle>
+                인기도<ContentTitleMore onClick={() => viewContentDetail('like')}>더보기</ContentTitleMore>
+              </ContentTitle>
               <ScrollMenuWrapper className="flex">
                 <ScrollMenu>
                   {likeData?.data.map((content: any, index: number) => (
@@ -101,6 +127,10 @@ const ContentTitle = styled.div`
   max-width: inherit;
   padding: 16px 0 0 16px;
   color: #eb3120;
+`;
+
+const ContentTitleMore = styled.span`
+  float: right;
 `;
 
 const CardsContainer = styled.div`
