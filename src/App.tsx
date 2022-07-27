@@ -1,11 +1,8 @@
-import axios from 'axios';
 import React, { Suspense, useEffect, useLayoutEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import './App.css';
-import { refreshToken } from './apis/AuthApi';
-import { axiosInstance } from './apis/axiosInstance';
 import Footer from './containers/Footer';
 import Header from './containers/Header';
 import MainPage from './pages/MainPage';
@@ -56,12 +53,12 @@ function App() {
             <Route path="/signUpPage" element={<SignUpPage />} />
             <Route path="/recipeDetailPage" element={<RecipeDetailPage />} />
             {/* 로그인이 필요한 페이지 */}
-            {/* <Route element={<PrivateRoutes authentication />}> */}
-            <Route path="/recipeRegisterPage" element={<RecipeRegisterPage />} />
-            <Route path="/myPage" element={<MyPage />} />
-            <Route path="/myPage/myRefrigeratorPage" element={<MyRefrigeratorPage />} />
-            <Route path="/myPage/userEditPage" element={<UserEditProfile />} />
-            {/* </Route> */}
+            <Route element={<PrivateRoutes authentication />}>
+              <Route path="/recipeRegisterPage" element={<RecipeRegisterPage />} />
+              <Route path="/myPage" element={<MyPage />} />
+              <Route path="/myPage/myRefrigeratorPage" element={<MyRefrigeratorPage />} />
+              <Route path="/myPage/userEditPage" element={<UserEditProfile />} />
+            </Route>
           </Routes>
           {/* </div>
             </div>
