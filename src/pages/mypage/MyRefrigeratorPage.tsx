@@ -1,13 +1,13 @@
 import { postResource, getResource } from '@/apis/ResourceApi';
 import { Ingredient } from '@/apis/ResourceApi';
 import { ingredientsSelector } from '@/recoil/ingredient';
+import moment from 'moment';
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
-import moment from 'moment';
 import { authInstance } from '../../apis/axiosInstance';
 import BottomFloat from '../../components/BottomFloat';
 import Calendar from '../../components/mypage/Calendar';
@@ -21,6 +21,7 @@ const MyRefrigeratorPage = () => {
   const [ingredientName, setIngredientName] = useState('');
   const [ingredientCount, setIngredientCount] = useState<number>(null);
   const [expirationDate, setExpirationDate] = useState<any>();
+  const [editIngredientId, setEditIngredientId] = useState<number | null>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -44,16 +45,15 @@ const MyRefrigeratorPage = () => {
     const nowDate = new Date();
 
     const diffDate = exprationDate.getTime() - nowDate.getTime();
-    let diffDateNumber = Math.floor(diffDate / (1000 * 60 * 60 * 24)) + 1
+    let diffDateNumber = Math.floor(diffDate / (1000 * 60 * 60 * 24)) + 1;
 
-    let returnElement = <div>{diffDateNumber} 일 남음</div>
+    let returnElement = <div>{diffDateNumber} 일 남음</div>;
 
-    if (diffDateNumber === 0){
-      returnElement = <div>오늘까지</div>
-    } else if (diffDateNumber < 0)  {
-      returnElement =  <div>{Math.abs(diffDateNumber)} 일이 지났습니다!</div>
+    if (diffDateNumber === 0 || isNaN(diffDateNumber)) {
+      returnElement = <div style={{ color: '#ff7f00' }}>오늘까지</div>;
+    } else if (diffDateNumber < 0) {
+      returnElement = <div style={{ color: 'red' }}>{Math.abs(diffDateNumber)} 일이 지났습니다!</div>;
     }
-
     return returnElement;
   };
 
@@ -80,18 +80,58 @@ const MyRefrigeratorPage = () => {
       });
   };
 
+  const [editMode, setEditMode] = useState(false);
   // 삭제와 수정을 둘다
-  const handleOnClickEdit = (e) => {
-    const id = e.target;
-    authInstance
-      .put(`/user/fridge/${id}`)
-      .then((res) => {
-        const idx = ingredients.findIndex(id);
+  const handleOnClickEditMode = (e) => {
+    const selectIngredientId = e.target.id as number;
+    setEditIngredientId(e.target.id);
+    setEditMode(true);
 
-        setIngredients([...ingredients]);
+    setShowRegisterIngredient(true);
+
+    const editIngredient = ingredients[selectIngredientId] as Ingredient;
+
+    setIngredientName(editIngredient.resourceName);
+    setIngredientCount(parseInt(editIngredient.amount));
+
+    //setEditIngredientId(null);
+    //setEditMode(false);
+  };
+
+  const handleOnClickEdit = () => {
+
+    const editIngredientsArray = Array.from(ingredients);
+
+    editIngredientsArray.push({
+      resourceName: ingredientName,
+      amount: String(ingredientCount),
+      endTime: expirationDate,
+      category: '',
+    });
+
+    editIngredientsArray.splice(editIngredientId, 1);
+
+    const formData = new FormData();
+
+    formData.append(
+      'fridgeRequestDtoList',
+      new Blob([JSON.stringify(editIngredientsArray)], { type: 'application/json' }),
+    );
+
+    authInstance
+      .put(`/user/fridge`, formData)
+      .then((res) => {
+        setIngredients([...editIngredientsArray]);
       })
       .catch((err) => {
         console.log('재료 가져오기 에러 :', err);
+      })
+      .finally(() => {
+        setEditMode(false);
+        setEditIngredientId(null);
+        setIngredientName('');
+        setIngredientCount(null);
+        setShowRegisterIngredient(false);
       });
   };
 
@@ -100,10 +140,16 @@ const MyRefrigeratorPage = () => {
       alert('재료 이름을 확인해 주세요!');
       return;
     }
+
+    if (ingredientCount < 1) {
+      alert('수량은 1개 이상으로 입력해주세요!');
+      return;
+    }
+
     setLoading(true);
 
-    const formData = new FormData();  
-   
+    const formData = new FormData();
+
     const requestList = [
       {
         category: '',
@@ -122,7 +168,7 @@ const MyRefrigeratorPage = () => {
       .then((res) => {
         setIngredients([...ingredients, ...requestList]);
         setIngredientName('');
-        setIngredientCount(0);
+        setIngredientCount(1);
         alert('재료등록이 완료 되었습니다!');
       })
       .catch((err) => {
@@ -187,32 +233,29 @@ const MyRefrigeratorPage = () => {
                 />
 
                 <Time style={{ textAlign: 'left' }}>유통기한</Time>
-                <input type="date" id="start" name="trip-start"
-                 style={{ margin: '10px 0 0 0' }}
-                  value={moment(expirationDate).format("YYYY-MM-DD") }
+                <input
+                  type="date"
+                  id="start"
+                  name="trip-start"
+                  style={{ margin: '10px 0 0 0' }}
+                  value={moment(expirationDate).format('YYYY-MM-DD')}
                   onChange={(e) => {
-                    setExpirationDate(e.target.value)
+                    setExpirationDate(e.target.value);
                   }}
-                  min="2018-01-01" />
-                {/* <DatePickerWrapper style={{ margin: '20px 0 0 -90px' }}>
-                  <DatePicker
-                    style={{ margin: '0 0 0 -100px' }}
-                    // selected={expirationDate}
-                    onChange={(date: Date) => setExpirationDate(date)}
-                  />
-                </DatePickerWrapper> */}
+                  min="2018-01-01"
+                />
               </>
             ) : (
               <>
                 {ingredients.length > 0 ? (
                   Array.from(ingredients).map((item, idx) => {
                     return (
-                      <>
-                        <EditOption key={idx}>
-                          {/* <div>수정</div>
-                        <div onClick={handleOnClickEdit} style={{ margin: '0 4px' }}>
-                          |
-                        </div> */}
+                      <div key={idx}>
+                        <EditOption>
+                          <div onClick={handleOnClickEditMode} id={String(idx)}>
+                            수정
+                          </div>
+                          <div style={{ margin: '0 4px' }}>|</div>
                           <div id={String(idx)} onClick={handleOnClickDelete} style={{}}>
                             삭제
                           </div>
@@ -225,31 +268,29 @@ const MyRefrigeratorPage = () => {
                           </div>
                           <div>{getExpirationDay(item.endTime)}</div>
                         </IngredientsBox>
-                      </>
+                      </div>
                     );
                   })
                 ) : (
                   <div>등록하신 재료가 없습니다.</div>
                 )}
-
-                {/* <IngredientsBox className="">
-                  <div>
-                    <span style={{ margin: '0 0 0 0' }}>달걀(6개)</span>
-                  </div>
-                  <div>10일 남음</div>
-                </IngredientsBox> */}
               </>
             )}
-
-            {/* <Calendar /> */}
           </OptionsWrapper>
         </div>
       </div>
+
       {showRegisterIngredient && (
         <BottomFloat className="w-full">
-          <RegisterButton disabled={loading} onClick={handleOnClickRegister}>
-            {loading ? '등록중' : '등록하기'}
-          </RegisterButton>
+          {editMode ? (
+            <RegisterButton disabled={loading} onClick={handleOnClickEdit}>
+              {loading ? '수정중' : '수정하기'}
+            </RegisterButton>
+          ) : (
+            <RegisterButton disabled={loading} onClick={handleOnClickRegister}>
+              {loading ? '등록중' : '등록하기'}
+            </RegisterButton>
+          )}
         </BottomFloat>
       )}
     </div>
