@@ -1,5 +1,5 @@
 import commentApi from '@apis/CommentApi';
-import Comment from '@components/comment/Comment';
+import Comment from '@components/Comment';
 import useIntersectionObserver from '@hook/intersectionObserver';
 import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
