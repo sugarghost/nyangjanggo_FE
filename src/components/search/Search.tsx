@@ -88,7 +88,12 @@ const Search = () => {
     // input에 값이 있을때만 작동
     if (isSearchedValue) {
       if (event.key === 'Enter') {
-        console.log('enter');
+        setSearchQueryState({
+          type: 'title',
+          query: searchValue,
+          size: 10,
+          page: 0,
+        });
       }
     }
   };

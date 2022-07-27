@@ -4,7 +4,7 @@ import Carousel from '@components/Carousel';
 import Search from '@components/search/Search';
 import useIntersectionObserver from '@hook/intersectionObserver';
 import { searchQuery } from '@recoil/searchAtom';
-import { Pageable } from '@type/searchType';
+import { Pageable, SearchContent } from '@type/searchType';
 import React, { Suspense, useEffect, useState, useRef, useCallback } from 'react';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { useInfiniteQuery } from 'react-query';
@@ -32,7 +32,7 @@ const TitleSearched = () => {
   const [searchQueryState, setSearchQueryState] = useRecoilState(searchQuery);
 
   // 검색을 위한 API
-  const getRecipeListByResourceApi = SearchApi.getRecipeListByResource;
+  const getRecipeListByTitleApi = SearchApi.getRecipeListByTitle;
 
   // 무한 스크롤을 위해 특정 요소가 보이는지 판별하기 위한 Intersection Observer
   const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
@@ -49,8 +49,23 @@ const TitleSearched = () => {
       size: searchQueryState.size,
       query: searchQueryState.query,
     };
-    const res = await getRecipeListByResourceApi(paramTemplate);
-    const { content, last } = res.data;
+    const res = await getRecipeListByTitleApi(paramTemplate);
+    console.log(res);
+    const content = [];
+    res.data.hits?.hits.map((hit) => {
+      content.push({
+        boardId: hit._source.id,
+        title: hit._source.title,
+        nickname: hit._source.userNickname,
+        userImg: hit._source.userImageLink,
+        goodCount: hit._source.goodCount,
+        commentCount: hit._source.commentCount,
+        mainImg: hit._source.mainImageLink,
+        createdAt: hit._source.createdAt,
+        modifiedAt: hit._source.modifiedAt,
+      });
+    });
+    const last = res.data.hits?.total.value <= paramTemplate.size * (pageParam + 1);
     // 페이지 번호를 증가시키는 용도로 사용 될 nextPage는 기존 pageParam(페이지 넘버)에 +1을 해줌
     return { content, nextPage: pageParam + 1, last: last === undefined || last === true };
   };
@@ -97,7 +112,7 @@ const TitleSearched = () => {
               <CardsContainer className="flex flex-row">
                 {data?.pages?.map((page, index) => (
                   <React.Fragment key={index}>
-                    {page?.content?.map((content: any, subIndex: number) => (
+                    {page?.content?.map((content: SearchContent, subIndex: number) => (
                       <Card
                         cardTitle={content.title}
                         key={content.boardId}
@@ -105,21 +120,6 @@ const TitleSearched = () => {
                         styleCustom={{ width: '40vw', margin: 'auto' }}
                         onClick={(e) => viewRecipeDetail(content.boardId)}
                       />
-                      // <div
-                      //   className="flex my-2"
-                      //   onClick={(e) => viewRecipeDetail(content.boardId)}
-                      //   key={`${index}_${subIndex}`}
-                      // >
-                      //   <img src={content.mainImg} className="w-2/5" />
-                      //   <div className="w-full">
-                      //     <p>{content.title}</p>
-                      //     <div className="flex">
-                      //       <div>
-                      //         <p>{content.nickname}</p>좋아요: {content.goodCount}
-                      //       </div>
-                      //     </div>
-                      //   </div>
-                      // </div>
                     ))}
                   </React.Fragment>
                 ))}

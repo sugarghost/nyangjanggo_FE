@@ -1,7 +1,7 @@
 import { FieldValues } from 'react-hook-form';
 
 import { Step } from '../type/recipeType';
-import { authInstance, axiosInstance } from './axiosInstance';
+import { elasticInstance, axiosInstance } from './axiosInstance';
 
 const title = '/title';
 const resource = '/resource';
@@ -9,6 +9,8 @@ const recommend = '/recommend';
 const boards = '/boards';
 const board = '/board';
 const preview = '/preview';
+const search = '/_search';
+const resourceKeyword = '/resource_keyword';
 
 export type ResourcePostTemplate = {
   boardId: number;
@@ -41,6 +43,8 @@ export default {
     return res;
   },
 
+  /*
+  엘라스틱 서치를 직접 접근하는 방식으로 변경하며 기존 코드 일부 비활성화 후 대체
   async getRecipeListByResource(payload: Pageable) {
     const res = await axiosInstance.get(
       `${boards}${resource}?resourceName=${payload.query}&page=${payload.page}&size=${payload.size}`,
@@ -60,6 +64,81 @@ export default {
 
   async getTitleRecommend(titleWord: string) {
     const res = await axiosInstance.get(`${board}${title}${recommend}?titleWords=${titleWord}`);
+    return res;
+  },
+  */
+
+  async getRecipeListByResource(payload: Pageable) {
+    const query = {
+      _source: ['id', 'title', 'userNickname', 'goodCount', 'commentCount', 'mainImageLink', 'createdAt', 'modifiedAt'],
+      query: {
+        match: {
+          'resourceInBoardList.resourceName': payload.query,
+        },
+      },
+      size: payload.size,
+      from: payload.page * payload.size,
+    };
+    const res = await elasticInstance.post(`${board}${search}`, query, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return res;
+  },
+  async getRecipeListByTitle(payload: Pageable) {
+    const query = {
+      _source: ['id', 'title', 'userNickname', 'goodCount', 'commentCount', 'mainImageLink', 'createdAt', 'modifiedAt'],
+      query: {
+        match: {
+          title: payload.query,
+        },
+      },
+      size: payload.size,
+      from: payload.page * payload.size,
+    };
+
+    const res = await elasticInstance.post(`${board}${search}`, query, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return res;
+  },
+  async getResourceRecommend(resourceName: string) {
+    const query = {
+      query: {
+        bool: {
+          must: [
+            {
+              match: {
+                resourceName,
+              },
+            },
+            {
+              range: {
+                cnt: {
+                  gte: 2,
+                },
+              },
+            },
+          ],
+        },
+      },
+      size: 10,
+      from: 0,
+    };
+    /*
+    const query = {
+      query: {
+        match_all: {},
+      },
+    };
+    */
+    const res = await elasticInstance.post(`${resourceKeyword}${search}`, query, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return res;
+  },
+
+  async getTitleRecommend(titleWord: string) {
+    const res = await elasticInstance.get(`${board}${title}${recommend}?titleWords=${titleWord}`);
     return res;
   },
 };

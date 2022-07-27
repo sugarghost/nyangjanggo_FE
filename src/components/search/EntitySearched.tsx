@@ -114,21 +114,6 @@ const EntitySearched = () => {
                         styleCustom={{ width: '40vw', margin: 'auto' }}
                         onClick={(e) => viewRecipeDetail(content.boardId)}
                       />
-                      // <div
-                      //   className="flex my-2"
-                      //   onClick={(e) => viewRecipeDetail(content.boardId)}
-                      //   key={`${index}_${subIndex}`}
-                      // >
-                      //   <img src={content.mainImg} className="w-2/5" />
-                      //   <div className="w-full">
-                      //     <p>{content.title}</p>
-                      //     <div className="flex">
-                      //       <div>
-                      //         <p>{content.nickname}</p>좋아요: {content.goodCount}
-                      //       </div>
-                      //     </div>
-                      //   </div>
-                      // </div>
                     ))}
                   </React.Fragment>
                 ))}
