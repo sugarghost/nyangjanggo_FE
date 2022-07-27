@@ -1,35 +1,32 @@
-import axios from 'axios';
-import React, { Suspense, useEffect, useLayoutEffect } from 'react';
+import React, { Suspense, useLayoutEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import './App.css';
-import { refreshToken } from './apis/AuthApi';
-import { axiosInstance } from './apis/axiosInstance';
 import Footer from './containers/Footer';
 import Header from './containers/Header';
 import MainPage from './pages/MainPage';
 import RecipeDetailPage from './pages/RecipeDetailPage';
-import RecipeRegisterPage from './pages/RecipeRegisterPage';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
-import TestPage from './pages/TestPage';
-import MyPage from './pages/mypage/MyPage';
-import MyRefrigeratorPage from './pages/mypage/MyRefrigeratorPage';
-import UserEditProfile from './pages/mypage/UserEditProfile';
-import { isExp } from './utils/jwt';
 import PrivateRoutes from './utils/privateRoutes';
 
 const queryClient = new QueryClient();
 
 function App() {
+  // 페이지 코드 스플리팅
+  // 테스트 페이지는 애초에 접근할 이유가 없으니 스플리팅
+  const TestPage = React.lazy(() => import('@pages/TestPage'));
+  // 주로 View 사용이 크며 등록은 선택이니 스플리팅
+  const RecipeRegisterPage = React.lazy(() => import('@pages/RecipeRegisterPage'));
+  // 마이페이지 접속을 안할 가능성이 크니 스플리팅
+  const MyPage = React.lazy(() => import('@pages/mypage/MyPage'));
+  // 냉장고 기능을 이용 안할 수 있으니 스플리팅
+  const MyRefrigeratorPage = React.lazy(() => import('@pages/mypage/MyRefrigeratorPage'));
+  // 자기 정보를 수정 안하는 경우도 많으니 스플리팅
+  const UserEditProfile = React.lazy(() => import('@pages/mypage/UserEditProfile'));
+
   useLayoutEffect(() => {
-    /*
-    localStorage.setItem(
-      'accessToken',
-      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodHNsdHM5NUBnbWFpbC5jb20iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2NTczMzI5NjUsImV4cCI6MTY1ODU0MjU2NX0.eZl4GB5_swQw7nGQV4YhBdq3Uswc7Vtixb5FdBObgls',
-    );
-    */
     const userInfoArr = window.location.href.split('&');
 
     // console.log(access_token)
@@ -48,16 +45,6 @@ function App() {
       }
       window.location.replace('/');
     }
-
-    // if (localStorage.getItem('token')) {
-    //   const token = localStorage.getItem('token') as string;
-    //   axios.defaults.headers.common.accessToken = token;
-
-    //   console.log(isExp(token));
-    //   if (isExp(token)) {
-    //     refreshToken();
-    //   }
-    // }
   }, []);
 
   return (
@@ -65,21 +52,53 @@ function App() {
       <BrowserRouter>
         <div className="App">
           <Header />
-          {/* <div className="bg-secondary-1 flex items-center min-h-screen bg-white dark:bg-gray-900">
-              <div className="container max-w-screen-lg xl:max-w-screen-xl mx-auto">
-              <div className="max-w-md mx-auto my-10 w-full"> */}
           <Routes>
             <Route path="/" element={<MainPage />} />
-            <Route path="/test" element={<TestPage />} />
+            <Route
+              path="/test"
+              element={
+                <Suspense>
+                  <TestPage />
+                </Suspense>
+              }
+            />
             <Route path="/signInPage" element={<SignInPage />} />
             <Route path="/signUpPage" element={<SignUpPage />} />
             <Route path="/recipeDetailPage" element={<RecipeDetailPage />} />
-            {/* 로그인이 필요한 페이지 */}
+            {/* 로그인이 필요한 페이지는 코드 스플리팅을 진행 */}
             <Route element={<PrivateRoutes authentication />}>
-              <Route path="/recipeRegisterPage" element={<RecipeRegisterPage />} />
-              <Route path="/myPage" element={<MyPage />} />
-              <Route path="/myPage/myRefrigeratorPage" element={<MyRefrigeratorPage />} />
-              <Route path="/myPage/userEditPage" element={<UserEditProfile />} />
+              <Route
+                path="/recipeRegisterPage"
+                element={
+                  <Suspense>
+                    <RecipeRegisterPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/myPage"
+                element={
+                  <Suspense>
+                    <MyPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/myPage/myRefrigeratorPage"
+                element={
+                  <Suspense>
+                    <MyRefrigeratorPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/myPage/userEditPage"
+                element={
+                  <Suspense>
+                    <UserEditProfile />
+                  </Suspense>
+                }
+              />
             </Route>
           </Routes>
           {/* </div>

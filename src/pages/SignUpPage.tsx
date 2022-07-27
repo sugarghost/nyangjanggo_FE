@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { refreshToken } from '../apis/AuthApi';
-import { axiosInstance } from '../apis/axiosInstance';
 import Button from '../components/Botton';
 import SignTitle from '../components/sign/SignTitle';
 import KakaoButton from '../images/kakao_button.png';
@@ -10,15 +9,7 @@ import NaverButton from '../images/naver_button.png';
 import Logo from '../images/nyang_logo.png';
 
 function SignUpPage() {
-  const kakaoAuth = async () => {
-    try {
-      const res = await axiosInstance.get('https://api.nyangjanggo.com/oauth2/authorization/kakao');
-      return res.data;
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-  };
+  
 
   const refreshTokenTest = () => {
     refreshToken();

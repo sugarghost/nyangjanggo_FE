@@ -1,3 +1,4 @@
+import { Pageable } from '@type/searchType';
 import { FieldValues } from 'react-hook-form';
 
 import { Step } from '../type/recipeType';
@@ -16,12 +17,6 @@ export type ResourcePostTemplate = {
       category: string;
     },
   ];
-};
-
-export type Pageable = {
-  page: number;
-  size: number;
-  sort: string;
 };
 
 export default {
@@ -77,7 +72,7 @@ export default {
   },
 
   async getRecipeListByDate(payload: Pageable) {
-    const res = await axiosInstance.get(`${boards}?&page=${payload.page}&size=${payload.size}&sort=${payload.sort}`);
+    const res = await axiosInstance.get(`${boards}?&page=${payload.page}&size=${payload.size}&sort=${payload.query}`);
     return res;
   },
   async getRecipeDetail(boardId: number) {
