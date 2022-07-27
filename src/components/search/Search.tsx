@@ -10,8 +10,6 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 const Search = () => {
-  // 검색어 전처리
-  const wholeTextArray = ['양파', '바나나', '쌀', '당근', '파', '대파', '파프리카', '다시마', '파슬리'];
   // 검색창 값 관리용 state
   const [searchValue, setSearchValue] = useState<string>('');
   // 검색창에 값이 입력되었는지 여부
@@ -22,10 +20,6 @@ const Search = () => {
   const [selectedTagList, setSelectedTagList] = useState([]);
   // 재료 검색이 비어있을 때 사용할 냉장고 재료 리스트
   const ingredientsList = useRecoilValue(ingredientsNameSelector);
-
-  // 요리이름 검색된 결과들 리스트
-  const [searchedList, setSearchedList] = useState(wholeTextArray);
-  const [searchedItemIndex, setSearchedItemIndex] = useState(-1);
 
   // 재료 검색, 요리 이름 검색을 전환하기 위한 state
   // 1: 재료 검색, 0: 요리 이름 검색
@@ -48,21 +42,11 @@ const Search = () => {
       refetchOnWindowFocus: false,
       enabled: false,
       onSuccess: (res) => {
-        console.log('getResourceRecommend', res);
-        setSearchedTagList(res.data.resourceRecommendList);
-      },
-    },
-  );
-
-  const { data: titleRecommendData, refetch: titleRecommendRefetch } = useQuery(
-    ['getTitleRecommend'],
-    async () => searchApi.getTitleRecommend(searchValue),
-    {
-      refetchOnWindowFocus: false,
-      enabled: false,
-      onSuccess: (res) => {
-        console.log('getTitleRecommend', res);
-        setSearchedList(res.data.titleRecommendList);
+        const resourceList = [];
+        res.data.hits?.hits.map((hit) => {
+          resourceList.push(hit._source.resourceName);
+        });
+        setSearchedTagList(resourceList);
       },
     },
   );
@@ -87,8 +71,6 @@ const Search = () => {
         setIsSearchedValue(false);
       } else {
         setIsSearchedValue(true);
-        // 검색어가 변화하면 요리 추천 목록을 가져와 searchedList에 넣어줌
-        await titleRecommendRefetch();
       }
     }
   };
@@ -102,39 +84,14 @@ const Search = () => {
     });
   };
 
-  // 요리 이름 검색시 아래로 검색 목록이 나옴
-  const showSearchedList = () => {
-    if (searchValue === '') {
-      setIsSearchedValue(false);
-      setSearchedList([]);
-    } else {
-      const choosenTextList = wholeTextArray.filter((textItem) => textItem.includes(searchValue));
-      setSearchedList(choosenTextList);
-    }
-  };
-
-  const clickDropDownItem = (clickedItem: any) => {
-    setSearchValue(clickedItem);
-    setIsSearchedValue(false);
-  };
-
   const handleDropDownKey = (event: any) => {
     // input에 값이 있을때만 작동
     if (isSearchedValue) {
-      if (event.key === 'ArrowDown' && searchedList.length - 1 > searchedItemIndex) {
-        setSearchedItemIndex(searchedItemIndex + 1);
-      }
-
-      if (event.key === 'ArrowUp' && searchedItemIndex >= 0) setSearchedItemIndex(searchedItemIndex - 1);
-      if (event.key === 'Enter' && searchedItemIndex >= 0) {
+      if (event.key === 'Enter') {
         console.log('enter');
-        clickDropDownItem(searchedList[searchedItemIndex]);
-        setSearchedItemIndex(-1);
       }
     }
   };
-
-  useEffect(showSearchedList, [searchValue]);
 
   const addTags = (tag: string) => {
     if (!selectedTagList.includes(tag)) setSelectedTagList([...selectedTagList, tag]);
@@ -207,21 +164,6 @@ const Search = () => {
               <RecipeSearchTitle>이름검색</RecipeSearchTitle>
             </div>
           </div>
-          {isSearchedValue && (
-            <DropDownBox>
-              {searchedList.length === 0 && <DropDownItem>해당하는 단어가 없습니다</DropDownItem>}
-              {searchedList.map((searchedItem, searchedIndex) => (
-                <DropDownItem
-                  key={searchedIndex}
-                  onClick={() => clickDropDownItem(searchedItem)}
-                  onMouseOver={() => setSearchedItemIndex(searchedIndex)}
-                  className={searchedItemIndex === searchedIndex ? 'selected' : ''}
-                >
-                  {searchedItem}
-                </DropDownItem>
-              ))}
-            </DropDownBox>
-          )}
         </div>
       )}
     </>
