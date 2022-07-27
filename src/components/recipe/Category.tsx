@@ -1,5 +1,5 @@
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactComponent as PlusIcon } from '@icon/plus.svg';
+import { ReactComponent as XIcon } from '@icon/x.svg';
 import { RecipeForm } from '@type/recipeType';
 import React from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
@@ -29,41 +29,41 @@ const Category = ({ name, index, onDelete }: CategoryProps) => {
     <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
       <div className="mb-4">
         <ResourceCategoryInput
-          validationCheck={errors.resourceRequestDtoList?.[index].category}
+          validationCheck={errors.resourceRequestDtoList?.[index]?.category}
           defaultValue={name}
           placeholder="재료 분류"
           {...register(`resourceRequestDtoList.${index}.category`, { required: true })}
         />
         <span className="float-right" onClick={deleteCategory}>
-          <FontAwesomeIcon icon={faMinus} color="grey" size="lg" />
+          <XIcon stroke="grey" />
         </span>
       </div>
       {fields.map((item, i) => (
         <div key={item.id}>
           <div className="flex justify-between w-full">
             <ResourceInput
-              validationCheck={errors.resourceRequestDtoList?.[index].resources?.[i].resourceName}
+              validationCheck={errors.resourceRequestDtoList?.[index]?.resources?.[i]?.resourceName}
               className="float-left text-base w-2/5 my-1 font-400"
               defaultValue={item.resourceName}
               placeholder="재료명"
               {...register(`resourceRequestDtoList.${index}.resources.${i}.resourceName`, { required: true })}
             />
             <ResourceInput
-              validationCheck={errors.resourceRequestDtoList?.[index].resources?.[i].amount}
+              validationCheck={errors.resourceRequestDtoList?.[index]?.resources?.[i]?.amount}
               className="float-left text-base w-2/5 my-1 font-400"
               defaultValue={item.amount}
               placeholder="재료량"
               {...register(`resourceRequestDtoList.${index}.resources.${i}.amount`, { required: true })}
             />
             <span className="float-right" onClick={() => remove(i)}>
-              <FontAwesomeIcon icon={faMinus} color="grey" size="sm" />
+              <XIcon stroke="grey" />
             </span>
           </div>
           <hr />
         </div>
       ))}
       <p className="mt-2" onClick={() => append({})}>
-        <FontAwesomeIcon icon={faPlus} color="grey" size="lg" />
+        <PlusIcon stroke="grey" />
       </p>
     </div>
   );

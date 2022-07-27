@@ -1,8 +1,8 @@
 import recipeApi from '@apis/RecipeApi';
 import CommentsPage from '@components/comment/CommentsPage';
-import { ReactComponent as Edit } from '@icon/edit.svg';
-import { ReactComponent as Heart } from '@icon/heart.svg';
-import { ReactComponent as Trash } from '@icon/x.svg';
+import { ReactComponent as EditIcon } from '@icon/edit.svg';
+import { ReactComponent as HeartIcon } from '@icon/heart.svg';
+import { ReactComponent as TrashIcon } from '@icon/x.svg';
 import userToken from '@recoil/userAtom';
 import { userSelector } from '@recoil/userSelector';
 import { RecipeDetail, ResourceForm, StepForm } from '@type/recipeType';
@@ -144,15 +144,15 @@ const RecipeDetailPage = ({}) => {
             {recipe?.nickname === userInfomation?.nickname && (
               <>
                 <IconButton onClick={modifyRecipeDetail}>
-                  <Edit className="m-auto" stroke="white" />
+                  <EditIcon className="m-auto" stroke="white" />
                 </IconButton>
                 <IconButton onClick={deleteRecipeDetail}>
-                  <Trash className="m-auto" stroke="white" />
+                  <TrashIcon className="m-auto" stroke="white" />
                 </IconButton>
               </>
             )}
             <IconButton onClick={likeRecipeDetail}>
-              <Heart className="m-auto" stroke={isLike ? '#EB3120' : 'white'} />
+              <HeartIcon className="m-auto" stroke={isLike ? '#EB3120' : 'white'} />
             </IconButton>
           </div>
           <img

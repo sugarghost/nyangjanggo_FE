@@ -1,6 +1,5 @@
 import recipeApi from '@apis/RecipeApi';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactComponent as XIcon } from '@icon/x.svg';
 import { RecipeForm } from '@type/recipeType';
 import imageCompression from 'browser-image-compression';
 import React, { useEffect, useRef, useState } from 'react';
@@ -88,7 +87,7 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
       <div className="mb-4">
         <span className="text-lg my-1 font-500 float-left">조리과정 {index + 1}</span>
         <span className="float-right" onClick={onDelete}>
-          <FontAwesomeIcon icon={faMinus} color="grey" size="lg" />
+          <XIcon stroke="grey" />
         </span>
       </div>
       <div className="flex justify-between w-full mb-4">
@@ -110,7 +109,7 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
           alt=""
         />
         <StepTextarea
-          validationCheck={errors.recipeStepRequestDtoList?.[index].stepContent}
+          validationCheck={errors.recipeStepRequestDtoList?.[index]?.stepContent}
           className="w-4/6 ml-4 border-gray-200 border-2 rounded-md p-1"
           placeholder="조리 과정을 알려주세요!"
           {...register(`recipeStepRequestDtoList.${index}.stepContent`, { required: true })}

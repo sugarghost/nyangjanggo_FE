@@ -1,7 +1,6 @@
-import { faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { ReactComponent as PlusIcon } from '@icon/plus.svg';
 import imageCompression from 'browser-image-compression';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { FieldValues, useForm, useFieldArray, FormProvider } from 'react-hook-form';
@@ -437,7 +436,7 @@ const RecipeRegisterPage = () => {
 
               <span className="text-gray-700 text-left float-left text-lg my-1 font-900">재료 분류</span>
               <span
-                className="m-1 float-right"
+                className="m-auto float-right"
                 onClick={() =>
                   resourceAppend({
                     category: '',
@@ -445,7 +444,7 @@ const RecipeRegisterPage = () => {
                   })
                 }
               >
-                <FontAwesomeIcon icon={faPlus} color="grey" size="lg" />
+                <PlusIcon stroke="grey" />
               </span>
               {resourceFields.map((item, index) => (
                 <div key={index}>
@@ -453,13 +452,11 @@ const RecipeRegisterPage = () => {
                 </div>
               ))}
               <div className="w-full">
-                <div>
-                  <span className="text-gray-700 text-left float-left text-lg my-1 font-900">조리 과정</span>
+                <span className="text-gray-700 text-left float-left text-lg my-1 font-900">조리 과정</span>
 
-                  <span className="m-1 float-right" onClick={() => stepAppend({})}>
-                    <FontAwesomeIcon icon={faPlus} color="grey" size="lg" />
-                  </span>
-                </div>
+                <span className="m-auto float-right" onClick={() => stepAppend({})}>
+                  <PlusIcon stroke="grey" />
+                </span>
               </div>
               <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
                 {stepFields.map((item, index) => (
