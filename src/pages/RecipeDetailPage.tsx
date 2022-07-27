@@ -131,15 +131,15 @@ const RecipeDetailPage = ({}) => {
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
         <div className="mx-auto w-90vw">
           <div className="float-right">
-            <button className="w-10 h-10 rounded-2xl bg-gray-200 m-1 align-middle" onClick={modifyRecipeDetail}>
+            <IconButton onClick={modifyRecipeDetail}>
               <Edit className="m-auto" stroke="white" />
-            </button>
-            <button className="w-10 h-10 rounded-2xl bg-gray-200 m-1 align-middle" onClick={deleteRecipeDetail}>
+            </IconButton>
+            <IconButton onClick={deleteRecipeDetail}>
               <Trash className="m-auto" stroke="white" />
-            </button>
-            <button className="w-10 h-10 rounded-2xl bg-gray-200 m-1 align-middle" onClick={likeRecipeDetail}>
+            </IconButton>
+            <IconButton onClick={likeRecipeDetail}>
               <Heart className="m-auto" stroke={isLike ? '#EB3120' : 'white'} />
-            </button>
+            </IconButton>
             {recipe?.nickname === userName && (
               <>
                 <button onClick={modifyRecipeDetail}>수정</button>
@@ -208,6 +208,14 @@ const RecipeDetailPage = ({}) => {
 };
 
 export default RecipeDetailPage;
+const IconButton = styled.button`
+  margin: 0.25rem;
+  background-color: #dedede;
+  vertical-align: middle;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 1rem;
+`;
 
 const MainImgWrapperLabel = styled.div`
   text-align: left;

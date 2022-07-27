@@ -100,9 +100,8 @@ const RecipeRegisterPage = () => {
   // 레시피 정보 useForm
   const recipeMethods = useForm<RecipeForm>({
     resolver: yupResolver(recipeValidationSchema),
-    // 형식 맞춰도 계속 오류나서 그냥 비활성화 시켜버림....
     defaultValues: recipeDefaultValues,
-    mode: 'onChange',
+    mode: 'onTouched',
   });
 
   const {
@@ -423,12 +422,13 @@ const RecipeRegisterPage = () => {
                 ref={mainImageRef}
                 hidden
               />
-              <input
-                className="p-4 my-4 w-full rounded-md border border-gray-300"
+              <TitleInput
+                validationCheck={recipeError.title}
                 placeholder="요리 이름"
                 {...recipeRegister('title', { required: true })}
               />
-              <textarea
+              <ContentTextarea
+                validationCheck={recipeError.content}
                 className="p-4 my-4 w-full rounded-md border border-gray-300"
                 placeholder="요리 설명"
                 rows={6}
@@ -501,62 +501,22 @@ const SaveButton = styled.button`
   }
 `;
 
-const MainImgWrapperLabel = styled.div`
-  text-align: left;
-`;
-
-const MainImgWrapper = styled.img`
+const TitleInput = styled.input<any>`
+  padding: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   width: 100%;
-  height: 300px;
-  border-radius: 10px;
-  margin-top: 10px;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  border-color: ${(props) => (props.validationCheck ? '#EB3120' : '#D1D5DB')}; ;
 `;
 
-const RegisterTitle = styled.div<any>`
-  text-align: left;
+const ContentTextarea = styled.textarea<any>`
+  padding: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   width: 100%;
-  font-weight: bold;
-  margin: ${(props) => props.margin ?? '0'};
-`;
-
-const RegisterImage = styled.img`
-  width: 100%;
-  border-radius: 8px;
-`;
-
-const IngredientsWrapper = styled.div`
-  margin: 8px 0 0 0;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: auto;
-  min-width: 350px;
-  border-radius: 8px;
-  padding: 16px 16px 100px 16px;
-`;
-
-const IngredientTitle = styled.div`
-  text-align: left;
-  font-weight: bold;
-  margin-bottom: 13px;
-`;
-
-const IngredientInfoWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding: 7px 0;
-  border-bottom: 1px solid grey;
-`;
-
-const RecipeInfoWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const RecipeStepImage = styled.img`
-  width: 100px;
-  height: 100px;
-  border-radius: 8px;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  border-color: ${(props) => (props.validationCheck ? '#EB3120' : '#D1D5DB')}; ;
 `;

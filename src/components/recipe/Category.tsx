@@ -12,7 +12,11 @@ type CategoryProps = {
 };
 
 const Category = ({ name, index, onDelete }: CategoryProps) => {
-  const { register, control } = useFormContext<RecipeForm>();
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useFormContext<RecipeForm>();
   const { fields, append, remove } = useFieldArray({
     control,
     name: `resourceRequestDtoList.${index}.resources`,
@@ -24,10 +28,10 @@ const Category = ({ name, index, onDelete }: CategoryProps) => {
   return (
     <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
       <div className="mb-4">
-        <input
+        <ResourceCategoryInput
+          validationCheck={errors.resourceRequestDtoList?.[index].category}
           defaultValue={name}
           placeholder="재료 분류"
-          className="text-lg my-1 font-500 float-left"
           {...register(`resourceRequestDtoList.${index}.category`, { required: true })}
         />
         <span className="float-right" onClick={deleteCategory}>
@@ -37,14 +41,16 @@ const Category = ({ name, index, onDelete }: CategoryProps) => {
       {fields.map((item, i) => (
         <div key={item.id}>
           <div className="flex justify-between w-full">
-            <input
-              className="float-left text-base w-1/3 my-1 font-400"
+            <ResourceInput
+              validationCheck={errors.resourceRequestDtoList?.[index].resources?.[i].resourceName}
+              className="float-left text-base w-2/5 my-1 font-400"
               defaultValue={item.resourceName}
               placeholder="재료명"
               {...register(`resourceRequestDtoList.${index}.resources.${i}.resourceName`, { required: true })}
             />
-            <input
-              className="float-left text-base w-1/3 my-1 font-400"
+            <ResourceInput
+              validationCheck={errors.resourceRequestDtoList?.[index].resources?.[i].amount}
+              className="float-left text-base w-2/5 my-1 font-400"
               defaultValue={item.amount}
               placeholder="재료량"
               {...register(`resourceRequestDtoList.${index}.resources.${i}.amount`, { required: true })}
@@ -64,28 +70,24 @@ const Category = ({ name, index, onDelete }: CategoryProps) => {
 };
 
 export default Category;
-
-const IngredientsWrapper = styled.div`
-  margin: 8px 0 0 0;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: auto;
-  min-width: 350px;
-  border-radius: 8px;
-  padding: 16px 16px 100px 16px;
+const ResourceCategoryInput = styled.input<any>`
+  float: left;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  width: 70%;
+  border-bottom-width: ${(props) => (props.validationCheck ? '1px' : '0')};
+  border-color: ${(props) => (props.validationCheck ? '#EB3120' : '#D1D5DB')}; ;
 `;
 
-const IngredientTitle = styled.div`
-  text-align: left;
-  font-weight: bold;
-  margin-bottom: 13px;
-`;
-
-const IngredientInfoWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding: 7px 0;
-  border-bottom: 1px solid grey;
+const ResourceInput = styled.input<any>`
+  float: left;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  width: 40%;
+  border-bottom-width: ${(props) => (props.validationCheck ? '1px' : '0')};
+  border-color: ${(props) => (props.validationCheck ? '#EB3120' : '#D1D5DB')}; ;
 `;

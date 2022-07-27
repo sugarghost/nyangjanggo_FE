@@ -17,7 +17,12 @@ type StepProps = {
 // boardId를 가져오기 위해 그냥 자식 컴포넌트 호출 시 넣어줬는데, 좀더 효율적인 방법이 있지 않을까?
 // 바뀌지 않고 모든 자식 컴포넌트에 동일한 정적 데이터니, 부모에 state를 호출하는 방법을 리팩토링때 고려하는게 좋아보임
 const Step = ({ boardId, index, onDelete }: StepProps) => {
-  const { register, getValues, setValue } = useFormContext<RecipeForm>();
+  const {
+    register,
+    getValues,
+    setValue,
+    formState: { errors },
+  } = useFormContext<RecipeForm>();
 
   const [imageUrl, setImageUrl] = useState<string>(getValues(`recipeStepRequestDtoList.${index}.imageLink`));
 
@@ -104,7 +109,8 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
           src={imageUrl}
           alt=""
         />
-        <textarea
+        <StepTextarea
+          validationCheck={errors.recipeStepRequestDtoList?.[index].stepContent}
           className="w-4/6 ml-4 border-gray-200 border-2 rounded-md p-1"
           placeholder="조리 과정을 알려주세요!"
           {...register(`recipeStepRequestDtoList.${index}.stepContent`, { required: true })}
@@ -116,26 +122,11 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
 
 export default Step;
 
-const RecipeStepImage = styled.img`
-  width: 100px;
-  height: 100px;
-  border-radius: 8px;
-`;
-const RecipeInfoWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-const IngredientTitle = styled.div`
-  text-align: left;
-  font-weight: bold;
-  margin-bottom: 13px;
-`;
-
-const IngredientInfoWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding: 7px 0;
-  border-bottom: 1px solid grey;
+const StepTextarea = styled.textarea<any>`
+  padding: 0.25rem;
+  margin-left: 1rem;
+  width: 66.666667%;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  border-color: ${(props) => (props.validationCheck ? '#EB3120' : '#D1D5DB')};
 `;
