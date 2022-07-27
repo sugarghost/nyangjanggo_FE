@@ -150,7 +150,7 @@ const ContentTitle = styled.div`
   font-size: 20px;
   line-height: 23px;
   max-width: inherit;
-  padding: 16px 0 0 16px;
+  padding: 16px;
   color: #eb3120;
 `;
 
