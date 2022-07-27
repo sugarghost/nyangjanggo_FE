@@ -88,7 +88,7 @@ const CardContainer = styled.div<any>`
   margin: ${(props) => props.styleCustom?.margin ?? ''};
   display: flex;
   flex-direction: column;
-  max-width:${(props) => props.styleCustom?.width ?? ''};
+  max-width: ${(props) => props.styleCustom?.width ?? ''};
 `;
 
 const CardImgWrapper = styled.img<any>`
