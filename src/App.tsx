@@ -24,12 +24,6 @@ const queryClient = new QueryClient();
 
 function App() {
   useLayoutEffect(() => {
-    
-    localStorage.setItem(
-      'accessToken',
-      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnZ3l1bmlAa2FrYW8uY29tIiwicm9sZXMiOiJVU0VSIiwiaWF0IjoxNjU4NDcwMTY0LCJleHAiOjE2NTk2Nzk3NjR9.oas7xljIBHXPPyvztSHB8twlgtS7AEG6eoputNY2Ld8',
-    );
-    
     const userInfoArr = window.location.href.split('&');
 
     // console.log(access_token)
@@ -48,16 +42,6 @@ function App() {
       }
       window.location.replace('/');
     }
-
-    // if (localStorage.getItem('token')) {
-    //   const token = localStorage.getItem('token') as string;
-    //   axios.defaults.headers.common.accessToken = token;
-
-    //   console.log(isExp(token));
-    //   if (isExp(token)) {
-    //     refreshToken();
-    //   }
-    // }
   }, []);
 
   return (
@@ -65,9 +49,6 @@ function App() {
       <BrowserRouter>
         <div className="App">
           <Header />
-          {/* <div className="bg-secondary-1 flex items-center min-h-screen bg-white dark:bg-gray-900">
-              <div className="container max-w-screen-lg xl:max-w-screen-xl mx-auto">
-              <div className="max-w-md mx-auto my-10 w-full"> */}
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/test" element={<TestPage />} />
@@ -76,10 +57,10 @@ function App() {
             <Route path="/recipeDetailPage" element={<RecipeDetailPage />} />
             {/* 로그인이 필요한 페이지 */}
             {/* <Route element={<PrivateRoutes authentication />}> */}
-              <Route path="/recipeRegisterPage" element={<RecipeRegisterPage />} />
-              <Route path="/myPage" element={<MyPage />} />
-              <Route path="/myPage/myRefrigeratorPage" element={<MyRefrigeratorPage />} />
-              <Route path="/myPage/userEditPage" element={<UserEditProfile />} />
+            <Route path="/recipeRegisterPage" element={<RecipeRegisterPage />} />
+            <Route path="/myPage" element={<MyPage />} />
+            <Route path="/myPage/myRefrigeratorPage" element={<MyRefrigeratorPage />} />
+            <Route path="/myPage/userEditPage" element={<UserEditProfile />} />
             {/* </Route> */}
           </Routes>
           {/* </div>
