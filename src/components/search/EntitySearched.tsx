@@ -29,7 +29,7 @@ const EntitySearched = () => {
   // 공통 처리
   const navigate = useNavigate();
   // 검색 이벤트 발생 시 컴포넌트간 검색 방식을 교환하기 위한 recoil
-  const searchQueryState = useRecoilValue(searchQuery);
+  const [searchQueryState, setSearchQueryState] = useRecoilState(searchQuery);
 
   // 게시글 목록 전처리
   const [boardType, setBoardType] = useState<string>('date');
@@ -83,6 +83,15 @@ const EntitySearched = () => {
     navigate('/recipeDetailPage', { state: { boardId } });
   };
 
+  // 메인 페이지로 돌아가는 용도
+  const viewContentDetail = () => {
+    setSearchQueryState({
+      type: '',
+      query: '',
+      size: 10,
+      page: 0,
+    });
+  };
   return (
     <>
       <Suspense fallback={<div>로딩중입니다.</div>}>
@@ -91,6 +100,8 @@ const EntitySearched = () => {
             <div className="mx-auto w-full">
               <ContentTitle>
                 {searchQueryState.query.split(','[0]) === 'goodCount' ? '인기 레시피' : '최신 레시피'}
+
+                <ContentTitleMain onClick={viewContentDetail}>메인보기</ContentTitleMain>
               </ContentTitle>
               <CardsContainer className="flex flex-row">
                 {data?.pages?.map((page, index) => (
@@ -150,6 +161,10 @@ const ContentTitle = styled.div`
   max-width: inherit;
   padding: 16px 0 0 16px;
   color: #eb3120;
+`;
+
+const ContentTitleMain = styled.span`
+  float: right;
 `;
 
 const CardsContainer = styled.div`

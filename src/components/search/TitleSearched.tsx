@@ -29,7 +29,7 @@ const TitleSearched = () => {
   // 공통 처리
   const navigate = useNavigate();
   // 검색 이벤트 발생 시 컴포넌트간 검색 방식을 교환하기 위한 recoil
-  const searchQueryState = useRecoilValue(searchQuery);
+  const [searchQueryState, setSearchQueryState] = useRecoilState(searchQuery);
 
   // 검색을 위한 API
   const getRecipeListByResourceApi = SearchApi.getRecipeListByResource;
@@ -75,13 +75,25 @@ const TitleSearched = () => {
     navigate('/recipeDetailPage', { state: { boardId } });
   };
 
+  // 메인 페이지로 돌아가는 용도
+  const viewContentDetail = () => {
+    setSearchQueryState({
+      type: '',
+      query: '',
+      size: 10,
+      page: 0,
+    });
+  };
+
   return (
     <>
       <Suspense fallback={<div>로딩중입니다.</div>}>
         <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
           <div className="max-w-screen-md mx-auto">
             <div className="mx-auto w-full">
-              <ContentTitle>요리이름 검색결과</ContentTitle>
+              <ContentTitle>
+                요리이름 검색결과<ContentTitleMain onClick={viewContentDetail}>메인보기</ContentTitleMain>
+              </ContentTitle>
               <CardsContainer className="flex flex-row">
                 {data?.pages?.map((page, index) => (
                   <React.Fragment key={index}>
@@ -142,6 +154,9 @@ const ContentTitle = styled.div`
   color: #eb3120;
 `;
 
+const ContentTitleMain = styled.span`
+  float: right;
+`;
 const CardsContainer = styled.div`
   margin: 0px auto;
   display: flex;
