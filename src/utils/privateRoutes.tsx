@@ -20,6 +20,10 @@ export default function PrivateRoutes({ authentication }: PrivateRouteProps): Re
   // authentication = true : 이 페이지에 접근하려면 인증이 되어있어야 함
   // authentication = false : 이 페이지에 접근하려면 인증이 안 되어있어야 함
   if (authentication) {
+    // 인증이 된 상태에서 사용자 상태값을 전역적으로 사용하기 위해 선언
+    // 알람기능 및 detail 페이지에서 활용하기 위함
+    // 일단 commit후 작업 진행
+
     // true, 인증이 되어있어야함
     if (isAuthenticated === false) {
       // 인증이 되어있어야하는데 안되어있음

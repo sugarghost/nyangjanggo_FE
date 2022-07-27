@@ -1,7 +1,6 @@
-import { faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { ReactComponent as PlusIcon } from '@icon/plus.svg';
 import imageCompression from 'browser-image-compression';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { FieldValues, useForm, useFieldArray, FormProvider } from 'react-hook-form';
@@ -100,9 +99,8 @@ const RecipeRegisterPage = () => {
   // 레시피 정보 useForm
   const recipeMethods = useForm<RecipeForm>({
     resolver: yupResolver(recipeValidationSchema),
-    // 형식 맞춰도 계속 오류나서 그냥 비활성화 시켜버림....
     defaultValues: recipeDefaultValues,
-    mode: 'onChange',
+    mode: 'onTouched',
   });
 
   const {
@@ -270,8 +268,13 @@ const RecipeRegisterPage = () => {
 
   const postRecipeMutation = useMutation((addData: FormData) => postRecipeApi(addData), {
     onSuccess: (res) => {
-      setBoardId(res.data.boardId);
-      window.scrollTo(0, 0);
+      ReactSwal.fire({
+        title: '<p>레시피 등록 완료!</p>',
+        html: '',
+        icon: 'info',
+      }).then(() => {
+        navigate('/');
+      });
     },
     onError: (e) => {
       ReactSwal.fire({
@@ -285,8 +288,13 @@ const RecipeRegisterPage = () => {
 
   const putRecipeMutation = useMutation((addData: FormData) => putRecipeApi(addData), {
     onSuccess: (res) => {
-      // setBoardId(res.data.boardId);
-      window.scrollTo(0, 0);
+      ReactSwal.fire({
+        title: '<p>레시피 수정 완료!</p>',
+        html: '',
+        icon: 'info',
+      }).then(() => {
+        navigate('/');
+      });
     },
     onError: (e) => {
       ReactSwal.fire({
@@ -392,16 +400,6 @@ const RecipeRegisterPage = () => {
   const stepDelete = (index: number) => {
     stepRemove(index);
   };
-
-  // 레시피 등록을 종료하기 위한 API
-  const postRegistMutation = useMutation((addData: FormData) => postRegistApi(addData), {
-    onSuccess: (res) => {
-      navigate('/');
-    },
-    onError: (e) => {
-      console.log(e);
-    },
-  });
   return (
     <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
@@ -423,12 +421,13 @@ const RecipeRegisterPage = () => {
                 ref={mainImageRef}
                 hidden
               />
-              <input
-                className="p-4 my-4 w-full rounded-md border border-gray-300"
+              <TitleInput
+                validationCheck={recipeError.title}
                 placeholder="요리 이름"
                 {...recipeRegister('title', { required: true })}
               />
-              <textarea
+              <ContentTextarea
+                validationCheck={recipeError.content}
                 className="p-4 my-4 w-full rounded-md border border-gray-300"
                 placeholder="요리 설명"
                 rows={6}
@@ -437,7 +436,7 @@ const RecipeRegisterPage = () => {
 
               <span className="text-gray-700 text-left float-left text-lg my-1 font-900">재료 분류</span>
               <span
-                className="m-1 float-right"
+                className="m-auto float-right"
                 onClick={() =>
                   resourceAppend({
                     category: '',
@@ -445,7 +444,7 @@ const RecipeRegisterPage = () => {
                   })
                 }
               >
-                <FontAwesomeIcon icon={faPlus} color="grey" size="lg" />
+                <PlusIcon stroke="grey" />
               </span>
               {resourceFields.map((item, index) => (
                 <div key={index}>
@@ -453,13 +452,11 @@ const RecipeRegisterPage = () => {
                 </div>
               ))}
               <div className="w-full">
-                <div>
-                  <span className="text-gray-700 text-left float-left text-lg my-1 font-900">조리 과정</span>
+                <span className="text-gray-700 text-left float-left text-lg my-1 font-900">조리 과정</span>
 
-                  <span className="m-1 float-right" onClick={() => stepAppend({})}>
-                    <FontAwesomeIcon icon={faPlus} color="grey" size="lg" />
-                  </span>
-                </div>
+                <span className="m-auto float-right" onClick={() => stepAppend({})}>
+                  <PlusIcon stroke="grey" />
+                </span>
               </div>
               <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
                 {stepFields.map((item, index) => (
@@ -501,62 +498,22 @@ const SaveButton = styled.button`
   }
 `;
 
-const MainImgWrapperLabel = styled.div`
-  text-align: left;
-`;
-
-const MainImgWrapper = styled.img`
+const TitleInput = styled.input<any>`
+  padding: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   width: 100%;
-  height: 300px;
-  border-radius: 10px;
-  margin-top: 10px;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  border-color: ${(props) => (props.validationCheck ? '#EB3120' : '#D1D5DB')}; ;
 `;
 
-const RegisterTitle = styled.div<any>`
-  text-align: left;
+const ContentTextarea = styled.textarea<any>`
+  padding: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   width: 100%;
-  font-weight: bold;
-  margin: ${(props) => props.margin ?? '0'};
-`;
-
-const RegisterImage = styled.img`
-  width: 100%;
-  border-radius: 8px;
-`;
-
-const IngredientsWrapper = styled.div`
-  margin: 8px 0 0 0;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: auto;
-  min-width: 350px;
-  border-radius: 8px;
-  padding: 16px 16px 100px 16px;
-`;
-
-const IngredientTitle = styled.div`
-  text-align: left;
-  font-weight: bold;
-  margin-bottom: 13px;
-`;
-
-const IngredientInfoWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding: 7px 0;
-  border-bottom: 1px solid grey;
-`;
-
-const RecipeInfoWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const RecipeStepImage = styled.img`
-  width: 100px;
-  height: 100px;
-  border-radius: 8px;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  border-color: ${(props) => (props.validationCheck ? '#EB3120' : '#D1D5DB')}; ;
 `;

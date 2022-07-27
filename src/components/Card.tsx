@@ -35,18 +35,15 @@ interface IProps {
   disabled?: boolean;
   styleCustom?: StyleCustom;
   cardPromotionValue?: string;
-  rank?: number;
-  key?: any;
 }
 
 function Card(props: IProps) {
-  const { onClick, rank, styleCustom, key, cardTitle, cardImg, className }: IProps = props;
+  const { onClick, styleCustom, cardTitle, cardImg, className }: IProps = props;
 
   return (
-    <CardContainer onClick={onClick}>
+    <CardContainer onClick={onClick} styleCustom={styleCustom}>
       <div style={{ position: 'relative' }}>
         <CardImgWrapper
-          key={key}
           className={className}
           styleCustom={styleCustom}
           onClick={onClick}
@@ -56,15 +53,10 @@ function Card(props: IProps) {
           disabledColor={COLOR_V2.PRIMARY_DISABLED}
           src={cardImg}
         />
-      </div>
-      <CardContentWrapper>
-        <CardContentLeft>
+        <CardContentWrapper>
           <CardTitleWrapper styleCustom={styleCustom}>{cardTitle}</CardTitleWrapper>
-        </CardContentLeft>
-        <CardContentRight>
-          <img style={{ width: '21px', height: '18px' }} src={LikeIcon} className="img-render" alt="" />
-        </CardContentRight>
-      </CardContentWrapper>
+        </CardContentWrapper>
+      </div>
     </CardContainer>
   );
 }
@@ -125,7 +117,6 @@ const CardContentWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 100%;
   padding: 10px 0 0 0;
 `;
 
@@ -135,16 +126,18 @@ const CardContentLeft = styled.div`
 `;
 const CardContentRight = styled.div``;
 const CardTitleWrapper = styled.div<any>`
-  display: flex;
-  align-items: center;
-  text-align: center;
-  width: auto;
-  font-weight: 800;
-  font-size: 16px;
-  line-height: 18px;
+  align-items: left;
+  white-space: normal;
+  line-height: 1.2;
+  height: 2.4em;
+  text-align: left;
   color: #3f3f3f;
+  word-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
-
 const CardDescWrapper = styled.div<any>`
   margin-top: 5px;
   font-weight: 400;
