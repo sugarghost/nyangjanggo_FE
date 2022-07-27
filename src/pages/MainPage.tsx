@@ -1,17 +1,17 @@
-import EntitySearched from '@components/search/EntitySearched';
 import MainSearched from '@components/search/MainSearched';
-import ResourceSearched from '@components/search/ResourceSearched';
 import Search from '@components/search/Search';
-import TitleSearched from '@components/search/TitleSearched';
 import { searchQuery } from '@recoil/searchAtom';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 const MainPage = () => {
   const navigate = useNavigate();
   const searchQueryState = useRecoilValue(searchQuery);
-
+  // 메인 페이지 검색 결과 페이지 코드 스플리팅
+  const EntitySearched = React.lazy(() => import('@components/search/EntitySearched'));
+  const ResourceSearched = React.lazy(() => import('@components/search/ResourceSearched'));
+  const TitleSearched = React.lazy(() => import('@components/search/TitleSearched'));
   return (
     <>
       <Search />
@@ -19,11 +19,18 @@ const MainPage = () => {
       {searchQueryState.type === '' ? (
         <MainSearched />
       ) : searchQueryState.type === 'entity' ? (
-        <EntitySearched />
+        <Suspense>
+          <EntitySearched />
+        </Suspense>
       ) : searchQueryState.type === 'resource' ? (
-        <ResourceSearched />
+        <Suspense>
+          <ResourceSearched />
+        </Suspense>
       ) : searchQueryState.type === 'title' ? (
-        <TitleSearched />
+        <Suspense>
+          {' '}
+          <TitleSearched />
+        </Suspense>
       ) : (
         <MainSearched />
       )}
