@@ -1,8 +1,6 @@
 import searchApi from '@apis/SearchApi';
 import Tag from '@components/search/Tag';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactComponent as ResourceSearchIcon } from '@icon/search.svg';
+import { ReactComponent as SearchIcon } from '@icon/search.svg';
 import RecipeSearchIcon from '@images/recipe_search_icon.png';
 import { ingredientsNameSelector } from '@recoil/ingredient';
 import { searchQuery } from '@recoil/searchAtom';
@@ -155,7 +153,7 @@ const Search = () => {
                 className="rounded-md flex flex-row p-1vw"
                 style={{ background: '#EFEFF0', padding: '10px', width: '88%' }}
               >
-                <FontAwesomeIcon className="m-1" icon={faSearch} color="grey" />
+                <SearchIcon fill="gray" className="m-1" />
                 <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
                 <div className="cursor-pointer mr-1" onClick={() => setSearchValue('')}>
                   &times;
@@ -187,7 +185,7 @@ const Search = () => {
               className={selectedTagList.length === 0 ? 'bg-empty' : 'bg-main'}
               onClick={onSearchResource}
             >
-              <ResourceSearchIcon className="m-auto" fill="white" />
+              <SearchIcon className="m-auto" fill="white" />
             </ResourceSearchButton>
           </ResourceSearchWrapper>
         </>
@@ -198,7 +196,7 @@ const Search = () => {
               className="rounded-md flex flex-row p-1vw"
               style={{ background: '#EFEFF0', padding: '10px', width: '88%' }}
             >
-              <FontAwesomeIcon className="m-1" icon={faSearch} color="grey" />
+              <SearchIcon fill="gray" className="m-1" />
               <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
               <div className="cursor-pointer mr-1" onClick={() => setSearchValue('')}>
                 &times;
@@ -226,7 +224,6 @@ const Search = () => {
           )}
         </div>
       )}
-      <hr />
     </>
   );
 };

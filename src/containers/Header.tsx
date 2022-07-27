@@ -95,14 +95,7 @@ const Header = () => {
   return (
     <header>
       {windowDimenion.winWidth > 750 ? (
-        <>
-          <div className="mx-2 text-center">
-            <LogoWrapper className="font-extrabold xs:text-3xl md:text-3xl" onPointerUp={goHome}>
-              LOGO
-            </LogoWrapper>
-          </div>
-          <UserIconWrapper className="img-render" onClick={goMypage} src={UserIcon} />
-        </>
+        <></>
       ) : window.location.pathname !== '/' ? (
         <MobileHeader className="w-full  text-center flex justify-between">
           <BackButton

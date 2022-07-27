@@ -71,9 +71,6 @@ const MainSearched = () => {
         <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
           <div className="max-w-screen-md mx-auto">
             <div className="mx-auto w-full">
-              <br />
-              <br />
-              <br />
               <ContentTitle>
                 최신순
                 <ContentTitleMore onClick={() => viewContentDetail('recent')}>더보기</ContentTitleMore>
@@ -85,7 +82,7 @@ const MainSearched = () => {
                       cardTitle={content.title}
                       key={index}
                       cardImg={content.mainImg}
-                      styleCustom={{ width: '40vw', margin: 'auto' }}
+                      styleCustom={{ width: '40vw', margin: '0.25rem' }}
                       onClick={(e) => viewRecipeDetail(content.boardId)}
                     />
                   ))}
@@ -101,7 +98,7 @@ const MainSearched = () => {
                       cardTitle={content.title}
                       key={index}
                       cardImg={content.mainImg}
-                      styleCustom={{ width: '40vw', margin: 'auto' }}
+                      styleCustom={{ width: '40vw', margin: '0.25rem' }}
                       onClick={(e) => viewRecipeDetail(content.boardId)}
                     />
                   ))}
@@ -125,7 +122,7 @@ const ContentTitle = styled.div`
   font-size: 20px;
   line-height: 23px;
   max-width: inherit;
-  padding: 16px 0 0 16px;
+  padding: 16px;
   color: #eb3120;
 `;
 
@@ -144,9 +141,9 @@ const CardsContainer = styled.div`
 `;
 
 const ScrollMenuWrapper = styled.div`
-  margin: 8px 0 0 0;
-  padding: 0 0 30px 16px;
-  overflow: scroll;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  margin-top: 0.5rem;
 
   @media screen and (max-width: 500px) {
     max-width: 410px;
