@@ -16,7 +16,7 @@ export const ingredientsNameSelector = selector({
   key: 'ingredientsNameSelector',
   get: async () => {
     const data = [];
-    if (isExist) {
+    if (isExist()) {
       const response = await getResource();
       response.data.map((value) => data.push(value.resourceName));
     }
