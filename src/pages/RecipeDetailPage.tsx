@@ -4,6 +4,7 @@ import { ReactComponent as Edit } from '@icon/edit.svg';
 import { ReactComponent as Heart } from '@icon/heart.svg';
 import { ReactComponent as Trash } from '@icon/x.svg';
 import userToken from '@recoil/userAtom';
+import { userSelector } from '@recoil/userSelector';
 import { RecipeDetail, ResourceForm, StepForm } from '@type/recipeType';
 import { getToken, getNickname } from '@utils/jwt';
 import React, { Suspense, useEffect, useState, useRef } from 'react';
@@ -19,7 +20,7 @@ const RecipeDetailPage = ({}) => {
   const state = location.state as { boardId: number };
 
   // 페이지 조회 처리
-  const userName = getToken() ? getNickname(getToken()) : '';
+  const userInfomation = useRecoilValue(userSelector);
   const [userInfo, setUserInfo] = useState<RecipeDetail>();
   const [boardId, setBoardId] = useState<number>(state.boardId);
   const [recipe, setRecipe] = useState<RecipeDetail>();
@@ -82,6 +83,15 @@ const RecipeDetailPage = ({}) => {
         StepFormTemp[fields.stepNum] = fields;
       });
       setStepForm(StepFormTemp);
+
+      // 좋아요 처리 단계
+      if (userInfomation) {
+        e.data.goodList.map((fields: any, index: number) => {
+          if (fields.nickname === userInfomation.nickname) {
+            setIsLike(true);
+          }
+        });
+      }
     },
     onError: (e) => {
       console.log(e);
@@ -131,21 +141,19 @@ const RecipeDetailPage = ({}) => {
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
         <div className="mx-auto w-90vw">
           <div className="float-right">
-            <IconButton onClick={modifyRecipeDetail}>
-              <Edit className="m-auto" stroke="white" />
-            </IconButton>
-            <IconButton onClick={deleteRecipeDetail}>
-              <Trash className="m-auto" stroke="white" />
-            </IconButton>
+            {recipe?.nickname === userInfomation?.nickname && (
+              <>
+                <IconButton onClick={modifyRecipeDetail}>
+                  <Edit className="m-auto" stroke="white" />
+                </IconButton>
+                <IconButton onClick={deleteRecipeDetail}>
+                  <Trash className="m-auto" stroke="white" />
+                </IconButton>
+              </>
+            )}
             <IconButton onClick={likeRecipeDetail}>
               <Heart className="m-auto" stroke={isLike ? '#EB3120' : 'white'} />
             </IconButton>
-            {recipe?.nickname === userName && (
-              <>
-                <button onClick={modifyRecipeDetail}>수정</button>
-                <button onClick={deleteRecipeDetail}>삭제</button>
-              </>
-            )}
           </div>
           <img
             className="min-h-80 mb-4 w-full rounded-2xl image-render-auto bg-gray-100"
@@ -154,52 +162,62 @@ const RecipeDetailPage = ({}) => {
           />
           <p className="text-gray-700 text-left text-4xl my-1 font-900">{recipe?.title}</p>
           <textarea
-            className="text-left text-lg w-full my-1 font-300 border-gray-200 border-2 rounded-md min-h-30 p-2"
+            className="text-left text-lg w-full my-1 font-300 border-gray-200 border-2 rounded-md min-h-30 p-2 focus:outline-none"
             readOnly
             value={recipe?.content}
           />
 
           <hr />
-
-          <p className="text-gray-700 text-left text-lg my-1 font-900">재료 분류</p>
-          {/* index를 key로 사용중이지만, 나중에 다른 고유키를 고려해야함 */}
-          {ResourceForm.map((categorys, index) => (
-            <div key={index}>
+          {ResourceForm.length !== 0 ? (
+            <>
+              <p className="text-gray-700 text-left text-lg my-1 font-900">재료 분류</p>
+              {ResourceForm.map((categorys, index) => (
+                <div key={categorys.category}>
+                  <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
+                    <p className="text-lg my-1 font-500 text-left">{categorys.category}</p>
+                    {categorys.resources.map((resource, subIndex) => (
+                      <div key={`${categorys.category}_${resource.resourceName}`}>
+                        <div className="flex justify-between w-full mb-4">
+                          <span className="float-left text-left text-base w-2/3 my-1 font-400">
+                            {resource.resourceName}
+                          </span>
+                          <span className="text-base my-1 font-400">:</span>
+                          <span className="float-right text-right text-base w-1/3 my-1 font-400">
+                            {resource.amount}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+              <hr />
+            </>
+          ) : (
+            <></>
+          )}
+          {StepForm.length !== 0 ? (
+            <>
+              <p className="text-gray-700 text-left text-lg my-1 font-900">조리 과정</p>
               <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
-                <p className="text-lg my-1 font-500 text-left">{categorys.category}</p>
-                {categorys.resources.map((resource, subIndex) => (
-                  <div key={`${index}_${subIndex}`}>
-                    <div className="flex justify-between w-full mb-4">
-                      <span className="float-left text-left text-base w-2/3 my-1 font-400">
-                        {resource.resourceName}
-                      </span>
-                      <span className="text-base my-1 font-400">:</span>
-                      <span className="float-right text-right text-base w-1/3 my-1 font-400">{resource.amount}</span>
-                    </div>
+                {StepForm.map((field, index) => (
+                  <div key={index}>
+                    <p className="text-lg my-1 font-500 text-left">조리과정 {index + 1}</p>
+                    <RecipeInfoWrapper>
+                      <div className="flex justify-between w-full mb-4">
+                        <img src={field.imageLink} className="img-render w-2/6 rounded-lg" alt="" />
+                        <div className="w-4/6 ml-4 text-left border-gray-200 border-2 rounded-md p-1">
+                          {field.stepContent}
+                        </div>
+                      </div>
+                    </RecipeInfoWrapper>
                   </div>
                 ))}
               </div>
-            </div>
-          ))}
-          <hr />
-
-          <p className="text-gray-700 text-left text-lg my-1 font-900">조리 과정</p>
-          <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
-            {StepForm.map((field, index) => (
-              <div key={index}>
-                <p className="text-lg my-1 font-500 text-left">조리과정 {index + 1}</p>
-                <RecipeInfoWrapper>
-                  <div className="flex justify-between w-full mb-4">
-                    <img src={field.imageLink} className="img-render w-2/6 rounded-lg" alt="" />
-                    <div className="w-4/6 ml-4 text-left border-gray-200 border-2 rounded-md p-1">
-                      {field.stepContent}
-                    </div>
-                  </div>
-                </RecipeInfoWrapper>
-              </div>
-            ))}
-          </div>
-
+            </>
+          ) : (
+            <></>
+          )}
           <CommentsPage boardId={boardId} />
         </div>
       </div>

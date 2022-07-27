@@ -3,7 +3,7 @@ import { authInstance } from '@/apis/axiosInstance';
 import { selector, useRecoilValue, atom, selectorFamily } from 'recoil';
 
 export const ingredientsSelector = selector({
-  key: 'userSelector',
+  key: 'ingredientsSelector',
   get: async () => {
     const response = await getResource();
     const data = response.data ? response.data : ([] as unknown as Ingredient[]);
@@ -12,7 +12,7 @@ export const ingredientsSelector = selector({
 });
 
 export const ingredientsNameSelector = selector({
-  key: 'userSelector',
+  key: 'ingredientsNameSelector',
   get: async () => {
     const response = await getResource();
     const data = [];

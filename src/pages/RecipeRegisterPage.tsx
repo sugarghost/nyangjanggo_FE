@@ -269,8 +269,13 @@ const RecipeRegisterPage = () => {
 
   const postRecipeMutation = useMutation((addData: FormData) => postRecipeApi(addData), {
     onSuccess: (res) => {
-      setBoardId(res.data.boardId);
-      window.scrollTo(0, 0);
+      ReactSwal.fire({
+        title: '<p>레시피 등록 완료!</p>',
+        html: '',
+        icon: 'info',
+      }).then(() => {
+        navigate('/');
+      });
     },
     onError: (e) => {
       ReactSwal.fire({
@@ -284,8 +289,13 @@ const RecipeRegisterPage = () => {
 
   const putRecipeMutation = useMutation((addData: FormData) => putRecipeApi(addData), {
     onSuccess: (res) => {
-      // setBoardId(res.data.boardId);
-      window.scrollTo(0, 0);
+      ReactSwal.fire({
+        title: '<p>레시피 수정 완료!</p>',
+        html: '',
+        icon: 'info',
+      }).then(() => {
+        navigate('/');
+      });
     },
     onError: (e) => {
       ReactSwal.fire({
@@ -391,16 +401,6 @@ const RecipeRegisterPage = () => {
   const stepDelete = (index: number) => {
     stepRemove(index);
   };
-
-  // 레시피 등록을 종료하기 위한 API
-  const postRegistMutation = useMutation((addData: FormData) => postRegistApi(addData), {
-    onSuccess: (res) => {
-      navigate('/');
-    },
-    onError: (e) => {
-      console.log(e);
-    },
-  });
   return (
     <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
