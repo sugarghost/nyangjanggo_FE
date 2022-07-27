@@ -28,7 +28,6 @@ const MainPage = () => {
         </Suspense>
       ) : searchQueryState.type === 'title' ? (
         <Suspense>
-          {' '}
           <TitleSearched />
         </Suspense>
       ) : (
