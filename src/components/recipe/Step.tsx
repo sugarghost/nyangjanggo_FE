@@ -110,7 +110,6 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
         />
         <StepTextarea
           validationCheck={errors.recipeStepRequestDtoList?.[index]?.stepContent}
-          className="w-4/6 ml-4 border-gray-200 border-2 rounded-md p-1"
           placeholder="조리 과정을 알려주세요!"
           {...register(`recipeStepRequestDtoList.${index}.stepContent`, { required: true })}
         />
