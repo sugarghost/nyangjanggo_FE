@@ -3,6 +3,7 @@ import Card from '@components/Card';
 import Carousel from '@components/Carousel';
 import Search from '@components/search/Search';
 import useIntersectionObserver from '@hook/intersectionObserver';
+import RightArrow from '@images/right_arrow.png';
 import { searchQueryAtom, searchTypeAtom } from '@recoil/searchAtom';
 import { Pageable } from '@type/searchType';
 import React, { Suspense, useEffect, useState, useRef, useCallback } from 'react';
@@ -11,7 +12,6 @@ import { useInfiniteQuery, useQuery } from 'react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import RightArrow from '../../images/right_arrow.png';
 
 export type PostContent = {
   boardId: number;
@@ -139,12 +139,14 @@ const ContentTitle = styled.div`
 `;
 
 const ContentTitleMore = styled.span`
+  float: right;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
   line-height: 14px;
   color: #9a9a9a;
   display: flex;
+  margin-left: 10px;
   align-items: center;
 `;
 
