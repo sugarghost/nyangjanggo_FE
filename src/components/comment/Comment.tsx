@@ -1,7 +1,9 @@
 import commentApi from '@apis/CommentApi';
+import { userSelector } from '@recoil/userSelector';
 import moment from 'moment';
 import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { useMutation, useQuery } from 'react-query';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 type CommentProps = {
@@ -17,6 +19,7 @@ type CommentProps = {
   onClick?: (e: React.MouseEvent<HTMLSpanElement>) => void;
 };
 const Comment = ({ boardId, content, onClick }: CommentProps) => {
+  const userInfomation = useRecoilValue(userSelector);
   const putCommentApi = commentApi.putComment;
   const createAtString = moment(content.createAt).format('YY.MM.DD');
   const modifiedAtString = moment(content.modifiedAt).format('YY.MM.DD');
@@ -25,7 +28,7 @@ const Comment = ({ boardId, content, onClick }: CommentProps) => {
     <CommentWrapper>
       <CommentHeader>
         <CommentNickname>{content.nickname}</CommentNickname>|<CommentDate>{createAtString}</CommentDate>
-        <CommentDelete onClick={onClick}>X</CommentDelete>
+        {userInfomation?.nickname === content.nickname && <CommentDelete onClick={onClick}>X</CommentDelete>}
       </CommentHeader>
       <CommentContent>{content.comment}</CommentContent>
       <hr />

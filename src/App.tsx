@@ -25,6 +25,8 @@ function App() {
   const MyRefrigeratorPage = React.lazy(() => import('@pages/mypage/MyRefrigeratorPage'));
   // 자기 정보를 수정 안하는 경우도 많으니 스플리팅
   const UserEditProfile = React.lazy(() => import('@pages/mypage/UserEditProfile'));
+  // 좋아요 안쓰는 경우가 있으니 스플리팅
+  const LikePage = React.lazy(() => import('@pages/LikePage'));
 
   useLayoutEffect(() => {
     const userInfoArr = window.location.href.split('&');
@@ -96,6 +98,14 @@ function App() {
                 element={
                   <Suspense>
                     <UserEditProfile />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/likePage"
+                element={
+                  <Suspense>
+                    <LikePage />
                   </Suspense>
                 }
               />

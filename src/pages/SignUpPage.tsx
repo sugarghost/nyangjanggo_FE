@@ -9,8 +9,6 @@ import NaverButton from '../images/naver_button.png';
 import Logo from '../images/nyang_logo.png';
 
 function SignUpPage() {
-  
-
   const refreshTokenTest = () => {
     refreshToken();
   };
@@ -37,32 +35,10 @@ function SignUpPage() {
                 */}
               <a href="https://api.nyangjanggo.com/oauth2/authorization/kakao">
                 {/* @ts-ignore */}
-                <OauthButton src={KakaoButton}></OauthButton>
+                <OauthButton src={KakaoButton} />
               </a>
               {/* <div onClick={kakaoAuth}>카카오 로그인</div> */}
             </button>
-            <button
-              className="w-full"
-              style={{
-                margin: '12px auto 0 auto',
-              }}
-              onClick={() => {}}
-            >
-              <a href="https://api.nyangjanggo.com/oauth2/authorization/naver">
-                {/* @ts-ignore */}
-                <OauthButton src={NaverButton}></OauthButton>
-              </a>
-            </button>
-            {/* <Button
-                className={"w-full"}
-                styleCustom={{
-                  background: "grey",
-                  margin: "10px 0 0 0",
-                }}
-                onClick={refreshTokenTest}
-              >
-                <div>리프래쉬 토큰 테스트</div>
-              </Button> */}
           </div>
         </div>
       </div>
