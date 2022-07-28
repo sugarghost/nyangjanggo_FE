@@ -37,7 +37,6 @@ const RecipeDetailPage = ({}) => {
     refetchOnWindowFocus: false,
     enabled: !!boardId,
     onSuccess: (e) => {
-      console.log('getRecipeDetail', e);
       // 레시피 정보 처리 단계
       setRecipe({
         title: e.data.title,
@@ -132,10 +131,6 @@ const RecipeDetailPage = ({}) => {
     likeRecipeMutation.mutate(boardId);
   };
 
-  const goBack = () => {
-    navigate(-1);
-  };
-
   return (
     <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
@@ -151,9 +146,11 @@ const RecipeDetailPage = ({}) => {
                 </IconButton>
               </>
             )}
-            <IconButton onClick={likeRecipeDetail}>
-              <HeartIcon className="m-auto" stroke={isLike ? '#EB3120' : 'white'} />
-            </IconButton>
+            {userInfomation?.nickname && (
+              <IconButton onClick={likeRecipeDetail}>
+                <HeartIcon className="m-auto" stroke={isLike ? '#EB3120' : 'white'} />
+              </IconButton>
+            )}
           </div>
           <img
             className="min-h-80 mb-4 w-full rounded-2xl image-render-auto bg-gray-100"

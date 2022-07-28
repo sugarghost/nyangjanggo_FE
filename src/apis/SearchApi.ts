@@ -35,7 +35,7 @@ export default {
   },
 
   async getRecipeListByEntity(payload: Pageable) {
-    const res = await axiosInstance.get(`${boards}?&page=${payload.page}&size=${payload.size}&sort=${payload.query}`);
+    const res = await axiosInstance.get(`${boards}?page=${payload.page}&size=${payload.size}&sort=${payload.query}`);
     return res;
   },
   async getRecipeListByEntity10(entityName: string) {
