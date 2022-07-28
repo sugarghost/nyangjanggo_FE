@@ -3,13 +3,14 @@ import Tag from '@components/search/Tag';
 import { ReactComponent as SearchIcon } from '@icon/search.svg';
 import RecipeSearchIcon from '@images/recipe_search_icon.png';
 import { ingredientsNameSelector } from '@recoil/ingredient';
-import { searchQuery } from '@recoil/searchAtom';
+import { searchQueryAtom, searchTypeAtom } from '@recoil/searchAtom';
 import React, { useState, useEffect } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 const Search = () => {
+  const queryClient = useQueryClient();
   // 검색창 값 관리용 state
   const [searchValue, setSearchValue] = useState<string>('');
   // 검색창에 값이 입력되었는지 여부
@@ -26,7 +27,8 @@ const Search = () => {
   const [searchType, setSearchType] = useState(1);
 
   // 검색 이벤트 발생 시 컴포넌트간 검색 방식을 교환하기 위한 recoil
-  const [searchQueryState, setSearchQueryState] = useRecoilState(searchQuery);
+  const [searchQueryState, setSearchQueryState] = useRecoilState(searchQueryAtom);
+  const [searchTypeState, setSearchTypeState] = useRecoilState(searchTypeAtom);
 
   const switchSearchType = () => {
     setSearchValue('');
@@ -76,8 +78,8 @@ const Search = () => {
   };
 
   const onSearchResource = () => {
+    setSearchTypeState('resource');
     setSearchQueryState({
-      type: 'resource',
       query: selectedTagList.join(),
       size: 10,
       page: 0,
@@ -86,10 +88,10 @@ const Search = () => {
 
   const handleDropDownKey = (event: any) => {
     // input에 값이 있을때만 작동
-    if (isSearchedValue) {
+    if (isSearchedValue && !searchType) {
       if (event.key === 'Enter') {
+        setSearchTypeState('title');
         setSearchQueryState({
-          type: 'title',
           query: searchValue,
           size: 10,
           page: 0,

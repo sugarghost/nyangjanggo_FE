@@ -3,7 +3,7 @@ import Card from '@components/Card';
 import Carousel from '@components/Carousel';
 import Search from '@components/search/Search';
 import useIntersectionObserver from '@hook/intersectionObserver';
-import { searchQuery } from '@recoil/searchAtom';
+import { searchQueryAtom, searchTypeAtom } from '@recoil/searchAtom';
 import { Pageable, SearchContent } from '@type/searchType';
 import React, { Suspense, useEffect, useState, useRef, useCallback } from 'react';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
@@ -29,7 +29,8 @@ const TitleSearched = () => {
   // 공통 처리
   const navigate = useNavigate();
   // 검색 이벤트 발생 시 컴포넌트간 검색 방식을 교환하기 위한 recoil
-  const [searchQueryState, setSearchQueryState] = useRecoilState(searchQuery);
+  const [searchQueryState, setSearchQueryState] = useRecoilState(searchQueryAtom);
+  const [, setSearchTypeState] = useRecoilState(searchTypeAtom);
 
   // 검색을 위한 API
   const getRecipeListByTitleApi = SearchApi.getRecipeListByTitle;
@@ -49,8 +50,8 @@ const TitleSearched = () => {
       size: searchQueryState.size,
       query: searchQueryState.query,
     };
+
     const res = await getRecipeListByTitleApi(paramTemplate);
-    console.log(res);
     const content = [];
     res.data.hits?.hits.map((hit) => {
       content.push({
@@ -67,12 +68,12 @@ const TitleSearched = () => {
     });
     const last = res.data.hits?.total.value <= paramTemplate.size * (pageParam + 1);
     // 페이지 번호를 증가시키는 용도로 사용 될 nextPage는 기존 pageParam(페이지 넘버)에 +1을 해줌
-    return { content, nextPage: pageParam + 1, last: last === undefined || last === true };
+    return { content, nextPage: pageParam + 1, last };
   };
 
   // 무한 스크롤을 위해 useInfiniteQuery를 사용함,
   const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery(
-    'infinitePosts',
+    ['getRecipeListByTitleInfinite', searchQueryState],
     // pageParam(페이지 번호)를 파라미터로 axios 실행을 위한 fetchPostList를 실행
     // 페이지 번호는 getNextPageParam을 통해 1씩 증가하다가 마지막 도달 시 undefined로 작동을 멈춤
     async ({ pageParam = searchQueryState.page }) => fetchPostList(pageParam),
@@ -92,14 +93,13 @@ const TitleSearched = () => {
 
   // 메인 페이지로 돌아가는 용도
   const viewContentDetail = () => {
+    setSearchTypeState('');
     setSearchQueryState({
-      type: '',
       query: '',
       size: 10,
       page: 0,
     });
   };
-
   return (
     <>
       <Suspense fallback={<div>로딩중입니다.</div>}>
