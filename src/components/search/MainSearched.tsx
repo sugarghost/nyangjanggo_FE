@@ -3,7 +3,7 @@ import Card from '@components/Card';
 import Carousel from '@components/Carousel';
 import Search from '@components/search/Search';
 import useIntersectionObserver from '@hook/intersectionObserver';
-import { searchQuery } from '@recoil/searchAtom';
+import { searchQueryAtom, searchTypeAtom } from '@recoil/searchAtom';
 import { Pageable } from '@type/searchType';
 import React, { Suspense, useEffect, useState, useRef, useCallback } from 'react';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
@@ -31,7 +31,8 @@ const MainSearched = () => {
   // 인기도순, 최신순 각각 10개씩 가져오기 위한 API
   const getEntity10Api = SearchApi.getRecipeListByEntity10;
   // 검색 이벤트 발생 시 컴포넌트간 검색 방식을 교환하기 위한 recoil
-  const [searchQueryState, setSearchQueryState] = useRecoilState(searchQuery);
+  const [searchQueryState, setSearchQueryState] = useRecoilState(searchQueryAtom);
+  const [searchTypeState, setSearchTypeState] = useRecoilState(searchTypeAtom);
 
   // 최신순 게시물 가져오기
   const { data: recentData } = useQuery(['getRecentData'], async () => getEntity10Api('createdAt'), {
@@ -49,15 +50,15 @@ const MainSearched = () => {
   // 최신순이나 인기도 순 좀더 자세히 보는 용도
   const viewContentDetail = (type: string) => {
     if (type === 'recent') {
+      setSearchTypeState('entity');
       setSearchQueryState({
-        type: 'entity',
         query: 'createdAt,desc',
         size: 10,
         page: 0,
       });
     } else if (type === 'like') {
+      setSearchTypeState('entity');
       setSearchQueryState({
-        type: 'entity',
         query: 'goodCount,desc',
         size: 10,
         page: 0,

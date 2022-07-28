@@ -3,7 +3,7 @@ import Card from '@components/Card';
 import Carousel from '@components/Carousel';
 import Search from '@components/search/Search';
 import useIntersectionObserver from '@hook/intersectionObserver';
-import { searchQuery } from '@recoil/searchAtom';
+import { searchQueryAtom, searchTypeAtom } from '@recoil/searchAtom';
 import { Pageable } from '@type/searchType';
 import React, { Suspense, useEffect, useState, useRef, useCallback } from 'react';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
@@ -29,7 +29,8 @@ const EntitySearched = () => {
   // 공통 처리
   const navigate = useNavigate();
   // 검색 이벤트 발생 시 컴포넌트간 검색 방식을 교환하기 위한 recoil
-  const [searchQueryState, setSearchQueryState] = useRecoilState(searchQuery);
+  const [searchQueryState, setSearchQueryState] = useRecoilState(searchQueryAtom);
+  const [searchTypeState, setSearchTypeState] = useRecoilState(searchTypeAtom);
 
   // 게시글 목록 전처리
   const [boardType, setBoardType] = useState<string>('date');
@@ -65,7 +66,7 @@ const EntitySearched = () => {
 
   // 무한 스크롤을 위해 useInfiniteQuery를 사용함,
   const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery(
-    'infinitePosts',
+    ['getRecipeListByEntityInfinite', searchQueryState],
     // pageParam(페이지 번호)를 파라미터로 axios 실행을 위한 fetchPostList를 실행
     // 페이지 번호는 getNextPageParam을 통해 1씩 증가하다가 마지막 도달 시 undefined로 작동을 멈춤
     async ({ pageParam = searchQueryState.page }) => fetchPostList(pageParam),
@@ -86,7 +87,6 @@ const EntitySearched = () => {
   // 메인 페이지로 돌아가는 용도
   const viewContentDetail = () => {
     setSearchQueryState({
-      type: '',
       query: '',
       size: 10,
       page: 0,
@@ -114,21 +114,6 @@ const EntitySearched = () => {
                         styleCustom={{ width: '40vw', margin: 'auto' }}
                         onClick={(e) => viewRecipeDetail(content.boardId)}
                       />
-                      // <div
-                      //   className="flex my-2"
-                      //   onClick={(e) => viewRecipeDetail(content.boardId)}
-                      //   key={`${index}_${subIndex}`}
-                      // >
-                      //   <img src={content.mainImg} className="w-2/5" />
-                      //   <div className="w-full">
-                      //     <p>{content.title}</p>
-                      //     <div className="flex">
-                      //       <div>
-                      //         <p>{content.nickname}</p>좋아요: {content.goodCount}
-                      //       </div>
-                      //     </div>
-                      //   </div>
-                      // </div>
                     ))}
                   </React.Fragment>
                 ))}

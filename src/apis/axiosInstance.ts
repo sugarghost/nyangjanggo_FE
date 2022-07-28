@@ -11,6 +11,16 @@ axiosInstance.defaults.validateStatus = (status) => status < 400;
 axiosInstance.defaults.baseURL = PRODUCTION ? 'https://gyuni.shop/api' : 'https://gyuni.shop/api';
 axiosInstance.defaults.timeout = 30000;
 
+export const elasticInstance = axios.create();
+
+elasticInstance.defaults.validateStatus = (status) => status < 400;
+elasticInstance.defaults.baseURL = 'http://15.165.84.237:9200';
+elasticInstance.defaults.timeout = 30000;
+elasticInstance.defaults.auth = {
+  username: 'elastic',
+  password: 'HangHaeNyang',
+};
+
 export const authInstance = axios.create();
 
 authInstance.defaults.validateStatus = (status) => status < 400;
