@@ -86,6 +86,7 @@ const EntitySearched = () => {
 
   // 메인 페이지로 돌아가는 용도
   const viewContentDetail = () => {
+    setSearchTypeState('');
     setSearchQueryState({
       query: '',
       size: 10,
