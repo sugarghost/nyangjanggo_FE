@@ -12,6 +12,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
+import RightArrow from '../../images/right_arrow.png';
+
 export type PostContent = {
   boardId: number;
   commentCount: number;
@@ -107,7 +109,10 @@ const TitleSearched = () => {
           <div className="max-w-screen-md mx-auto">
             <div className="mx-auto w-full">
               <ContentTitle>
-                요리이름 검색결과<ContentTitleMain onClick={viewContentDetail}>메인보기</ContentTitleMain>
+                요리이름 검색결과
+                <ContentTitleMain onClick={viewContentDetail}>
+                  메인보기 <img src={RightArrow} />
+                </ContentTitleMain>
               </ContentTitle>
               <CardsContainer className="flex flex-row">
                 {data?.pages?.map((page, index) => (
@@ -152,10 +157,20 @@ const ContentTitle = styled.div`
   max-width: inherit;
   padding: 16px;
   color: #eb3120;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const ContentTitleMain = styled.span`
-  float: right;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14px;
+  color: #9a9a9a;
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
 `;
 const CardsContainer = styled.div`
   margin: 0px auto;

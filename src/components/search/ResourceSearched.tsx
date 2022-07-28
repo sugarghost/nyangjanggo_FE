@@ -12,6 +12,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
+import RightArrow from '../../images/right_arrow.png';
+
 const ResourceSearched = () => {
   // 공통 처리
   const navigate = useNavigate();
@@ -100,7 +102,10 @@ const ResourceSearched = () => {
           <div className="max-w-screen-md mx-auto">
             <div className="mx-auto w-full">
               <ContentTitle>
-                재료 검색결과<ContentTitleMain onClick={viewContentDetail}>메인보기</ContentTitleMain>
+                재료 검색결과
+                <ContentTitleMain onClick={viewContentDetail}>
+                  메인보기 <img src={RightArrow} />
+                </ContentTitleMain>
               </ContentTitle>
               <CardsContainer className="flex flex-row">
                 {data?.pages?.map((page, index) => (
@@ -135,7 +140,7 @@ const ResourceSearched = () => {
 };
 
 const ContentTitle = styled.div`
-  text-align: left;
+  text-align: center;
   padding: 0px 15px 0px 15px;
   font-family: 'NEXON Lv2 Gothic';
   font-style: normal;
@@ -145,10 +150,19 @@ const ContentTitle = styled.div`
   max-width: inherit;
   padding: 16px;
   color: #eb3120;
+  align-items: center;
 `;
 
 const ContentTitleMain = styled.span`
   float: right;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14px;
+  color: #9a9a9a;
+  display: flex;
+  margin-left: 10px;
+  align-items: center;
 `;
 const CardsContainer = styled.div`
   margin: 0px auto;

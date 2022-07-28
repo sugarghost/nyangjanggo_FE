@@ -13,6 +13,7 @@ type RouterPages =
   | '/recipeRegisterPage'
   | '/myPage'
   | '/myPage/myRefrigeratorPage'
+  | '/likePage'
   | '/'
   | ''
   | null;
@@ -25,6 +26,7 @@ type RouterPageNames =
   | '마이페이지'
   | 'MY 냉장고'
   | '메인페이지'
+  | '좋아요 보기'
   | ''
   | null;
 
@@ -69,8 +71,8 @@ const Header = () => {
     if (pathName === '/myPage/myRefrigeratorPage') {
       return 'MY 냉장고';
     }
-    if (pathName === '/') {
-      return '';
+    if (pathName === '/likePage') {
+      return '좋아요 보기';
     }
 
     return '';
@@ -97,15 +99,13 @@ const Header = () => {
       {windowDimenion.winWidth > 750 ? (
         <></>
       ) : window.location.pathname !== '/' ? (
-        <MobileHeader className="w-full  text-center flex justify-between">
+        <MobileHeader className="w-full text-center flex justify-between">
           <BackButton
             onClick={() => {
               navigate(-1);
             }}
           />
           <MobileHeaderTitle>{pageTitle}</MobileHeaderTitle>
-          {/* <div>&nbsp;&nbsp;</div> */}
-          <UserIconWrapper className="img-render" onClick={goMypage} src={UserIcon} />
         </MobileHeader>
       ) : (
         <></>
@@ -137,7 +137,7 @@ const BackButton = styled.div`
 `;
 
 const MobileHeaderTitle = styled.div`
-  margin: auto 0px;
+  margin: auto;
 `;
 
 const UserIconWrapper = styled.img`

@@ -92,4 +92,9 @@ export default {
     });
     return res;
   },
+
+  async getLikeList() {
+    const res = await authInstance.get(`${boards}/user/good`);
+    return res;
+  },
 };

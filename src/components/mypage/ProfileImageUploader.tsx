@@ -9,7 +9,7 @@ interface IProps {
 function ProfileImageUploader(props: IProps) {
   const { setProfileImageFile, userImgUrl } = props;
 
-  const [fileImage, setFileImage] = useState(userImgUrl);
+  const [fileImage, setFileImage] = useState('');
   const fileRef = useRef<any>();
   const saveFileImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     // @ts-ignore
@@ -26,7 +26,10 @@ function ProfileImageUploader(props: IProps) {
   const imageClick = () => {
     fileRef.current.click();
   };
-  useEffect(() => {}, [fileImage]);
+  // props으로 전달되는 userImgUrl을 바로 할당하면 오류가 나서 한번 렌더링을 거침
+  useEffect(() => {
+    setFileImage(userImgUrl);
+  }, [userImgUrl]);
   return (
     <>
       <h1>이미지 업로드 </h1>

@@ -28,7 +28,7 @@ function Footer() {
 
   // 좋아요 버튼
   const likeButtonClick = () => {
-    navigate('/');
+    navigate('/likePage');
   };
 
   // 내정보 버튼
@@ -57,7 +57,7 @@ function Footer() {
           <p className="text-sm">레시피</p>
         </div>
         <div className="m-auto py-1 w-1/5" onClick={likeButtonClick}>
-          <HeartIcon className="m-auto" stroke={currentPathName === '/' ? '#EB3120' : '#676767'} />
+          <HeartIcon className="m-auto" stroke={currentPathName === '/likePage' ? '#EB3120' : '#676767'} />
           <p className="text-sm">좋아요</p>
         </div>
         <div className="m-auto py-1 w-1/5" onClick={myInfoButtonClick}>

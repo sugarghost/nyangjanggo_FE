@@ -1,14 +1,17 @@
 import commentApi from '@apis/CommentApi';
 import Comment from '@components/comment/Comment';
 import useIntersectionObserver from '@hook/intersectionObserver';
+import { userSelector } from '@recoil/userSelector';
 import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 type CommentsPageProps = {
   boardId: number;
 };
 const CommentsPage = ({ boardId }: CommentsPageProps) => {
+  const userInfomation = useRecoilValue(userSelector);
   const postCommentApi = commentApi.postComment;
   const getCommentApi = commentApi.getComment;
   const deleteCommentApi = commentApi.deleteComment;
@@ -98,10 +101,12 @@ const CommentsPage = ({ boardId }: CommentsPageProps) => {
 
   return (
     <>
-      <CommentInputWrapper className="">
-        <CommentInput placeholder="코멘트를 입력해주세요" ref={commentRef} />
-        <CommentRegister onClick={onCommentRegister}>등록</CommentRegister>
-      </CommentInputWrapper>
+      {userInfomation?.nickname && (
+        <CommentInputWrapper className="">
+          <CommentInput placeholder="코멘트를 입력해주세요" ref={commentRef} />
+          <CommentRegister onClick={onCommentRegister}>등록</CommentRegister>
+        </CommentInputWrapper>
+      )}
       <p className="text-gray-700 text-lg my-1 font-900 text-left">코멘트</p>
       <hr />
       {commentListData?.pages?.map((page, index) => (
