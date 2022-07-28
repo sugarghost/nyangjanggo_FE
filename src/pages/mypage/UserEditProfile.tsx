@@ -82,6 +82,7 @@ const UserEditProfile = () => {
     putUserMutation.mutate(formData);
   };
 
+  useEffect(() => {}, [userImgUrl]);
   return (
     <div className="bg-secondary-1 min-h-screen bg-white dark:bg-gray-900" style={{ padding: '0px 10px' }}>
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
