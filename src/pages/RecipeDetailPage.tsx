@@ -13,7 +13,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-const RecipeDetailPage = ({}) => {
+const RecipeDetailPage = () => {
   // 공통 처리
   const navigate = useNavigate();
   const location = useLocation();
@@ -97,7 +97,6 @@ const RecipeDetailPage = ({}) => {
     },
   });
 
-  useEffect(() => {}, []);
   // 수정 페이지 기능
   const modifyRecipeDetail = () => {
     navigate('/recipeRegisterPage', { state: { boardId, recipe, ResourceForm, StepForm, type: 'modify' } });
@@ -105,7 +104,7 @@ const RecipeDetailPage = ({}) => {
 
   const deleteRecipeMutation = useMutation((boardId: number) => deleteRecipeApi(boardId), {
     onSuccess: (res) => {
-      navigate(-1);
+      navigate('/');
     },
     onError: (e) => {
       console.log('putRecipeMutation Error:', e);
