@@ -3,6 +3,7 @@ import { COLOR } from '@/constants';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ReactComponent as PlusIcon } from '@icon/plus.svg';
+import PreviewImage from '@images/preview_image.png';
 import imageCompression from 'browser-image-compression';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { FieldValues, useForm, useFieldArray, FormProvider } from 'react-hook-form';
@@ -17,7 +18,6 @@ import recipeApi from '../apis/RecipeApi';
 import Button from '../components/Botton';
 import Category from '../components/recipe/Category';
 import Step from '../components/recipe/Step';
-import PreviewImage from '../images/preview_image.png';
 import {
   RecipeDetail,
   RecipeForm,
@@ -172,7 +172,8 @@ const RecipeRegisterPage = () => {
       if (res.data) {
         setBoardId(res.data.boardId);
       }
-      setQueryData(res.data);
+      // 현재 임시 저장을 지원하지 않기에 일단 비활성화
+      // setQueryData(res.data);
     },
   });
 
