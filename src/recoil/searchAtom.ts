@@ -1,11 +1,14 @@
 import { atom } from 'recoil';
 
-export const searchQuery = atom<any>({
+export const searchQueryAtom = atom<any>({
   key: 'searchQuery',
   default: {
-    type: '',
     query: '',
-    size: 5,
+    size: 10,
     page: 0,
   },
+});
+export const searchTypeAtom = atom<any>({
+  key: 'searchType',
+  default: '',
 });
