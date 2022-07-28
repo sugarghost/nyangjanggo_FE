@@ -3,6 +3,7 @@ import Card from '@components/Card';
 import Carousel from '@components/Carousel';
 import Search from '@components/search/Search';
 import useIntersectionObserver from '@hook/intersectionObserver';
+import RightArrow from '@images/right_arrow.png';
 import { searchQueryAtom, searchTypeAtom } from '@recoil/searchAtom';
 import { Pageable } from '@type/searchType';
 import React, { Suspense, useEffect, useState, useRef, useCallback } from 'react';
@@ -102,7 +103,10 @@ const EntitySearched = () => {
               <ContentTitle>
                 {searchQueryState.query.split(','[0]) === 'goodCount' ? '인기 레시피' : '최신 레시피'}
 
-                <ContentTitleMain onClick={viewContentDetail}>메인보기</ContentTitleMain>
+                <ContentTitleMain onClick={viewContentDetail}>
+                  메인보기
+                  <img src={RightArrow} />
+                </ContentTitleMain>
               </ContentTitle>
               <CardsContainer className="flex flex-row">
                 {data?.pages?.map((page, index) => (
@@ -147,10 +151,19 @@ const ContentTitle = styled.div`
   max-width: inherit;
   padding: 16px;
   color: #eb3120;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const ContentTitleMain = styled.span`
-  float: right;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14px;
+  color: #9a9a9a;
+  display: flex;
+  align-items: center;
 `;
 
 const CardsContainer = styled.div`

@@ -3,6 +3,7 @@ import Card from '@components/Card';
 import Carousel from '@components/Carousel';
 import Search from '@components/search/Search';
 import useIntersectionObserver from '@hook/intersectionObserver';
+import RightArrow from '@images/right_arrow.png';
 import { searchQueryAtom, searchTypeAtom } from '@recoil/searchAtom';
 import { Pageable, SearchContent } from '@type/searchType';
 import React, { Suspense, useEffect, useState, useRef, useCallback } from 'react';
@@ -11,8 +12,6 @@ import { useInfiniteQuery } from 'react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-
-import RightArrow from '../../images/right_arrow.png';
 
 const ResourceSearched = () => {
   // 공통 처리
@@ -115,7 +114,7 @@ const ResourceSearched = () => {
                         cardTitle={content.title}
                         key={content.boardId}
                         cardImg={content.mainImg}
-                        styleCustom={{ width: '50%', margin: '16px 0 0 0' }}
+                        styleCustom={{ width: '40vw', margin: '0.25rem' }}
                         onClick={(e) => viewRecipeDetail(content.boardId)}
                       />
                     ))}
@@ -140,7 +139,7 @@ const ResourceSearched = () => {
 };
 
 const ContentTitle = styled.div`
-  text-align: center;
+  text-align: left;
   padding: 0px 15px 0px 15px;
   font-family: 'NEXON Lv2 Gothic';
   font-style: normal;
@@ -150,6 +149,8 @@ const ContentTitle = styled.div`
   max-width: inherit;
   padding: 16px;
   color: #eb3120;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 `;
 
