@@ -46,7 +46,6 @@ function Card(props: IProps) {
         <CardImgWrapper
           className={className}
           styleCustom={styleCustom}
-          onClick={onClick}
           color={COLOR_V2.WHITE1}
           hoverColor={COLOR_V2.PRIMARY5}
           activeColor={COLOR_V2.PRIMARY_ACTIVE}
