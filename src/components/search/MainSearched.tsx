@@ -11,6 +11,7 @@ import { useInfiniteQuery, useQuery } from 'react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import RightArrow from '../../images/right_arrow.png';
 
 export type PostContent = {
   boardId: number;
@@ -74,7 +75,10 @@ const MainSearched = () => {
             <div className="mx-auto w-full">
               <ContentTitle>
                 최신순
-                <ContentTitleMore onClick={() => viewContentDetail('recent')}>더보기</ContentTitleMore>
+                <ContentTitleMore onClick={() => viewContentDetail('recent')}>
+                  더보기
+                  <img src={RightArrow} />
+                </ContentTitleMore>
               </ContentTitle>
               <ScrollMenuWrapper className="flex">
                 <ScrollMenu>
@@ -90,7 +94,11 @@ const MainSearched = () => {
                 </ScrollMenu>
               </ScrollMenuWrapper>
               <ContentTitle>
-                인기도<ContentTitleMore onClick={() => viewContentDetail('like')}>더보기</ContentTitleMore>
+                인기도
+                <ContentTitleMore onClick={() => viewContentDetail('like')}>
+                  더보기
+                  <img src={RightArrow} />
+                </ContentTitleMore>
               </ContentTitle>
               <ScrollMenuWrapper className="flex">
                 <ScrollMenu>
@@ -125,10 +133,19 @@ const ContentTitle = styled.div`
   max-width: inherit;
   padding: 16px;
   color: #eb3120;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const ContentTitleMore = styled.span`
-  float: right;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14px;
+  color: #9a9a9a;
+  display: flex;
+  align-items: center;
 `;
 
 const CardsContainer = styled.div`

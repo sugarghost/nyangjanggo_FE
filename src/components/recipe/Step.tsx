@@ -100,8 +100,8 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
           hidden
         />
         <img
-          height="w-2/6"
-          className="img-render w-2/6 rounded-lg"
+          style={{ width: '66px', height: '66px', borderRadius: "10px", overflow: "hidden" }}
+          className="img-render rounded-lg"
           onClick={stepImageClick}
           // recipeStepRequestDtoList.${index}.imgUrl 형식으로 값을 등록해 봤지만 이미지가 변경이 되도 렌더링이 안되는 문제가 발생
           // useState를 사용해봐도 렌더링이 안되서 추가로 useEffect를 사용함
