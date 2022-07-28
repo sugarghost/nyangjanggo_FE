@@ -1,3 +1,5 @@
+import BottomFloat from '@/components/BottomFloat';
+import { COLOR } from '@/constants';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ReactComponent as PlusIcon } from '@icon/plus.svg';
@@ -15,6 +17,7 @@ import recipeApi from '../apis/RecipeApi';
 import Button from '../components/Botton';
 import Category from '../components/recipe/Category';
 import Step from '../components/recipe/Step';
+import PreviewImage from '../images/preview_image.png';
 import {
   RecipeDetail,
   RecipeForm,
@@ -88,7 +91,7 @@ const RecipeRegisterPage = () => {
   // 레시피 정보 상태
   const mainImageRef = useRef<HTMLInputElement>(null);
   // 이미지 등록 전에 보여줄 샘플 이미지를 기본으로 등록
-  const [mainImageUrl, setMainImageUrl] = useState<string>();
+  const [mainImageUrl, setMainImageUrl] = useState<string>(PreviewImage);
 
   const postRecipeApi = recipeApi.postRecipe;
   const putRecipeApi = recipeApi.putRecipe;
@@ -406,9 +409,11 @@ const RecipeRegisterPage = () => {
         <div className="mx-auto w-90vw">
           <FormProvider {...recipeMethods}>
             <form onSubmit={recipeHandleSubmit(onSubmitRecipe, onErrorRecipe)}>
-              <p className="text-gray-700 text-left text-lg my-1 font-900">요리 메인 이미지</p>
-              <img
-                className="min-h-80 w-full rounded-2xl image-render-auto bg-gray-100"
+              <MainImageTitle className="text-gray-700 text-left text-lg my-1 font-900">
+                요리 메인 이미지
+              </MainImageTitle>
+              <MainImage
+                className="w-full rounded-2xl image-render-auto bg-gray-100"
                 src={mainImageUrl}
                 onClick={mainImageClick}
                 alt=""
@@ -428,7 +433,7 @@ const RecipeRegisterPage = () => {
               />
               <ContentTextarea
                 validationCheck={recipeError.content}
-                className="p-4 my-4 w-full rounded-md border border-gray-300"
+                className="p-4 my-1 w-full rounded-md border border-gray-300"
                 placeholder="요리 설명"
                 rows={6}
                 {...recipeRegister('content', { required: true })}
@@ -451,10 +456,9 @@ const RecipeRegisterPage = () => {
                   <Category name={item.category} index={index} onDelete={() => resourceRemove(index)} />
                 </div>
               ))}
-              <div className="w-full">
-                <span className="text-gray-700 text-left float-left text-lg my-1 font-900">조리 과정</span>
-
-                <span className="m-auto float-right" onClick={() => stepAppend({})}>
+              <div className="w-full my-3">
+                <span className="text-gray-700 text-left float-left text-lg my-3 font-900">조리 과정</span>
+                <span className="m-auto float-right my-3" onClick={() => stepAppend({})}>
                   <PlusIcon stroke="grey" />
                 </span>
               </div>
@@ -465,11 +469,15 @@ const RecipeRegisterPage = () => {
                   </div>
                 ))}
               </div>
-              <div>
-                <SaveButton type="submit" disabled={isDisabled}>
+
+              <BottomFloat className="w-full">
+                <RegisterButton type="submit" disabled={isDisabled}>
                   등록하기
-                </SaveButton>
-              </div>
+                </RegisterButton>
+              </BottomFloat>
+              {/* <SaveButton type="submit" disabled={isDisabled}>
+                  등록하기
+                </SaveButton> */}
             </form>
           </FormProvider>
         </div>
@@ -498,6 +506,20 @@ const SaveButton = styled.button`
   }
 `;
 
+const MainImageTitle = styled.div`
+  font-style: normal;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 17px;
+  color: #3f3f3f;
+  margin: 16px 0 0 0;
+`;
+
+const MainImage = styled.img`
+  height: 180px;
+  margin: 10px 0 0 0;
+`;
+
 const TitleInput = styled.input<any>`
   padding: 1rem;
   margin-top: 1rem;
@@ -510,10 +532,19 @@ const TitleInput = styled.input<any>`
 
 const ContentTextarea = styled.textarea<any>`
   padding: 1rem;
-  margin-top: 1rem;
+  margin-top: 0px;
   margin-bottom: 1rem;
   width: 100%;
   border-radius: 0.375rem;
   border-width: 1px;
   border-color: ${(props) => (props.validationCheck ? '#EB3120' : '#D1D5DB')}; ;
+`;
+
+const RegisterButton = styled.button`
+  width: 100%;
+  background: ${COLOR.MAIN};
+  margin: 0px auto;
+  padding: 16px;
+  color: white;
+  max-width: 420px;
 `;

@@ -71,7 +71,7 @@ const CardContainer = styled.div<any>`
   padding: ${(props) => props.styleCustom?.padding ?? ''};
   font-style: normal;
   font-weight: 600;
-  font-size: ${(props) => props.styleCustom?.fontSize ?? '18px'};
+  font-size: ${(props) => props.styleCustom?.fontSize ?? '14px'};
   line-height: 22px;
   text-align: left;
   letter-spacing: -0.02em;
