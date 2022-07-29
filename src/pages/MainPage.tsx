@@ -13,9 +13,7 @@ const MainPage = () => {
   const ResourceSearched = React.lazy(() => import('@components/search/ResourceSearched'));
   const TitleSearched = React.lazy(() => import('@components/search/TitleSearched'));
 
-  useEffect(() => {
-    console.log('searchTypeState Re-Render');
-  }, [searchTypeState]);
+  useEffect(() => {}, [searchTypeState]);
   return (
     <>
       <Search />

@@ -28,12 +28,17 @@ const Category = ({ name, index, onDelete }: CategoryProps) => {
   return (
     <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
       <div className="mb-4">
-        <ResourceCategoryInput
-          validationCheck={errors.resourceRequestDtoList?.[index]?.category}
-          defaultValue={name}
-          placeholder="재료 분류"
-          {...register(`resourceRequestDtoList.${index}.category`, { required: true })}
-        />
+        <div className="flex flex-col w-70vw float-left">
+          <ResourceCategoryInput
+            validationCheck={errors.resourceRequestDtoList?.[index]?.category}
+            defaultValue={name}
+            placeholder="재료 분류"
+            {...register(`resourceRequestDtoList.${index}.category`, { required: true, max: 30 })}
+          />
+          {errors.resourceRequestDtoList?.[index]?.category && (
+            <ValidationMessage>{errors.resourceRequestDtoList?.[index]?.category.message}</ValidationMessage>
+          )}
+        </div>
         <span className="float-right" onClick={deleteCategory}>
           <XIcon stroke="grey" />
         </span>
@@ -41,20 +46,36 @@ const Category = ({ name, index, onDelete }: CategoryProps) => {
       {fields.map((item, i) => (
         <div key={item.id}>
           <div className="flex justify-between w-full">
-            <ResourceInput
-              validationCheck={errors.resourceRequestDtoList?.[index]?.resources?.[i]?.resourceName}
-              className="float-left text-base w-2/5 my-1 font-400"
-              defaultValue={item.resourceName}
-              placeholder="재료명"
-              {...register(`resourceRequestDtoList.${index}.resources.${i}.resourceName`, { required: true })}
-            />
-            <ResourceInput
-              validationCheck={errors.resourceRequestDtoList?.[index]?.resources?.[i]?.amount}
-              className="float-left text-base w-2/5 my-1 font-400"
-              defaultValue={item.amount}
-              placeholder="재료량"
-              {...register(`resourceRequestDtoList.${index}.resources.${i}.amount`, { required: true })}
-            />
+            <div className="flex flex-col w-40vw">
+              <ResourceInput
+                validationCheck={errors.resourceRequestDtoList?.[index]?.resources?.[i]?.resourceName}
+                defaultValue={item.resourceName}
+                placeholder="재료명"
+                {...register(`resourceRequestDtoList.${index}.resources.${i}.resourceName`, {
+                  required: true,
+                  max: 30,
+                })}
+              />
+              {errors.resourceRequestDtoList?.[index]?.resources?.[i]?.resourceName && (
+                <ValidationMessage>
+                  {errors.resourceRequestDtoList?.[index]?.resources?.[i]?.resourceName.message}
+                </ValidationMessage>
+              )}
+            </div>
+            <div className="flex flex-col w-40vw">
+              <ResourceInput
+                validationCheck={errors.resourceRequestDtoList?.[index]?.resources?.[i]?.amount}
+                defaultValue={item.amount}
+                placeholder="재료량"
+                {...register(`resourceRequestDtoList.${index}.resources.${i}.amount`, { required: true, max: 30 })}
+              />
+
+              {errors.resourceRequestDtoList?.[index]?.resources?.[i]?.amount && (
+                <ValidationMessage>
+                  {errors.resourceRequestDtoList?.[index]?.resources?.[i]?.amount.message}
+                </ValidationMessage>
+              )}
+            </div>
             <span className="float-right" onClick={() => remove(i)}>
               <XIcon stroke="grey" />
             </span>
@@ -76,7 +97,6 @@ const ResourceCategoryInput = styled.input<any>`
   margin-bottom: 0.25rem;
   font-size: 1.125rem;
   line-height: 1.75rem;
-  width: 70%;
   border-bottom-width: ${(props) => (props.validationCheck ? '1px' : '0')};
   border-color: ${(props) => (props.validationCheck ? '#EB3120' : '#D1D5DB')}; ;
 `;
@@ -87,7 +107,16 @@ const ResourceInput = styled.input<any>`
   margin-bottom: 0.25rem;
   font-size: 1rem;
   line-height: 1.5rem;
-  width: 40%;
   border-bottom-width: ${(props) => (props.validationCheck ? '1px' : '0')};
   border-color: ${(props) => (props.validationCheck ? '#EB3120' : '#D1D5DB')}; ;
+`;
+
+const ValidationMessage = styled.p`
+  text-align: left;
+  font-size: 12px;
+  color: #eb3120;
+  font-weight: normal;
+  font-style: normal;
+  font-variant: normal;
+  text-transform: none;
 `;

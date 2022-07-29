@@ -6,9 +6,13 @@ import { selector, useRecoilValue, atom, selectorFamily } from 'recoil';
 export const ingredientsSelector = selector({
   key: 'ingredientsSelector',
   get: async () => {
-    const response = await getResource();
-    const data = response.data ? response.data : ([] as unknown as Ingredient[]);
-    return data;
+    if (isExist()) {
+      const response = await getResource();
+      const data = response.data ? response.data : ([] as unknown as Ingredient[]);
+      return data;
+    }
+
+    return [];
   },
 });
 

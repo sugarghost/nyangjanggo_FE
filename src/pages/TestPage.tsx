@@ -27,7 +27,6 @@ function TestPage({}) {
   };
   const token = () => {
     const api = targetApiRef.current.value;
-    console.log('api', api);
     testInstance
       .get(
         `${api}`, // token refresh api

@@ -1,5 +1,6 @@
 import recipeApi from '@apis/RecipeApi';
 import { ReactComponent as XIcon } from '@icon/x.svg';
+import PreviewImage from '@images/preview_image.png';
 import { RecipeForm } from '@type/recipeType';
 import imageCompression from 'browser-image-compression';
 import React, { useEffect, useRef, useState } from 'react';
@@ -20,10 +21,11 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
     register,
     getValues,
     setValue,
+    watch,
     formState: { errors },
   } = useFormContext<RecipeForm>();
 
-  const [imageUrl, setImageUrl] = useState<string>(getValues(`recipeStepRequestDtoList.${index}.imageLink`));
+  const [imageUrl, setImageUrl] = useState('');
 
   const fileRef = useRef<any>();
 
@@ -45,7 +47,11 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
 
   // src에 직접 값을 지정하고 state로 setImageUrl을 사용해봐도 렌더링이 되지 않아서 Effect를 등록함
   useEffect(() => {}, [imageUrl]);
-
+  useEffect(() => {
+    if (watch(`recipeStepRequestDtoList.${index}.imageLink`)) {
+      setImageUrl(watch(`recipeStepRequestDtoList.${index}.imageLink`));
+    }
+  }, [watch(`recipeStepRequestDtoList.${index}.imageLink`)]);
   // 조리 이미지 클릭 시 Click 이벤트를 연결된 input 요소로 옮겨줌
   const stepImageClick = () => {
     fileRef.current.click();
@@ -100,19 +106,26 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
           hidden
         />
         <img
-          style={{ width: '66px', height: '66px', borderRadius: "10px", overflow: "hidden" }}
+          style={{ width: '66px', height: '66px', borderRadius: '10px', overflow: 'hidden' }}
           className="img-render rounded-lg"
           onClick={stepImageClick}
           // recipeStepRequestDtoList.${index}.imgUrl 형식으로 값을 등록해 봤지만 이미지가 변경이 되도 렌더링이 안되는 문제가 발생
           // useState를 사용해봐도 렌더링이 안되서 추가로 useEffect를 사용함
-          src={imageUrl}
+          src={imageUrl || PreviewImage}
           alt=""
         />
-        <StepTextarea
-          validationCheck={errors.recipeStepRequestDtoList?.[index]?.stepContent}
-          placeholder="조리 과정을 알려주세요!"
-          {...register(`recipeStepRequestDtoList.${index}.stepContent`, { required: true })}
-        />
+
+        <div className="flex flex-col w-60vw ml-1">
+          <StepTextarea
+            validationCheck={errors.recipeStepRequestDtoList?.[index]?.stepContent}
+            placeholder="조리 과정을 알려주세요!"
+            {...register(`recipeStepRequestDtoList.${index}.stepContent`, { required: true, max: 1000 })}
+          />
+
+          {errors.recipeStepRequestDtoList?.[index]?.stepContent && (
+            <ValidationMessage>{errors.recipeStepRequestDtoList?.[index]?.stepContent.message}</ValidationMessage>
+          )}
+        </div>
       </div>
     </>
   );
@@ -122,9 +135,17 @@ export default Step;
 
 const StepTextarea = styled.textarea<any>`
   padding: 0.25rem;
-  margin-left: 1rem;
-  width: 66.666667%;
   border-radius: 0.375rem;
   border-width: 1px;
   border-color: ${(props) => (props.validationCheck ? '#EB3120' : '#D1D5DB')};
+`;
+
+const ValidationMessage = styled.p`
+  text-align: left;
+  font-size: 12px;
+  color: #eb3120;
+  font-weight: normal;
+  font-style: normal;
+  font-variant: normal;
+  text-transform: none;
 `;

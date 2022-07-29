@@ -35,6 +35,5 @@ export const getEmail = (token: string) => {
 };
 export const getNickname = (token: string) => {
   const decode = jwtDecode<TokenType>(token);
-  console.log('decode:', decode);
   return decode.nickname;
 };

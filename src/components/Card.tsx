@@ -1,3 +1,4 @@
+import { ReactComponent as HeartIcon } from '@icon/heart.svg';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -21,6 +22,7 @@ interface StyleCustom {
   titleColor?: string;
   descColor?: string;
   expirationColor?: string;
+  goodCount?: number;
 }
 
 interface IProps {
@@ -35,23 +37,30 @@ interface IProps {
   disabled?: boolean;
   styleCustom?: StyleCustom;
   cardPromotionValue?: string;
+  goodCount?: number;
 }
 
 function Card(props: IProps) {
-  const { onClick, styleCustom, cardTitle, cardImg, className }: IProps = props;
+  const { onClick, styleCustom, cardTitle, cardImg, className, goodCount }: IProps = props;
 
   return (
     <CardContainer onClick={onClick} styleCustom={styleCustom}>
       <div style={{ position: 'relative' }}>
-        <CardImgWrapper
-          className={className}
-          styleCustom={styleCustom}
-          color={COLOR_V2.WHITE1}
-          hoverColor={COLOR_V2.PRIMARY5}
-          activeColor={COLOR_V2.PRIMARY_ACTIVE}
-          disabledColor={COLOR_V2.PRIMARY_DISABLED}
-          src={cardImg}
-        />
+        <div style={{ position: 'relative' }}>
+          <CardImgWrapper
+            className={className}
+            styleCustom={styleCustom}
+            color={COLOR_V2.WHITE1}
+            hoverColor={COLOR_V2.PRIMARY5}
+            activeColor={COLOR_V2.PRIMARY_ACTIVE}
+            disabledColor={COLOR_V2.PRIMARY_DISABLED}
+            src={cardImg}
+          />
+          <CardGoodCountWrapper className="text-center p-1 justify-center">
+            <HeartIcon width="20" height="20" className="m-auto float-left" stroke="white" />
+            <span className="m-auto">{goodCount}</span>
+          </CardGoodCountWrapper>
+        </div>
         <CardContentWrapper>
           <CardTitleWrapper styleCustom={styleCustom}>{cardTitle}</CardTitleWrapper>
         </CardContentWrapper>
@@ -93,6 +102,11 @@ const CardImgWrapper = styled.img<any>`
   @media screen and (max-width: 680px) {
     width: 173px;
     height: 173px;
+  }
+
+  @media screen and (min-width: 681px) and (max-width: 768px) {
+    width: 230px;
+    height: 230px;
   }
 `;
 
@@ -147,4 +161,16 @@ const CardDescWrapper = styled.div<any>`
   font-size: 10px;
   line-height: 14px;
   color: #9a9a9a;
+`;
+
+const CardGoodCountWrapper = styled.div`
+  border-radius: 1rem;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin-bottom: 0.5rem;
+  margin-left: 0.5rem;
+  width: 70px;
+  color: white;
+  background-color: rgba(37, 37, 37, 0.8);
 `;
