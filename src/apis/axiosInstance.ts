@@ -14,7 +14,7 @@ axiosInstance.defaults.timeout = 30000;
 export const elasticInstance = axios.create();
 
 elasticInstance.defaults.validateStatus = (status) => status < 400;
-elasticInstance.defaults.baseURL = 'http://15.165.84.237:9200';
+elasticInstance.defaults.baseURL = 'https://gyuni.shop:9200';
 elasticInstance.defaults.timeout = 30000;
 elasticInstance.defaults.auth = {
   username: 'elastic',
