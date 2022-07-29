@@ -159,13 +159,6 @@ const RecipeRegisterPage = () => {
     name: 'recipeStepRequestDtoList', // recipeStepRequestDtoList 에서 recipeStepRequestDtoList로 변경됬으니 한번 다시 변경해야함
   });
 
-  // 입력값들의 유효성을 체크하기 위해 사용
-
-  // 뒤로 돌아가기 용
-  const goBack = () => {
-    navigate(-1);
-  };
-
   // 처음 페이지 진입시 해당 유저가 작성중이었던 레시피가 있는지 확인해 조회
   // 수정 모드인 경우 작동 안함
   const { isLoading, data: postingData } = useQuery(['getRecipePosting'], async () => recipeApi.getRecipePosting(), {
@@ -201,6 +194,7 @@ const RecipeRegisterPage = () => {
 
       recipeMethods.setValue('title', data.title);
       recipeMethods.setValue('content', data.content);
+      recipeMethods.setValue('mainImageLink', data.mainImg);
       setMainImageUrl(data.mainImg);
 
       // 재료 정보가 있는 경우 서버에서 넘어오는 데이터가 View 형식과는 다르기 때문에 처리 과정이 필요
@@ -302,7 +296,7 @@ const RecipeRegisterPage = () => {
         html: '',
         icon: 'info',
       }).then(() => {
-        navigate('/');
+        navigate(-1);
       });
     },
     onError: (e) => {

@@ -118,6 +118,7 @@ const EntitySearched = () => {
                         cardImg={content.mainImg}
                         styleCustom={{ width: '40vw', margin: 'auto' }}
                         onClick={(e) => viewRecipeDetail(content.boardId)}
+                        goodCount={content.goodCount}
                       />
                     ))}
                   </React.Fragment>
