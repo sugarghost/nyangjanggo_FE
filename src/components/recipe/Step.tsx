@@ -1,5 +1,6 @@
 import recipeApi from '@apis/RecipeApi';
 import { ReactComponent as XIcon } from '@icon/x.svg';
+import PreviewImage from '@images/preview_image.png';
 import { RecipeForm } from '@type/recipeType';
 import imageCompression from 'browser-image-compression';
 import React, { useEffect, useRef, useState } from 'react';
@@ -20,10 +21,11 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
     register,
     getValues,
     setValue,
+    watch,
     formState: { errors },
   } = useFormContext<RecipeForm>();
 
-  const [imageUrl, setImageUrl] = useState<string>(getValues(`recipeStepRequestDtoList.${index}.imageLink`));
+  const [imageUrl, setImageUrl] = useState('');
 
   const fileRef = useRef<any>();
 
@@ -44,8 +46,14 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
   const postImageApi = recipeApi.postImage;
 
   // src에 직접 값을 지정하고 state로 setImageUrl을 사용해봐도 렌더링이 되지 않아서 Effect를 등록함
-  useEffect(() => {}, [imageUrl]);
-
+  useEffect(() => {
+    console.log(imageUrl);
+  }, [imageUrl]);
+  useEffect(() => {
+    if (watch(`recipeStepRequestDtoList.${index}.imageLink`)) {
+      setImageUrl(watch(`recipeStepRequestDtoList.${index}.imageLink`));
+    }
+  }, [watch(`recipeStepRequestDtoList.${index}.imageLink`)]);
   // 조리 이미지 클릭 시 Click 이벤트를 연결된 input 요소로 옮겨줌
   const stepImageClick = () => {
     fileRef.current.click();
@@ -105,7 +113,7 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
           onClick={stepImageClick}
           // recipeStepRequestDtoList.${index}.imgUrl 형식으로 값을 등록해 봤지만 이미지가 변경이 되도 렌더링이 안되는 문제가 발생
           // useState를 사용해봐도 렌더링이 안되서 추가로 useEffect를 사용함
-          src={imageUrl}
+          src={imageUrl || PreviewImage}
           alt=""
         />
 

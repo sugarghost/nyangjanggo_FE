@@ -14,4 +14,8 @@ export default {
     });
     return res;
   },
+  async checkNickname(nickname: string) {
+    const res = await authInstance.get(`${user}/checkNickname?nickname=${nickname}`);
+    return res;
+  },
 };

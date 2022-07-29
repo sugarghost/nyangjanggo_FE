@@ -1,4 +1,5 @@
 import userApi from '@apis/UserApi';
+import PreviewImage from '@images/preview_image.png';
 import React, { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +22,9 @@ function MyPage() {
     onSuccess: (res) => {
       console.log('getUser', res.data);
       setNickName(res.data.nickname);
-      setProfileImage(res.data.userImg);
+      if (res.data.userImg) {
+        setProfileImage(res.data.userImg);
+      }
       setUserDescription(res.data.userDescription);
     },
   });
@@ -34,7 +37,7 @@ function MyPage() {
     navigate('/myPage/userEditPage');
   };
 
-  const [profileImage, setProfileImage] = useState('');
+  const [profileImage, setProfileImage] = useState(PreviewImage);
   const [nickNameImage, setNickName] = useState('닉네임');
   const [userDescription, setUserDescription] = useState('자기소개');
 
