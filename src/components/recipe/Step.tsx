@@ -100,7 +100,7 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
           hidden
         />
         <img
-          style={{ width: '66px', height: '66px', borderRadius: "10px", overflow: "hidden" }}
+          style={{ width: '66px', height: '66px', borderRadius: '10px', overflow: 'hidden' }}
           className="img-render rounded-lg"
           onClick={stepImageClick}
           // recipeStepRequestDtoList.${index}.imgUrl 형식으로 값을 등록해 봤지만 이미지가 변경이 되도 렌더링이 안되는 문제가 발생
@@ -108,11 +108,18 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
           src={imageUrl}
           alt=""
         />
-        <StepTextarea
-          validationCheck={errors.recipeStepRequestDtoList?.[index]?.stepContent}
-          placeholder="조리 과정을 알려주세요!"
-          {...register(`recipeStepRequestDtoList.${index}.stepContent`, { required: true })}
-        />
+
+        <div className="flex flex-col w-60vw ml-1">
+          <StepTextarea
+            validationCheck={errors.recipeStepRequestDtoList?.[index]?.stepContent}
+            placeholder="조리 과정을 알려주세요!"
+            {...register(`recipeStepRequestDtoList.${index}.stepContent`, { required: true, max: 1000 })}
+          />
+
+          {errors.recipeStepRequestDtoList?.[index]?.stepContent && (
+            <ValidationMessage>{errors.recipeStepRequestDtoList?.[index]?.stepContent.message}</ValidationMessage>
+          )}
+        </div>
       </div>
     </>
   );
@@ -122,9 +129,17 @@ export default Step;
 
 const StepTextarea = styled.textarea<any>`
   padding: 0.25rem;
-  margin-left: 1rem;
-  width: 66.666667%;
   border-radius: 0.375rem;
   border-width: 1px;
   border-color: ${(props) => (props.validationCheck ? '#EB3120' : '#D1D5DB')};
+`;
+
+const ValidationMessage = styled.p`
+  text-align: left;
+  font-size: 9px;
+  color: #eb3120;
+  font-weight: normal;
+  font-style: normal;
+  font-variant: normal;
+  text-transform: none;
 `;
