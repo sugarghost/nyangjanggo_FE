@@ -1,5 +1,5 @@
-import BottomFloat from '@/components/BottomFloat';
-import { COLOR } from '@/constants';
+import BottomFloat from '@components/BottomFloat';
+import { COLOR } from '@constants/Color';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ReactComponent as PlusIcon } from '@icon/plus.svg';
@@ -127,7 +127,12 @@ const RecipeRegisterPage = () => {
       recipeWatch('resourceRequestDtoList').every((el) =>
         el.resources.every((subEl) => subEl.resourceName !== '' && subEl.amount !== ''),
       ) &&
-      recipeWatch('recipeStepRequestDtoList').every((el) => el.imageLink !== '' && el.stepContent !== '')
+      recipeWatch('recipeStepRequestDtoList').every((el) => el.imageLink !== '' && el.stepContent !== '') &&
+      !recipeError.title &&
+      !recipeError.content &&
+      !recipeError.mainImageLink &&
+      !recipeError.recipeStepRequestDtoList &&
+      !recipeError.resourceRequestDtoList
     ) {
       setDisabled(false);
     } else {
@@ -372,7 +377,15 @@ const RecipeRegisterPage = () => {
     }
   };
 
-  const onErrorRecipe = (errors: any, e: any) => console.log(errors, e);
+  const onErrorRecipe = (errors: any, e: any) => {
+    console.log(errors, e);
+
+    ReactSwal.fire({
+      title: '<p>이미지 정보가 유효하지 않습니다!</p>',
+      html: '<p>다시 시도해 주세요</p>',
+      icon: 'error',
+    });
+  };
   const onSaveMainImageFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
       const uploadFile = e.target.files[0];
@@ -419,7 +432,6 @@ const RecipeRegisterPage = () => {
                 onClick={mainImageClick}
                 alt=""
               />
-
               <input
                 type="file"
                 onChange={onSaveMainImageFile}
@@ -430,15 +442,16 @@ const RecipeRegisterPage = () => {
               <TitleInput
                 validationCheck={recipeError.title}
                 placeholder="요리 이름"
-                {...recipeRegister('title', { required: true })}
+                {...recipeRegister('title', { required: true, max: 255 })}
               />
+              {recipeError.title && <ValidationMessage>{recipeError.title.message}</ValidationMessage>}
               <ContentTextarea
                 validationCheck={recipeError.content}
-                className="p-4 my-1 w-full rounded-md border border-gray-300"
                 placeholder="요리 설명"
                 rows={6}
-                {...recipeRegister('content', { required: true })}
+                {...recipeRegister('content', { required: true, max: 1000 })}
               />
+              {recipeError.content && <ValidationMessage>{recipeError.content.message}</ValidationMessage>}
 
               <span className="text-gray-700 text-left float-left text-lg my-1 font-900">재료 분류</span>
               <span
@@ -471,11 +484,10 @@ const RecipeRegisterPage = () => {
                 ))}
               </div>
 
-              <BottomFloat className="w-full">
-                <RegisterButton type="submit" disabled={isDisabled}>
-                  등록하기
-                </RegisterButton>
-              </BottomFloat>
+              {/* 모바일에서 동작시 css가 망가져서 복구 */}
+              <SaveButton type="submit" disabled={isDisabled}>
+                등록하기
+              </SaveButton>
               {/* <SaveButton type="submit" disabled={isDisabled}>
                   등록하기
                 </SaveButton> */}
@@ -524,7 +536,7 @@ const MainImage = styled.img`
 const TitleInput = styled.input<any>`
   padding: 1rem;
   margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 6px;
   width: 100%;
   border-radius: 0.375rem;
   border-width: 1px;
@@ -533,8 +545,7 @@ const TitleInput = styled.input<any>`
 
 const ContentTextarea = styled.textarea<any>`
   padding: 1rem;
-  margin-top: 0px;
-  margin-bottom: 1rem;
+  margin-top: 1rem;
   width: 100%;
   border-radius: 0.375rem;
   border-width: 1px;
@@ -548,4 +559,13 @@ const RegisterButton = styled.button`
   padding: 16px;
   color: white;
   max-width: 420px;
+`;
+const ValidationMessage = styled.p`
+  text-align: left;
+  font-size: 9px;
+  color: #eb3120;
+  font-weight: normal;
+  font-style: normal;
+  font-variant: normal;
+  text-transform: none;
 `;

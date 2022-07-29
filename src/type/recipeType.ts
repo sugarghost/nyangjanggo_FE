@@ -53,16 +53,16 @@ export type StepForm = {
 };
 
 export const recipeValidationSchema = yup.object().shape({
-  title: yup.string().required('요리명을 입력해 주세요'),
-  content: yup.string().required('요리 설명을 입력해 주세요'),
-  mainImageLink: yup.string().required('이미지 등록은 필수 입니다'),
+  title: yup.string().max(255, '* 요리명을 255자 이내로 입력해 주세요').required('* 요리명을 입력해 주세요'),
+  content: yup.string().max(1000, '* 요리 설명을 1000자 이내로 입력해 주세요').required('* 요리 설명을 입력해 주세요'),
+  mainImageLink: yup.string().required('* 이미지 등록은 필수 입니다'),
   resourceRequestDtoList: yup.array(
     yup.object().shape({
-      category: yup.string().required('재료 분류를 입력해 주세요'),
+      category: yup.string().max(30, '* 재료 분류를 30자 이내로 입력해 주세요').required('* 재료 분류를 입력해 주세요'),
       resources: yup.array(
         yup.object().shape({
-          resourceName: yup.string().required('재료명을 입력해주세요'),
-          amount: yup.string().required('재료량을 입력해주세요'),
+          resourceName: yup.string().max(30, '* 재료명을 30자 이내로 입력해주세요').required('* 재료명을 입력해주세요'),
+          amount: yup.string().max(30, '* 재료량을 30자 이내로 입력해주세요').required('* 재료량을 입력해주세요'),
         }),
       ),
     }),
@@ -70,8 +70,11 @@ export const recipeValidationSchema = yup.object().shape({
   recipeStepRequestDtoList: yup.array(
     yup.object().shape({
       stepNum: yup.number().required(),
-      stepContent: yup.string().required('조리 내용을 입력해주세요'),
-      imageLink: yup.string().required('이미지 등록은 필수입니다'),
+      stepContent: yup
+        .string()
+        .max(1000, '* 조리 내용을 1000자 이내로 입력해주세요')
+        .required('* 조리 내용을 입력해주세요'),
+      imageLink: yup.string().required('* 이미지 등록은 필수입니다'),
     }),
   ),
 });
