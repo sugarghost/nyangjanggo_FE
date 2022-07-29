@@ -113,7 +113,7 @@ const ResourceInput = styled.input<any>`
 
 const ValidationMessage = styled.p`
   text-align: left;
-  font-size: 9px;
+  font-size: 12px;
   color: #eb3120;
   font-weight: normal;
   font-style: normal;

@@ -381,7 +381,7 @@ const RecipeRegisterPage = () => {
     console.log(errors, e);
 
     ReactSwal.fire({
-      title: '<p>이미지 정보가 유효하지 않습니다!</p>',
+      title: '<p>등록 정보가 유효하지 않습니다!</p>',
       html: '<p>다시 시도해 주세요</p>',
       icon: 'error',
     });
@@ -562,7 +562,7 @@ const RegisterButton = styled.button`
 `;
 const ValidationMessage = styled.p`
   text-align: left;
-  font-size: 9px;
+  font-size: 12px;
   color: #eb3120;
   font-weight: normal;
   font-style: normal;
