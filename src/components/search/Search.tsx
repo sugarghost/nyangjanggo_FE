@@ -61,7 +61,6 @@ const Search = () => {
       if (event.target.value.length === 0) {
         setIsSearchedValue(false);
         // 나중에 냉장고 연결해서 냉장고 데이터 있으면 여기에 연결함
-        console.log('ingredientsList :', ingredientsList);
         setSearchedTagList(ingredientsList);
       } else {
         setIsSearchedValue(true);

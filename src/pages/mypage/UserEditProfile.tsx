@@ -39,7 +39,6 @@ const UserEditProfile = () => {
   useQuery(['getUser'], async () => getUserApi(), {
     refetchOnWindowFocus: false,
     onSuccess: (res) => {
-      console.log('getUser', res.data);
       setValue('nickname', res.data.nickname);
       setValue('userDescription', res.data.userDescription);
       setNicknameOrigin(res.data.nickname);
@@ -54,7 +53,6 @@ const UserEditProfile = () => {
     refetchOnWindowFocus: false,
     enabled: false,
     onSuccess: (res) => {
-      console.log('checkNickname :', res);
       if (res.data.check === 'true') {
         setNicnknameValidation(true);
       } else {

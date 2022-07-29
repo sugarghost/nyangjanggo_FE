@@ -1,6 +1,7 @@
 import React, { Suspense, useLayoutEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import styled from 'styled-components';
 
 import './App.css';
 import Footer from './containers/Footer';
@@ -53,72 +54,82 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <div className="App">
-          <Header />
-          <Routes>
-            <Route path="/" element={<MainPage />} />
-            <Route
-              path="/test"
-              element={
-                <Suspense>
-                  <TestPage />
-                </Suspense>
-              }
-            />
-            <Route path="/signInPage" element={<SignInPage />} />
-            <Route path="/signUpPage" element={<SignUpPage />} />
-            <Route path="/recipeDetailPage" element={<RecipeDetailPage />} />
-            {/* 로그인이 필요한 페이지는 코드 스플리팅을 진행 */}
-            <Route element={<PrivateRoutes authentication />}>
+          <MainPageWrapper>
+            <Header />
+            <Routes>
+              <Route path="/" element={<MainPage />} />
               <Route
-                path="/recipeRegisterPage"
+                path="/test"
                 element={
                   <Suspense>
-                    <RecipeRegisterPage />
+                    <TestPage />
                   </Suspense>
                 }
               />
-              <Route
-                path="/myPage"
-                element={
-                  <Suspense>
-                    <MyPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/myPage/myRefrigeratorPage"
-                element={
-                  <Suspense>
-                    <MyRefrigeratorPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/myPage/userEditPage"
-                element={
-                  <Suspense>
-                    <UserEditProfile />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/likePage"
-                element={
-                  <Suspense>
-                    <LikePage />
-                  </Suspense>
-                }
-              />
-            </Route>
-          </Routes>
-          {/* </div>
+              <Route path="/signInPage" element={<SignInPage />} />
+              <Route path="/signUpPage" element={<SignUpPage />} />
+              <Route path="/recipeDetailPage" element={<RecipeDetailPage />} />
+              {/* 로그인이 필요한 페이지는 코드 스플리팅을 진행 */}
+              <Route element={<PrivateRoutes authentication />}>
+                <Route
+                  path="/recipeRegisterPage"
+                  element={
+                    <Suspense>
+                      <RecipeRegisterPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/myPage"
+                  element={
+                    <Suspense>
+                      <MyPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/myPage/myRefrigeratorPage"
+                  element={
+                    <Suspense>
+                      <MyRefrigeratorPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/myPage/userEditPage"
+                  element={
+                    <Suspense>
+                      <UserEditProfile />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/likePage"
+                  element={
+                    <Suspense>
+                      <LikePage />
+                    </Suspense>
+                  }
+                />
+              </Route>
+            </Routes>
+            {/* </div>
             </div>
           </div> */}
-          <Footer />
+            <Footer />
+          </MainPageWrapper>
         </div>
       </BrowserRouter>
     </QueryClientProvider>
   );
 }
+export const MainPageWrapper = styled.div`
+  max-width: 768px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow-x: hidden;
+  margin: auto;
+`;
 
 export default App;

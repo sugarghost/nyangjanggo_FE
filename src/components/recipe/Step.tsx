@@ -46,9 +46,7 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
   const postImageApi = recipeApi.postImage;
 
   // src에 직접 값을 지정하고 state로 setImageUrl을 사용해봐도 렌더링이 되지 않아서 Effect를 등록함
-  useEffect(() => {
-    console.log(imageUrl);
-  }, [imageUrl]);
+  useEffect(() => {}, [imageUrl]);
   useEffect(() => {
     if (watch(`recipeStepRequestDtoList.${index}.imageLink`)) {
       setImageUrl(watch(`recipeStepRequestDtoList.${index}.imageLink`));

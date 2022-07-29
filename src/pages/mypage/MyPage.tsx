@@ -20,7 +20,6 @@ function MyPage() {
   useQuery(['getUser'], async () => getUserApi(), {
     refetchOnWindowFocus: false,
     onSuccess: (res) => {
-      console.log('getUser', res.data);
       setNickName(res.data.nickname);
       if (res.data.userImg) {
         setProfileImage(res.data.userImg);
