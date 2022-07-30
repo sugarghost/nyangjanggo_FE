@@ -50,6 +50,7 @@ const CommentsPage = ({ boardId }: CommentsPageProps) => {
     remove,
   } = useInfiniteQuery('infiniteComments', async ({ pageParam = 0 }) => fetchPostList(pageParam), {
     refetchOnWindowFocus: false,
+    enabled: !!boardId,
     getNextPageParam: (lastPage, pages) => {
       if (!lastPage.last) return lastPage.nextPage;
       return undefined;

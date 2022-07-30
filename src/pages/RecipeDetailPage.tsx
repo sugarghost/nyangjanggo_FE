@@ -9,20 +9,21 @@ import { RecipeDetail, ResourceForm, StepForm } from '@type/recipeType';
 import { getToken, getNickname } from '@utils/jwt';
 import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-const RecipeDetailPage = () => {
+const RecipeDetailPage = ({ match }) => {
   // 공통 처리
   const navigate = useNavigate();
   const location = useLocation();
-  const state = location.state as { boardId: number };
 
+  // 파라미터 처리
+  const { boardIdParams } = useParams();
   // 페이지 조회 처리
   const userInfomation = useRecoilValue(userSelector);
   const [userInfo, setUserInfo] = useState<RecipeDetail>();
-  const [boardId, setBoardId] = useState<number>(state.boardId);
+  const [boardId, setBoardId] = useState<number>(Number(boardIdParams));
   const [recipe, setRecipe] = useState<RecipeDetail>();
   const [ResourceForm, setResourceForm] = useState<ResourceForm[]>([]);
   const [StepForm, setStepForm] = useState<StepForm[]>([]);
