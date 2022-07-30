@@ -13,7 +13,7 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-const RecipeDetailPage = ({ match }) => {
+const RecipeDetailPage = () => {
   // 공통 처리
   const navigate = useNavigate();
   const location = useLocation();
