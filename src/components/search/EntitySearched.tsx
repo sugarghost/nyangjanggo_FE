@@ -101,7 +101,7 @@ const EntitySearched = () => {
           <div className="max-w-screen-md mx-auto">
             <div className="mx-auto w-full">
               <ContentTitle>
-                {searchQueryState.query.split(','[0]) === 'goodCount' ? '인기 레시피' : '최신 레시피'}
+                {searchQueryState.query === 'goodCount,desc' ? '인기 레시피' : '최신 레시피'}
 
                 <ContentTitleMain onClick={viewContentDetail}>
                   메인보기
@@ -116,7 +116,7 @@ const EntitySearched = () => {
                         cardTitle={content.title}
                         key={content.boardId}
                         cardImg={content.mainImg}
-                        styleCustom={{ width: '40vw', margin: 'auto' }}
+                        styleCustom={{ width: '40%', margin: 'auto' }}
                         onClick={(e) => viewRecipeDetail(content.boardId)}
                         goodCount={content.goodCount}
                       />

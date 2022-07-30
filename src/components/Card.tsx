@@ -104,7 +104,7 @@ const CardImgWrapper = styled.img<any>`
     height: 173px;
   }
 
-  @media screen and (min-width: 681px) and (max-width: 768px) {
+  @media screen and (min-width: 681px) {
     width: 230px;
     height: 230px;
   }

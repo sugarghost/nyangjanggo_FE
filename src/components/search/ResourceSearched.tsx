@@ -114,7 +114,7 @@ const ResourceSearched = () => {
                         cardTitle={content.title}
                         key={content.boardId}
                         cardImg={content.mainImg}
-                        styleCustom={{ width: '40vw', margin: '0.25rem' }}
+                        styleCustom={{ width: '40%', margin: '0.25rem' }}
                         onClick={(e) => viewRecipeDetail(content.boardId)}
                         goodCount={content.goodCount}
                       />

@@ -87,7 +87,7 @@ const MainSearched = () => {
                       cardTitle={content.title}
                       key={index}
                       cardImg={content.mainImg}
-                      styleCustom={{ width: '40vw', margin: '0.25rem' }}
+                      styleCustom={{ width: '200px', margin: '0.25rem' }}
                       onClick={(e) => viewRecipeDetail(content.boardId)}
                       goodCount={content.goodCount}
                     />
@@ -108,7 +108,7 @@ const MainSearched = () => {
                       cardTitle={content.title}
                       key={index}
                       cardImg={content.mainImg}
-                      styleCustom={{ width: '40vw', margin: '0.25rem' }}
+                      styleCustom={{ width: '200px', margin: '0.25rem' }}
                       onClick={(e) => viewRecipeDetail(content.boardId)}
                       goodCount={content.goodCount}
                     />
