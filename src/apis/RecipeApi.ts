@@ -80,7 +80,7 @@ export default {
     return res;
   },
   async deleteRecipe(boardId: number) {
-    const res = await authInstance.delete(`${board}/${boardId}`, {
+    const res = await authInstance.delete(`${board}?boardId=${boardId}`, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return res;
