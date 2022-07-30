@@ -186,6 +186,7 @@ const Search = () => {
 
           <SearchedBox>
             {ingredientsList.length === 0 && searchValue === '' ? <p>등록된 냉장고 재료가 없습니다!</p> : ''}
+
             {searchedTagList.map((tags: string, index: number) =>
               !selectedTagList.includes(tags) ? (
                 <Tag key={index} tag={tags} onClick={() => addTags(tags)} bgColor="bg-box" />
@@ -195,11 +196,12 @@ const Search = () => {
             )}
           </SearchedBox>
 
-          <ResourceSearchWrapper>
-            {selectedTagList.map((tags: string, index: number) => (
-              <Tag key={index} tag={tags} onClick={() => removeTags(tags)} bgColor="bg-main text-white" isCancle />
-            ))}
-            {/*
+          {selectedTagList.length !== 0 && (
+            <ResourceSearchWrapper>
+              {selectedTagList.map((tags: string, index: number) => (
+                <Tag key={index} tag={tags} onClick={() => removeTags(tags)} bgColor="bg-main text-white" isCancle />
+              ))}
+              {/*
             <ResourceSearchButton
               className={selectedTagList.length === 0 ? 'bg-empty' : 'bg-main'}
               onClick={onSearchResource}
@@ -207,7 +209,8 @@ const Search = () => {
               <SearchIcon className="m-auto" fill="white" />
             </ResourceSearchButton>
             */}
-          </ResourceSearchWrapper>
+            </ResourceSearchWrapper>
+          )}
         </>
       ) : (
         <div className="p-4 top-0 w-full z-100">
