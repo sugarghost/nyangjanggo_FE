@@ -27,7 +27,7 @@ const LikePage = () => {
   return (
     <>
       <Suspense fallback={<div>로딩중입니다.</div>}>
-        <div className="mx-auto w-full">
+        <div className="mx-auto w-full min-h-screen">
           <CardsContainer className="flex flex-row">
             {likeList.map((content: any) => (
               <Card

@@ -99,7 +99,7 @@ const ResourceSearched = () => {
   return (
     <>
       <Suspense fallback={<div>로딩중입니다.</div>}>
-        <div className="mx-auto w-full">
+        <div className="mx-auto w-full min-h-screen">
           <ContentTitle>
             재료 검색결과
             <ContentTitleMain onClick={viewContentDetail}>

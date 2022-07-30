@@ -46,7 +46,7 @@ function MyPage() {
   };
 
   return (
-    <div className=" mx-auto w-full">
+    <div className=" mx-auto w-full min-h-screen">
       <UserMainInfoWrapper className="min-width-400">
         <ProfileImage className="img-render" src={profileImage} />
         <ProfileInfo>

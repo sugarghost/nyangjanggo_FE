@@ -170,7 +170,7 @@ const UserEditProfile = () => {
   }, [watchAll, nicnknameValidation]);
 
   return (
-    <div className="mx-auto w-full">
+    <div className="mx-auto w-full min-h-screen">
       <form onSubmit={handleSubmit(handleOnClickUserProfileEdit, onErrorRecipe)}>
         <ProfileImageUploader setProfileImageFile={setProfileImageFile} userImgUrl={userImgUrl} />
         <div className="flex mt-6">
