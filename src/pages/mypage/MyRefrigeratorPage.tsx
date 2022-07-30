@@ -1,9 +1,11 @@
 import { postResource, getResource, Ingredient } from '@/apis/ResourceApi';
 import { ingredientsSelector } from '@/recoil/ingredient';
+import { isExist } from '@utils/jwt';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useQuery, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
@@ -14,6 +16,7 @@ import { COLOR } from '../../constants';
 
 const MyRefrigeratorPage = () => {
   const [profileImage, setProfileImage] = useState('https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg');
+  // 페이지 이동 후 돌아오면 반영이 안되는 오류가 있어 비활성화(아마 캐시 관련 사항이 아닐까 싶음)
   const currentIngredient = useRecoilValue(ingredientsSelector);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [showRegisterIngredient, setShowRegisterIngredient] = useState(false);
@@ -23,9 +26,13 @@ const MyRefrigeratorPage = () => {
   const [editIngredientId, setEditIngredientId] = useState<number | null>();
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setIngredients([...currentIngredient]);
-  }, []);
+  useQuery(['getingredients'], async () => getResource(), {
+    refetchOnWindowFocus: false,
+    enabled: isExist(),
+    onSuccess: (res) => {
+      setIngredients(res.data);
+    },
+  });
 
   const handleOnClcikAddButton = () => {
     setShowRegisterIngredient(!showRegisterIngredient);
@@ -272,19 +279,18 @@ const MyRefrigeratorPage = () => {
         )}
       </OptionsWrapper>
 
-      {showRegisterIngredient && (
-        <BottomFloat className="w-full">
-          {editMode ? (
-            <RegisterButton disabled={loading} onClick={handleOnClickEdit}>
-              {loading ? '수정중' : '수정하기'}
-            </RegisterButton>
-          ) : (
-            <RegisterButton disabled={loading} onClick={handleOnClickRegister}>
-              {loading ? '등록중' : '등록하기'}
-            </RegisterButton>
-          )}
-        </BottomFloat>
-      )}
+      {showRegisterIngredient &&
+        // 모바일 환경에서 버튼이 제대로 표시 안되서 일단 교체
+
+        (editMode ? (
+          <SaveButton disabled={loading} onClick={handleOnClickEdit}>
+            {loading ? '수정중' : '수정하기'}
+          </SaveButton>
+        ) : (
+          <SaveButton disabled={loading} onClick={handleOnClickRegister}>
+            {loading ? '등록중' : '등록하기'}
+          </SaveButton>
+        ))}
     </div>
   );
 };
@@ -392,4 +398,22 @@ const RegisterButton = styled.button`
   padding: 16px;
   color: white;
   max-width: 420px;
+`;
+
+const SaveButton = styled.button`
+  border-radius: 0.375rem;
+  height: 2.5rem;
+  width: 100%;
+  --tw-text-opacity: 1;
+  color: rgba(255, 255, 255, var(--tw-text-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgba(235, 49, 32, var(--tw-bg-opacity));
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+
+  &:disabled {
+    background-color: rgba(154, 154, 154, var(--tw-bg-opacity));
+  }
 `;
