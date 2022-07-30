@@ -100,10 +100,29 @@ const Search = () => {
     }
   };
 
-  const handleDropDownKey = (event: any) => {
-    // input에 값이 있을때만 작동
+  const onSearchTitle = () => {
     if (isSearchedValue && !searchType) {
-      if (event.key === 'Enter') {
+      setSearchTypeState('title');
+      setSearchQueryState({
+        query: searchValue,
+        size: 10,
+        page: 0,
+      });
+    }
+  };
+
+  const handleDropDownKey = (event: any) => {
+    // Enter인 경우에만 상정
+    if (event.key === 'Enter') {
+      // input에 값이 있을때만 작동
+      if (searchType && selectedTagList.length !== 0) {
+        setSearchTypeState('resource');
+        setSearchQueryState({
+          query: selectedTagList.join(' '),
+          size: 10,
+          page: 0,
+        });
+      } else if (isSearchedValue && !searchType) {
         setSearchTypeState('title');
         setSearchQueryState({
           query: searchValue,
@@ -146,17 +165,18 @@ const Search = () => {
         <>
           <div className="p-4 top-0 w-full z-100">
             <div className="flex flex-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-              <div
-                className="rounded-md flex flex-row p-1"
-                style={{ background: '#EFEFF0', padding: '10px', width: '88%' }}
-              >
-                <SearchIcon fill="gray" className="m-1" />
+              <div className="rounded-md flex flex-row pl-6" style={{ background: '#EFEFF0', width: '88%' }}>
                 <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
-                <div className="cursor-pointer ml-auto" onClick={searchClear}>
-                  &times;
-                </div>
+                <ResourceSearchButtonInBar
+                  className={selectedTagList.length === 0 ? 'bg-empty' : 'bg-main'}
+                  onClick={onSearchResource}
+                >
+                  <IconwWrapper>
+                    <SearchIcon className="m-1" fill="white" />
+                  </IconwWrapper>
+                </ResourceSearchButtonInBar>
               </div>
-              <div className="flex flex-col justify-center border-main" onClick={switchSearchType}>
+              <div className="flex flex-col justify-center border-main " onClick={switchSearchType}>
                 <RecipeSearchIconWrapper src={RecipeSearchIcon} className="img-render" />
                 <RecipeSearchTitle>재료검색</RecipeSearchTitle>
               </div>
@@ -177,28 +197,28 @@ const Search = () => {
 
           <ResourceSearchWrapper>
             {selectedTagList.map((tags: string, index: number) => (
-              <Tag key={index} tag={tags} onClick={() => removeTags(tags)} bgColor="bg-white" isCancle />
+              <Tag key={index} tag={tags} onClick={() => removeTags(tags)} bgColor="bg-main text-white" isCancle />
             ))}
+            {/*
             <ResourceSearchButton
               className={selectedTagList.length === 0 ? 'bg-empty' : 'bg-main'}
               onClick={onSearchResource}
             >
               <SearchIcon className="m-auto" fill="white" />
             </ResourceSearchButton>
+            */}
           </ResourceSearchWrapper>
         </>
       ) : (
         <div className="p-4 top-0 w-full z-100">
           <div className="flex flex-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-            <div
-              className="rounded-md flex flex-row p-1"
-              style={{ background: '#EFEFF0', padding: '10px', width: '88%' }}
-            >
-              <SearchIcon fill="gray" className="m-1" />
+            <div className="rounded-md flex flex-row pl-6" style={{ background: '#EFEFF0', width: '88%' }}>
               <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
-              <div className="cursor-pointer ml-auto" onClick={searchClear}>
-                &times;
-              </div>
+              <ResourceSearchButtonInBar className={!isSearchedValue ? 'bg-empty' : 'bg-main'} onClick={onSearchTitle}>
+                <IconwWrapper>
+                  <SearchIcon className="m-1" fill="white" />
+                </IconwWrapper>
+              </ResourceSearchButtonInBar>
             </div>
             <div className="flex flex-col justify-center" onClick={switchSearchType}>
               <RecipeSearchIconWrapper src={RecipeSearchIcon} className="img-render" />
@@ -250,6 +270,8 @@ const ResourceSearchWrapper = styled.div`
   margin: 0.75rem;
   min-height: 10vh;
 `;
+// 기존 재료 검색 버튼 css
+// 디자인을 버튼을 위로 올리자는 의견으로 폐기
 const ResourceSearchButton = styled.button`
   position: absolute;
   border-radius: 0.5rem;
@@ -258,6 +280,17 @@ const ResourceSearchButton = styled.button`
   bottom: 0;
   left: 50%;
   transform: translate(-50%, 50%);
+`;
+
+const ResourceSearchButtonInBar = styled.button`
+  float: right;
+  border-radius: 0.5rem;
+  height: 100%;
+  width: 10%;
+  min-width: 50px;
+  margin: 0;
+  padding: 4px;
+  margin-left: auto;
 `;
 
 const SearchedBox = styled.div`
@@ -275,4 +308,8 @@ const Input = styled.input`
   border: none;
   outline: none;
   font-size: 16px;
+`;
+
+const IconwWrapper = styled.div`
+  margin: auto;
 `;
