@@ -46,8 +46,8 @@ function MyPage() {
   };
 
   return (
-    <div className=" mx-auto w-full min-h-screen">
-      <UserMainInfoWrapper className="min-width-400">
+    <div className="mx-auto w-full min-h-screen">
+      <UserMainInfoWrapper className="">
         <ProfileImage className="img-render" src={profileImage} />
         <ProfileInfo>
           <div style={{ fontWeight: 'bold', fontSize: '24px' }} className="text-aling-left">
