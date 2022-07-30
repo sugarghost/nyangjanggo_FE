@@ -114,6 +114,18 @@ const Search = () => {
     }
   };
 
+  const searchClear = async () => {
+    await setSearchValue('');
+
+    if (searchType) {
+      setIsSearchedValue(false);
+      // 나중에 냉장고 연결해서 냉장고 데이터 있으면 여기에 연결함
+      setSearchedTagList(ingredientsList);
+    } else if (searchType === 0) {
+      setIsSearchedValue(false);
+    }
+  };
+
   const addTags = (tag: string) => {
     if (!selectedTagList.includes(tag)) setSelectedTagList([...selectedTagList, tag]);
   };
@@ -140,7 +152,7 @@ const Search = () => {
               >
                 <SearchIcon fill="gray" className="m-1" />
                 <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
-                <div className="cursor-pointer ml-auto" onClick={() => setSearchValue('')}>
+                <div className="cursor-pointer ml-auto" onClick={searchClear}>
                   &times;
                 </div>
               </div>
@@ -184,7 +196,7 @@ const Search = () => {
             >
               <SearchIcon fill="gray" className="m-1" />
               <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
-              <div className="cursor-pointer ml-auto" onClick={() => setSearchValue('')}>
+              <div className="cursor-pointer ml-auto" onClick={searchClear}>
                 &times;
               </div>
             </div>
