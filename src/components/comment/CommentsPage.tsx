@@ -92,7 +92,6 @@ const CommentsPage = ({ boardId }: CommentsPageProps) => {
 
   const deleteCommentMutation = useMutation((formData: FormData) => deleteCommentApi(formData), {
     onSuccess: (res) => {
-      console.log('deleteCommentMutation res:', res);
       refetch();
     },
     onError: (e) => {
