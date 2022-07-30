@@ -28,7 +28,7 @@ const Category = ({ name, index, onDelete }: CategoryProps) => {
   return (
     <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
       <div className="mb-4">
-        <div className="flex flex-col w-70vw float-left">
+        <div className="flex flex-col w-7/10 float-left">
           <ResourceCategoryInput
             validationCheck={errors.resourceRequestDtoList?.[index]?.category}
             defaultValue={name}
@@ -46,7 +46,7 @@ const Category = ({ name, index, onDelete }: CategoryProps) => {
       {fields.map((item, i) => (
         <div key={item.id}>
           <div className="flex justify-between w-full">
-            <div className="flex flex-col w-40vw">
+            <div className="flex flex-col w-2/5">
               <ResourceInput
                 validationCheck={errors.resourceRequestDtoList?.[index]?.resources?.[i]?.resourceName}
                 defaultValue={item.resourceName}
@@ -62,7 +62,7 @@ const Category = ({ name, index, onDelete }: CategoryProps) => {
                 </ValidationMessage>
               )}
             </div>
-            <div className="flex flex-col w-40vw">
+            <div className="flex flex-col w-2/5">
               <ResourceInput
                 validationCheck={errors.resourceRequestDtoList?.[index]?.resources?.[i]?.amount}
                 defaultValue={item.amount}

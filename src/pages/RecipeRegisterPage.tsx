@@ -414,7 +414,7 @@ const RecipeRegisterPage = () => {
   return (
     <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-        <div className="mx-auto w-90vw">
+        <div className="mx-auto w-9/10">
           <FormProvider {...recipeMethods}>
             <form onSubmit={recipeHandleSubmit(onSubmitRecipe, onErrorRecipe)}>
               <MainImageTitle className="text-gray-700 text-left text-lg my-1 font-900">

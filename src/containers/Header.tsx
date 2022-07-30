@@ -96,9 +96,7 @@ const Header = () => {
 
   return (
     <header>
-      {windowDimenion.winWidth > 750 ? (
-        <></>
-      ) : window.location.pathname !== '/' ? (
+      {window.location.pathname !== '/' ? (
         <MobileHeader className="w-full text-center flex justify-between">
           <BackButton
             onClick={() => {

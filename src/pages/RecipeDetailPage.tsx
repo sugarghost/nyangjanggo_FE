@@ -133,7 +133,7 @@ const RecipeDetailPage = () => {
   return (
     <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-        <div className="mx-auto w-90vw">
+        <div className="mx-auto w-9/10">
           <div className="float-right">
             {recipe?.nickname === userInfomation?.nickname && (
               <>

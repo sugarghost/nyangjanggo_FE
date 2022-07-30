@@ -110,10 +110,10 @@ const Search = () => {
     <>
       {searchType ? (
         <>
-          <div className="p-4 top-0 w-100vw z-100">
+          <div className="p-4 top-0 w-full z-100">
             <div className="flex flex-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
               <div
-                className="rounded-md flex flex-row p-1vw"
+                className="rounded-md flex flex-row p-1"
                 style={{ background: '#EFEFF0', padding: '10px', width: '88%' }}
               >
                 <SearchIcon fill="gray" className="m-1" />
@@ -153,10 +153,10 @@ const Search = () => {
           </ResourceSearchWrapper>
         </>
       ) : (
-        <div className="p-4 top-0 w-100vw z-100">
+        <div className="p-4 top-0 w-full z-100">
           <div className="flex flex-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
             <div
-              className="rounded-md flex flex-row p-1vw"
+              className="rounded-md flex flex-row p-1"
               style={{ background: '#EFEFF0', padding: '10px', width: '88%' }}
             >
               <SearchIcon fill="gray" className="m-1" />
@@ -244,7 +244,7 @@ const TagBox = styled.div`
 `;
 const WholeBox = styled.div`
   padding: 1vw;
-  width: 90vw;
+  width: 90%;
 `;
 
 const InputBox = styled.div`
