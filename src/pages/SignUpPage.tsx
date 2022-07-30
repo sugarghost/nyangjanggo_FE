@@ -1,25 +1,17 @@
+import Logo from '@images/nyang_logo.png';
 import React from 'react';
 import styled from 'styled-components';
 
-import { refreshToken } from '../apis/AuthApi';
-import Button from '../components/Botton';
 import SignTitle from '../components/sign/SignTitle';
 import KakaoButton from '../images/kakao_button.png';
 import NaverButton from '../images/naver_button.png';
-import Logo from '../images/nyang_logo.png';
 
 function SignUpPage() {
-  const refreshTokenTest = () => {
-    refreshToken();
-  };
-
   return (
-    <div className="min-h-screen max-w-md mx-auto">
+    <div className="mx-auto w-full min-h-screen">
       <div className="m-4">
-        <SignTitle>
-          <LogoWrapper className="img-render" src={Logo} />
-        </SignTitle>
-        <SignInfo>Sign in |</SignInfo>
+        <LogoWrapper className="img-render" src={Logo} />
+        <SignInfo>로그인 |</SignInfo>
         <button
           className="w-full"
           style={{
@@ -27,15 +19,10 @@ function SignUpPage() {
           }}
           onClick={() => {}}
         >
-          {/* TODO href에 서버 url 받기
-                  http://back-end-server/oauth2/authorization/kakao,
-                  http://back-end-server/oauth2/authorization/naver
-                */}
           <a href="https://api.nyangjanggo.com/oauth2/authorization/kakao">
             {/* @ts-ignore */}
             <OauthButton src={KakaoButton} />
           </a>
-          {/* <div onClick={kakaoAuth}>카카오 로그인</div> */}
         </button>
       </div>
     </div>
@@ -43,9 +30,8 @@ function SignUpPage() {
 }
 
 const LogoWrapper = styled.img`
-  width: 130px;
-  height: 130px;
-  margin: 0px auto;
+  width: 50%;
+  margin: auto;
 `;
 
 const SignInfo = styled.div`
