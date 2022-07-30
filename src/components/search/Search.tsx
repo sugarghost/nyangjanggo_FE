@@ -1,9 +1,11 @@
+import { getResource } from '@apis/ResourceApi';
 import searchApi from '@apis/SearchApi';
 import Tag from '@components/search/Tag';
 import { ReactComponent as SearchIcon } from '@icon/search.svg';
 import RecipeSearchIcon from '@images/recipe_search_icon.png';
 import { ingredientsNameSelector } from '@recoil/ingredient';
 import { searchQueryAtom, searchTypeAtom } from '@recoil/searchAtom';
+import { isExist } from '@utils/jwt';
 import React, { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -20,7 +22,8 @@ const Search = () => {
   // 재료 검색을 위해 선택 된 tag list
   const [selectedTagList, setSelectedTagList] = useState([]);
   // 재료 검색이 비어있을 때 사용할 냉장고 재료 리스트
-  const ingredientsList = useRecoilValue(ingredientsNameSelector);
+  // const ingredientsList = useRecoilValue(ingredientsNameSelector);
+  const [ingredientsList, setIngredientsList] = useState([]);
 
   // 재료 검색, 요리 이름 검색을 전환하기 위한 state
   // 1: 재료 검색, 0: 요리 이름 검색
@@ -53,6 +56,16 @@ const Search = () => {
     },
   );
 
+  useQuery(['getingredientsName'], async () => getResource(), {
+    refetchOnWindowFocus: false,
+    enabled: isExist(),
+    onSuccess: (res) => {
+      const resourceList = [];
+      res.data.map((value) => resourceList.push(value.resourceName));
+      setIngredientsList(resourceList);
+    },
+  });
+
   // 검색창 기능
   const changeSearchValue = async (event: React.ChangeEvent<HTMLInputElement>) => {
     await setSearchValue(event.target.value);
@@ -77,12 +90,14 @@ const Search = () => {
   };
 
   const onSearchResource = () => {
-    setSearchTypeState('resource');
-    setSearchQueryState({
-      query: selectedTagList.join(' '),
-      size: 10,
-      page: 0,
-    });
+    if (selectedTagList.length !== 0) {
+      setSearchTypeState('resource');
+      setSearchQueryState({
+        query: selectedTagList.join(' '),
+        size: 10,
+        page: 0,
+      });
+    }
   };
 
   const handleDropDownKey = (event: any) => {
@@ -106,6 +121,13 @@ const Search = () => {
   const removeTags = (tag: string) => {
     setSelectedTagList(selectedTagList.filter((element) => element !== tag));
   };
+
+  useEffect(() => {
+    if (ingredientsList.length !== 0) {
+      setSearchedTagList(ingredientsList);
+    }
+  }, [ingredientsList]);
+
   return (
     <>
       {searchType ? (
@@ -131,6 +153,7 @@ const Search = () => {
           </div>
 
           <SearchedBox>
+            {ingredientsList.length === 0 && searchValue === '' ? <p>등록된 냉장고 재료가 없습니다!</p> : ''}
             {searchedTagList.map((tags: string, index: number) =>
               !selectedTagList.includes(tags) ? (
                 <Tag key={index} tag={tags} onClick={() => addTags(tags)} bgColor="bg-box" />
