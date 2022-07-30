@@ -21,7 +21,7 @@ const LikePage = () => {
 
   // 상세 페이지 기능
   const viewRecipeDetail = (boardId: number) => {
-    navigate('/recipeDetailPage', { state: { boardId } });
+    navigate(`/recipeDetailPage/${boardId}`);
   };
 
   return (

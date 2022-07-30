@@ -46,7 +46,7 @@ const MainSearched = () => {
   });
   // 상세 페이지 기능
   const viewRecipeDetail = (boardId: number) => {
-    navigate('/recipeDetailPage', { state: { boardId } });
+    navigate(`/recipeDetailPage/${boardId}`);
   };
   // 최신순이나 인기도 순 좀더 자세히 보는 용도
   const viewContentDetail = (type: string) => {

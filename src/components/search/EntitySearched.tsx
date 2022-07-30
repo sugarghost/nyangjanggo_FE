@@ -82,7 +82,7 @@ const EntitySearched = () => {
 
   // 상세 페이지 기능
   const viewRecipeDetail = (boardId: number) => {
-    navigate('/recipeDetailPage', { state: { boardId } });
+    navigate(`/recipeDetailPage/${boardId}`);
   };
 
   // 메인 페이지로 돌아가는 용도
