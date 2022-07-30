@@ -72,13 +72,38 @@ export default {
     const query = {
       _source: ['id', 'title', 'userNickname', 'goodCount', 'commentCount', 'mainImageLink', 'createdAt', 'modifiedAt'],
       query: {
-        match: {
-          'resourceInBoardList.resourceName': payload.query,
+        bool: {
+          must: [
+            {
+              match: {
+                resourceName: payload.query,
+              },
+            },
+            {
+              range: {
+                cnt: {
+                  gte: 2,
+                },
+              },
+            },
+          ],
         },
       },
+      sort: [
+        {
+          _score: {
+            order: 'desc',
+          },
+          'resourceName.keyword': {
+            order: 'asc',
+          },
+        },
+      ],
+      track_scores: true,
       size: payload.size,
       from: payload.page * payload.size,
     };
+
     const res = await elasticInstance.post(`${board}${search}`, query, {
       headers: { 'Content-Type': 'application/json' },
     });
