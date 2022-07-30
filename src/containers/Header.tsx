@@ -96,7 +96,9 @@ const Header = () => {
 
   return (
     <header>
-      {window.location.pathname !== '/' ? (
+      {window.location.pathname !== '/' &&
+      window.location.pathname !== '/signUpPage' &&
+      window.location.pathname !== '/signInPage' ? (
         <MobileHeader className="w-full text-center flex justify-between">
           <BackButton
             onClick={() => {
