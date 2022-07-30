@@ -184,7 +184,7 @@ const Search = () => {
             >
               <SearchIcon fill="gray" className="m-1" />
               <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
-              <div className="cursor-pointer mr-1" onClick={() => setSearchValue('')}>
+              <div className="cursor-pointer ml-auto" onClick={() => setSearchValue('')}>
                 &times;
               </div>
             </div>
@@ -257,6 +257,7 @@ const SearchedBox = styled.div`
   border-radius: 1rem;
 `;
 const Input = styled.input`
+  width: 80%;
   margin: 0;
   background-color: transparent;
   border: none;
