@@ -1,5 +1,4 @@
-import { postResource, getResource } from '@/apis/ResourceApi';
-import { Ingredient } from '@/apis/ResourceApi';
+import { postResource, getResource, Ingredient } from '@/apis/ResourceApi';
 import { ingredientsSelector } from '@/recoil/ingredient';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
@@ -45,7 +44,7 @@ const MyRefrigeratorPage = () => {
     const nowDate = new Date();
 
     const diffDate = exprationDate.getTime() - nowDate.getTime();
-    let diffDateNumber = Math.floor(diffDate / (1000 * 60 * 60 * 24)) + 1;
+    const diffDateNumber = Math.floor(diffDate / (1000 * 60 * 60 * 24)) + 1;
 
     let returnElement = <div>{diffDateNumber} 일 남음</div>;
 
@@ -60,7 +59,7 @@ const MyRefrigeratorPage = () => {
   const handleOnClickDelete = (e) => {
     const deleteItemIdx = e.target.id;
 
-    let deletedIngredients = Array.from(ingredients);
+    const deletedIngredients = Array.from(ingredients);
     deletedIngredients.splice(deleteItemIdx, 1);
 
     const formData = new FormData();
@@ -94,12 +93,11 @@ const MyRefrigeratorPage = () => {
     setIngredientName(editIngredient.resourceName);
     setIngredientCount(parseInt(editIngredient.amount));
 
-    //setEditIngredientId(null);
-    //setEditMode(false);
+    // setEditIngredientId(null);
+    // setEditMode(false);
   };
 
   const handleOnClickEdit = () => {
-
     const editIngredientsArray = Array.from(ingredients);
 
     editIngredientsArray.push({
@@ -179,106 +177,100 @@ const MyRefrigeratorPage = () => {
     setLoading(false);
   };
   return (
-    <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
-      <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-        <div className="mx-auto w-full" style={{ padding: '0px 10px' }}>
-          <OptionsWrapper>
-            <IngredientAddBtnWrapper>
-              {showRegisterIngredient ? (
-                <IngredientAddBtn style={{ userSelect: 'none' }} onPointerDown={handleOnClcikAddButton}>
-                  ←
-                </IngredientAddBtn>
-              ) : (
-                <IngredientAddBtn onPointerDown={handleOnClcikAddButton}>+</IngredientAddBtn>
-              )}
-            </IngredientAddBtnWrapper>
-            {showRegisterIngredient ? (
-              <>
-                <Title style={{ textAlign: 'left', userSelect: 'none' }}>재료 등록</Title>
+    <div className="mx-auto w-full" style={{ padding: '0px 10px' }}>
+      <OptionsWrapper>
+        <IngredientAddBtnWrapper>
+          {showRegisterIngredient ? (
+            <IngredientAddBtn style={{ userSelect: 'none' }} onPointerDown={handleOnClcikAddButton}>
+              ←
+            </IngredientAddBtn>
+          ) : (
+            <IngredientAddBtn onPointerDown={handleOnClcikAddButton}>+</IngredientAddBtn>
+          )}
+        </IngredientAddBtnWrapper>
+        {showRegisterIngredient ? (
+          <>
+            <Title style={{ textAlign: 'left', userSelect: 'none' }}>재료 등록</Title>
 
-                <label
-                  style={{
-                    textAlign: 'left',
-                    color: '#676767',
-                    fontWeight: 'bold',
-                    fontSize: '15px',
-                    margin: '32px 0 0 0',
-                  }}
-                >
-                  재료 이름
-                </label>
-                <IngredientRegisterTitleInput
-                  style={{ margin: '10px 0 0 0' }}
-                  onChange={handleOnChangeIngredientName}
-                  value={ingredientName}
-                  placeholder="재료 이름"
-                />
-                <label
-                  style={{
-                    textAlign: 'left',
-                    color: '#676767',
-                    fontWeight: 'bold',
-                    fontSize: '15px',
-                    margin: '29px 0 0 0',
-                  }}
-                >
-                  재료 수량
-                </label>
-                <IngredientRegisterCountInput
-                  style={{ margin: '10px 0 0 0' }}
-                  onChange={handleOnChangeIngredientCount}
-                  value={ingredientCount}
-                  placeholder="재료 수량"
-                  type="number"
-                />
+            <label
+              style={{
+                textAlign: 'left',
+                color: '#676767',
+                fontWeight: 'bold',
+                fontSize: '15px',
+                margin: '32px 0 0 0',
+              }}
+            >
+              재료 이름
+            </label>
+            <IngredientRegisterTitleInput
+              style={{ margin: '10px 0 0 0' }}
+              onChange={handleOnChangeIngredientName}
+              value={ingredientName}
+              placeholder="재료 이름"
+            />
+            <label
+              style={{
+                textAlign: 'left',
+                color: '#676767',
+                fontWeight: 'bold',
+                fontSize: '15px',
+                margin: '29px 0 0 0',
+              }}
+            >
+              재료 수량
+            </label>
+            <IngredientRegisterCountInput
+              style={{ margin: '10px 0 0 0' }}
+              onChange={handleOnChangeIngredientCount}
+              value={ingredientCount}
+              placeholder="재료 수량"
+              type="number"
+            />
 
-                <Time style={{ textAlign: 'left' }}>유통기한</Time>
-                <input
-                  type="date"
-                  id="start"
-                  name="trip-start"
-                  style={{ margin: '10px 0 0 0' }}
-                  value={moment(expirationDate).format('YYYY-MM-DD')}
-                  onChange={(e) => {
-                    setExpirationDate(e.target.value);
-                  }}
-                  min="2018-01-01"
-                />
-              </>
+            <Time style={{ textAlign: 'left' }}>유통기한</Time>
+            <input
+              type="date"
+              id="start"
+              name="trip-start"
+              style={{ margin: '10px 0 0 0' }}
+              value={moment(expirationDate).format('YYYY-MM-DD')}
+              onChange={(e) => {
+                setExpirationDate(e.target.value);
+              }}
+              min="2018-01-01"
+            />
+          </>
+        ) : (
+          <>
+            {ingredients.length > 0 ? (
+              Array.from(ingredients).map((item, idx) => (
+                <div key={idx}>
+                  <EditOption>
+                    <div onClick={handleOnClickEditMode} id={String(idx)}>
+                      수정
+                    </div>
+                    <div style={{ margin: '0 4px' }}>|</div>
+                    <div id={String(idx)} onClick={handleOnClickDelete} style={{}}>
+                      삭제
+                    </div>
+                  </EditOption>
+                  <IngredientsBox className="">
+                    <div>
+                      <span style={{ margin: '0 0 0 0' }}>
+                        {item.resourceName}({item.amount}개)
+                      </span>
+                    </div>
+                    <div>{getExpirationDay(item.endTime)}</div>
+                  </IngredientsBox>
+                </div>
+              ))
             ) : (
-              <>
-                {ingredients.length > 0 ? (
-                  Array.from(ingredients).map((item, idx) => {
-                    return (
-                      <div key={idx}>
-                        <EditOption>
-                          <div onClick={handleOnClickEditMode} id={String(idx)}>
-                            수정
-                          </div>
-                          <div style={{ margin: '0 4px' }}>|</div>
-                          <div id={String(idx)} onClick={handleOnClickDelete} style={{}}>
-                            삭제
-                          </div>
-                        </EditOption>
-                        <IngredientsBox className="">
-                          <div>
-                            <span style={{ margin: '0 0 0 0' }}>
-                              {item.resourceName}({item.amount}개)
-                            </span>
-                          </div>
-                          <div>{getExpirationDay(item.endTime)}</div>
-                        </IngredientsBox>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div>등록하신 재료가 없습니다.</div>
-                )}
-              </>
+              <div>등록하신 재료가 없습니다.</div>
             )}
-          </OptionsWrapper>
-        </div>
-      </div>
+          </>
+        )}
+      </OptionsWrapper>
 
       {showRegisterIngredient && (
         <BottomFloat className="w-full">

@@ -14,33 +14,29 @@ function SignUpPage() {
   };
 
   return (
-    <div className="bg-secondary-1 items-center min-h-screen bg-white dark:bg-gray-900 mt-100">
-      <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-        <div className="max-w-md mx-auto">
-          <div className="m-4">
-            <SignTitle>
-              <LogoWrapper className="img-render" src={Logo} />
-            </SignTitle>
-            <SignInfo>Sign in |</SignInfo>
-            <button
-              className="w-full"
-              style={{
-                margin: '30px 0 0 0',
-              }}
-              onClick={() => {}}
-            >
-              {/* TODO href에 서버 url 받기
+    <div className="max-w-md mx-auto">
+      <div className="m-4">
+        <SignTitle>
+          <LogoWrapper className="img-render" src={Logo} />
+        </SignTitle>
+        <SignInfo>Sign in |</SignInfo>
+        <button
+          className="w-full"
+          style={{
+            margin: '30px 0 0 0',
+          }}
+          onClick={() => {}}
+        >
+          {/* TODO href에 서버 url 받기
                   http://back-end-server/oauth2/authorization/kakao,
                   http://back-end-server/oauth2/authorization/naver
                 */}
-              <a href="https://api.nyangjanggo.com/oauth2/authorization/kakao">
-                {/* @ts-ignore */}
-                <OauthButton src={KakaoButton} />
-              </a>
-              {/* <div onClick={kakaoAuth}>카카오 로그인</div> */}
-            </button>
-          </div>
-        </div>
+          <a href="https://api.nyangjanggo.com/oauth2/authorization/kakao">
+            {/* @ts-ignore */}
+            <OauthButton src={KakaoButton} />
+          </a>
+          {/* <div onClick={kakaoAuth}>카카오 로그인</div> */}
+        </button>
       </div>
     </div>
   );

@@ -170,43 +170,39 @@ const UserEditProfile = () => {
   }, [watchAll, nicnknameValidation]);
 
   return (
-    <div className="bg-secondary-1 min-h-screen bg-white dark:bg-gray-900" style={{ padding: '0px 10px' }}>
-      <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-        <div className="max-w-md mx-auto w-full">
-          <form onSubmit={handleSubmit(handleOnClickUserProfileEdit, onErrorRecipe)}>
-            <ProfileImageUploader setProfileImageFile={setProfileImageFile} userImgUrl={userImgUrl} />
-            <div className="flex mt-6">
-              <NicknameInput
-                placeholder="닉네임"
-                validationCheck={!!errors.nickname}
-                {...register('nickname', { required: true, max: 20 })}
-                onChange={handleOnChangeNickname}
-              />
-              <NicknameButton className="m-auto" type="button" onClick={checkNickname} value="중복 확인" />
-            </div>
-            {errors.nickname ? (
-              <ValidationMessage>{errors.nickname.message}</ValidationMessage>
-            ) : !nicnknameValidation ? (
-              <ValidationMessage>{nicnknameValidationMessage}</ValidationMessage>
-            ) : (
-              ''
-            )}
-
-            <ContentTextarea
-              placeholder="자기 소개를 입력해주세요!"
-              rows={6}
-              validationCheck={!!errors.userDescription}
-              ref={userDescriptionRef}
-              {...register('userDescription', { required: true, max: 1000 })}
-            />
-            {errors.userDescription && <ValidationMessage>{errors.userDescription.message}</ValidationMessage>}
-
-            <SaveButton type="submit" disabled={isDisabled}>
-              <div>등록하기</div>
-            </SaveButton>
-          </form>
+    <div className="mx-auto w-full">
+      <form onSubmit={handleSubmit(handleOnClickUserProfileEdit, onErrorRecipe)}>
+        <ProfileImageUploader setProfileImageFile={setProfileImageFile} userImgUrl={userImgUrl} />
+        <div className="flex mt-6">
+          <NicknameInput
+            placeholder="닉네임"
+            validationCheck={!!errors.nickname}
+            {...register('nickname', { required: true, max: 20 })}
+            onChange={handleOnChangeNickname}
+          />
+          <NicknameButton className="m-auto" type="button" onClick={checkNickname} value="중복 확인" />
         </div>
-      </div>
+        {errors.nickname ? (
+          <ValidationMessage>{errors.nickname.message}</ValidationMessage>
+        ) : !nicnknameValidation ? (
+          <ValidationMessage>{nicnknameValidationMessage}</ValidationMessage>
+        ) : (
+          ''
+        )}
+
+        <ContentTextarea
+          placeholder="자기 소개를 입력해주세요!"
+          rows={6}
+          validationCheck={!!errors.userDescription}
+          ref={userDescriptionRef}
+          {...register('userDescription', { required: true, max: 1000 })}
+        />
+        {errors.userDescription && <ValidationMessage>{errors.userDescription.message}</ValidationMessage>}
+
+        <SaveButton type="submit" disabled={isDisabled}>
+          <div>등록하기</div>
+        </SaveButton>
+      </form>
     </div>
   );
 };

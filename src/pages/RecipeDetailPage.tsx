@@ -131,92 +131,82 @@ const RecipeDetailPage = () => {
   };
 
   return (
-    <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
-      <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-        <div className="mx-auto w-9/10">
-          <div className="float-right">
-            {recipe?.nickname === userInfomation?.nickname && (
-              <>
-                <IconButton onClick={modifyRecipeDetail}>
-                  <EditIcon className="m-auto" stroke="white" />
-                </IconButton>
-                <IconButton onClick={deleteRecipeDetail}>
-                  <TrashIcon className="m-auto" stroke="white" />
-                </IconButton>
-              </>
-            )}
-            {userInfomation?.nickname && (
-              <IconButton onClick={likeRecipeDetail}>
-                <HeartIcon className="m-auto" stroke={isLike ? '#EB3120' : 'white'} />
-              </IconButton>
-            )}
-          </div>
-          <img
-            className="min-h-80 mb-4 w-full rounded-2xl image-render-auto bg-gray-100"
-            src={recipe?.mainImg}
-            alt=""
-          />
-          <p className="text-gray-700 text-left text-4xl my-1 font-900">{recipe?.title}</p>
-          <textarea
-            className="text-left text-lg w-full my-1 font-300 border-gray-200 border-2 rounded-md min-h-30 p-2 focus:outline-none"
-            readOnly
-            value={recipe?.content}
-          />
+    <div className="mx-auto w-9/10">
+      <div className="float-right">
+        {recipe?.nickname === userInfomation?.nickname && (
+          <>
+            <IconButton onClick={modifyRecipeDetail}>
+              <EditIcon className="m-auto" stroke="white" />
+            </IconButton>
+            <IconButton onClick={deleteRecipeDetail}>
+              <TrashIcon className="m-auto" stroke="white" />
+            </IconButton>
+          </>
+        )}
+        {userInfomation?.nickname && (
+          <IconButton onClick={likeRecipeDetail}>
+            <HeartIcon className="m-auto" stroke={isLike ? '#EB3120' : 'white'} />
+          </IconButton>
+        )}
+      </div>
+      <img className="min-h-80 mb-4 w-full rounded-2xl image-render-auto bg-gray-100" src={recipe?.mainImg} alt="" />
+      <p className="text-gray-700 text-left text-4xl my-1 font-900">{recipe?.title}</p>
+      <textarea
+        className="text-left text-lg w-full my-1 font-300 border-gray-200 border-2 rounded-md min-h-30 p-2 focus:outline-none"
+        readOnly
+        value={recipe?.content}
+      />
 
-          <hr />
-          {ResourceForm.length !== 0 ? (
-            <>
-              <p className="text-gray-700 text-left text-lg my-1 font-900">재료 분류</p>
-              {ResourceForm.map((categorys, index) => (
-                <div key={categorys.category}>
-                  <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
-                    <p className="text-lg my-1 font-500 text-left">{categorys.category}</p>
-                    {categorys.resources.map((resource, subIndex) => (
-                      <div key={`${categorys.category}_${resource.resourceName}`}>
-                        <div className="flex justify-between w-full mb-4">
-                          <span className="float-left text-left text-base w-2/3 my-1 font-400">
-                            {resource.resourceName}
-                          </span>
-                          <span className="text-base my-1 font-400">:</span>
-                          <span className="float-right text-right text-base w-1/3 my-1 font-400">
-                            {resource.amount}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-              <hr />
-            </>
-          ) : (
-            <></>
-          )}
-          {StepForm.length !== 0 ? (
-            <>
-              <p className="text-gray-700 text-left text-lg my-1 font-900">조리 과정</p>
+      <hr />
+      {ResourceForm.length !== 0 ? (
+        <>
+          <p className="text-gray-700 text-left text-lg my-1 font-900">재료 분류</p>
+          {ResourceForm.map((categorys, index) => (
+            <div key={categorys.category}>
               <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
-                {StepForm.map((field, index) => (
-                  <div key={index}>
-                    <p className="text-lg my-1 font-500 text-left">조리과정 {index + 1}</p>
-                    <RecipeInfoWrapper>
-                      <div className="flex justify-between w-full mb-4">
-                        <img src={field.imageLink} className="img-render w-2/6 rounded-lg" alt="" />
-                        <div className="w-4/6 ml-4 text-left border-gray-200 border-2 rounded-md p-1">
-                          {field.stepContent}
-                        </div>
-                      </div>
-                    </RecipeInfoWrapper>
+                <p className="text-lg my-1 font-500 text-left">{categorys.category}</p>
+                {categorys.resources.map((resource, subIndex) => (
+                  <div key={`${categorys.category}_${resource.resourceName}`}>
+                    <div className="flex justify-between w-full mb-4">
+                      <span className="float-left text-left text-base w-2/3 my-1 font-400">
+                        {resource.resourceName}
+                      </span>
+                      <span className="text-base my-1 font-400">:</span>
+                      <span className="float-right text-right text-base w-1/3 my-1 font-400">{resource.amount}</span>
+                    </div>
                   </div>
                 ))}
               </div>
-            </>
-          ) : (
-            <></>
-          )}
-          <CommentsPage boardId={boardId} />
-        </div>
-      </div>
+            </div>
+          ))}
+          <hr />
+        </>
+      ) : (
+        <></>
+      )}
+      {StepForm.length !== 0 ? (
+        <>
+          <p className="text-gray-700 text-left text-lg my-1 font-900">조리 과정</p>
+          <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
+            {StepForm.map((field, index) => (
+              <div key={index}>
+                <p className="text-lg my-1 font-500 text-left">조리과정 {index + 1}</p>
+                <RecipeInfoWrapper>
+                  <div className="flex justify-between w-full mb-4">
+                    <img src={field.imageLink} className="img-render w-2/6 rounded-lg" alt="" />
+                    <div className="w-4/6 ml-4 text-left border-gray-200 border-2 rounded-md p-1">
+                      {field.stepContent}
+                    </div>
+                  </div>
+                </RecipeInfoWrapper>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
+      <CommentsPage boardId={boardId} />
     </div>
   );
 };
