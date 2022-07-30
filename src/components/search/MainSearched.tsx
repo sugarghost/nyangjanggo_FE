@@ -166,6 +166,7 @@ const ScrollMenuWrapper = styled.div`
   overflow-x: scroll;
   overflow-y: hidden;
   margin-top: 0.5rem;
+  width: 100%;
 
   @media screen and (max-width: 500px) {
     max-width: 410px;
