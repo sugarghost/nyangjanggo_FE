@@ -104,7 +104,7 @@ const TitleSearched = () => {
   return (
     <>
       <Suspense fallback={<div>로딩중입니다.</div>}>
-        <div className="mx-auto w-full">
+        <div className="mx-auto w-full min-h-screen">
           <ContentTitle>
             요리이름 검색결과
             <ContentTitleMain onClick={viewContentDetail}>

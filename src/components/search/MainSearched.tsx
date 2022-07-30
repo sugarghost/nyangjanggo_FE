@@ -70,7 +70,7 @@ const MainSearched = () => {
   return (
     <>
       <Suspense fallback={<div>로딩중입니다.</div>}>
-        <div className="mx-auto w-full">
+        <div className="mx-auto w-full min-h-screen">
           <ContentTitle>
             최신순
             <ContentTitleMore onClick={() => viewContentDetail('recent')}>

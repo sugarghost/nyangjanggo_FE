@@ -97,7 +97,7 @@ const EntitySearched = () => {
   return (
     <>
       <Suspense fallback={<div>로딩중입니다.</div>}>
-        <div className="mx-auto w-full">
+        <div className="mx-auto w-full min-h-screen">
           <ContentTitle>
             {searchQueryState.query === 'goodCount,desc' ? '인기 레시피' : '최신 레시피'}
 

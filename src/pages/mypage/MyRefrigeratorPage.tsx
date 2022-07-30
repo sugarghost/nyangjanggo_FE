@@ -177,7 +177,7 @@ const MyRefrigeratorPage = () => {
     setLoading(false);
   };
   return (
-    <div className="mx-auto w-full" style={{ padding: '0px 10px' }}>
+    <div className="mx-auto w-full min-h-screen" style={{ padding: '0px 10px' }}>
       <OptionsWrapper>
         <IngredientAddBtnWrapper>
           {showRegisterIngredient ? (
