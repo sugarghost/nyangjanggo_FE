@@ -14,7 +14,7 @@ function SignUpPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="min-h-screen max-w-md mx-auto">
       <div className="m-4">
         <SignTitle>
           <LogoWrapper className="img-render" src={Logo} />

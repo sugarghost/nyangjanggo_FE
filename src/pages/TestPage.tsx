@@ -32,9 +32,7 @@ function TestPage({}) {
         `${api}`, // token refresh api
         { headers: { 'Access-Token': `${accessToken}` }, withCredentials: isCredentials },
       )
-      .then((result) => {
-        console.log('result :', result);
-      })
+      .then((result) => {})
       .catch((refreshError) => {
         console.log('refreshError: ', refreshError);
       });

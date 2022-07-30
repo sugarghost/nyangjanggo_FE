@@ -38,9 +38,7 @@ const ResourceSearched = () => {
       size: searchQueryState.size,
       query: searchQueryState.query,
     };
-    console.log('paramTemplate: ', paramTemplate);
     const res = await getRecipeListByResourceApi(paramTemplate);
-    console.log('res :', res);
     const content = [];
     res.data.hits?.hits.map((hit) => {
       content.push({

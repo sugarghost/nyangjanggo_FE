@@ -64,7 +64,6 @@ const UserEditProfile = () => {
   // 유저 정보 변경
   const putUserMutation = useMutation((addData: FormData) => putUserApi(addData), {
     onSuccess: (res) => {
-      console.log('putUser :', res);
       navigate('/');
     },
     onError: (e) => {

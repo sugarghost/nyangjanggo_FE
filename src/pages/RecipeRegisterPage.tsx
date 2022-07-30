@@ -165,8 +165,6 @@ const RecipeRegisterPage = () => {
     refetchOnWindowFocus: false,
     enabled: !isModify,
     onSuccess: (res) => {
-      console.log('getRecipePosting', res);
-
       if (res.data) {
         setBoardId(res.data.boardId);
       }
