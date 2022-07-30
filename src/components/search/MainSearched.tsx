@@ -70,55 +70,51 @@ const MainSearched = () => {
   return (
     <>
       <Suspense fallback={<div>로딩중입니다.</div>}>
-        <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
-          <div className="max-w-screen-md mx-auto">
-            <div className="mx-auto w-full">
-              <ContentTitle>
-                최신순
-                <ContentTitleMore onClick={() => viewContentDetail('recent')}>
-                  더보기
-                  <img src={RightArrow} />
-                </ContentTitleMore>
-              </ContentTitle>
-              <ScrollMenuWrapper className="flex">
-                <ScrollMenu>
-                  {recentData?.data.map((content: any, index: number) => (
-                    <Card
-                      cardTitle={content.title}
-                      key={index}
-                      cardImg={content.mainImg}
-                      styleCustom={{ width: '200px', margin: '0.25rem' }}
-                      onClick={(e) => viewRecipeDetail(content.boardId)}
-                      goodCount={content.goodCount}
-                    />
-                  ))}
-                </ScrollMenu>
-              </ScrollMenuWrapper>
-              <ContentTitle>
-                인기도
-                <ContentTitleMore onClick={() => viewContentDetail('like')}>
-                  더보기
-                  <img src={RightArrow} />
-                </ContentTitleMore>
-              </ContentTitle>
-              <ScrollMenuWrapper className="flex">
-                <ScrollMenu>
-                  {likeData?.data.map((content: any, index: number) => (
-                    <Card
-                      cardTitle={content.title}
-                      key={index}
-                      cardImg={content.mainImg}
-                      styleCustom={{ width: '200px', margin: '0.25rem' }}
-                      onClick={(e) => viewRecipeDetail(content.boardId)}
-                      goodCount={content.goodCount}
-                    />
-                  ))}
-                </ScrollMenu>
-              </ScrollMenuWrapper>
-            </div>
-            <hr />
-          </div>
+        <div className="mx-auto w-full">
+          <ContentTitle>
+            최신순
+            <ContentTitleMore onClick={() => viewContentDetail('recent')}>
+              더보기
+              <img src={RightArrow} />
+            </ContentTitleMore>
+          </ContentTitle>
+          <ScrollMenuWrapper className="flex">
+            <ScrollMenu>
+              {recentData?.data.map((content: any, index: number) => (
+                <Card
+                  cardTitle={content.title}
+                  key={index}
+                  cardImg={content.mainImg}
+                  styleCustom={{ width: '200px', margin: '0.25rem' }}
+                  onClick={(e) => viewRecipeDetail(content.boardId)}
+                  goodCount={content.goodCount}
+                />
+              ))}
+            </ScrollMenu>
+          </ScrollMenuWrapper>
+          <ContentTitle>
+            인기도
+            <ContentTitleMore onClick={() => viewContentDetail('like')}>
+              더보기
+              <img src={RightArrow} />
+            </ContentTitleMore>
+          </ContentTitle>
+          <ScrollMenuWrapper className="flex">
+            <ScrollMenu>
+              {likeData?.data.map((content: any, index: number) => (
+                <Card
+                  cardTitle={content.title}
+                  key={index}
+                  cardImg={content.mainImg}
+                  styleCustom={{ width: '200px', margin: '0.25rem' }}
+                  onClick={(e) => viewRecipeDetail(content.boardId)}
+                  goodCount={content.goodCount}
+                />
+              ))}
+            </ScrollMenu>
+          </ScrollMenuWrapper>
         </div>
+        <hr />
       </Suspense>
     </>
   );

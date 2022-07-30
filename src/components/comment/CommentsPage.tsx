@@ -64,21 +64,30 @@ const CommentsPage = ({ boardId }: CommentsPageProps) => {
     },
   });
   const onCommentRegister = () => {
-    const formData = new FormData();
-    formData.append('boardId', String(boardId));
-    formData.append(
-      'commentRequestDto',
-      new Blob(
-        [
-          JSON.stringify({
-            content: commentRef.current.value,
-          }),
-        ],
-        { type: 'application/json' },
-      ),
-    );
+    if (commentRef.current.value) {
+      const formData = new FormData();
+      formData.append('boardId', String(boardId));
+      formData.append(
+        'commentRequestDto',
+        new Blob(
+          [
+            JSON.stringify({
+              content: commentRef.current.value,
+            }),
+          ],
+          { type: 'application/json' },
+        ),
+      );
 
-    postCommentMutation.mutate(formData);
+      postCommentMutation.mutate(formData);
+      commentRef.current.value = '';
+    }
+  };
+
+  const handleDropDownKey = (event: any) => {
+    if (event.key === 'Enter') {
+      onCommentRegister();
+    }
   };
 
   const deleteCommentMutation = useMutation((formData: FormData) => deleteCommentApi(formData), {
@@ -103,7 +112,7 @@ const CommentsPage = ({ boardId }: CommentsPageProps) => {
     <>
       {userInfomation?.nickname && (
         <CommentInputWrapper className="">
-          <CommentInput placeholder="코멘트를 입력해주세요" ref={commentRef} />
+          <CommentInput placeholder="코멘트를 입력해주세요" onKeyUp={handleDropDownKey} ref={commentRef} />
           <CommentRegister onClick={onCommentRegister}>등록</CommentRegister>
         </CommentInputWrapper>
       )}

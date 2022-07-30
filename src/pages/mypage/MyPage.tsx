@@ -46,31 +46,27 @@ function MyPage() {
   };
 
   return (
-    <div className="bg-secondary-1 min-h-screen bg-white dark:bg-gray-900" style={{ padding: '0px 0px' }}>
-      <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-        <div className="max-w-md mx-auto w-full">
-          <UserMainInfoWrapper className="min-width-400">
-            <ProfileImage className="img-render" src={profileImage} />
-            <ProfileInfo>
-              <div style={{ fontWeight: 'bold', fontSize: '24px' }} className="text-aling-left">
-                {nickNameImage}
-              </div>
-              <div style={{ margin: '5px 0 0 0' }} className="text-aling-left">
-                {userDescription}
-              </div>
-            </ProfileInfo>
-          </UserMainInfoWrapper>
-          <div style={{ width: '100%', height: '12px', background: COLOR.GRAY1 }} />
-          <OptionsWrapper>
-            <OptionBox onClick={goUserEditPage}>정보 수정</OptionBox>
-            <OptionBox onClick={goMyRefrigeratorPage} className="">
-              냉장고
-            </OptionBox>
-            {/* <OptionBox className="">이건뭘까</OptionBox> */}
-          </OptionsWrapper>
-          <LogOutButton onClick={handleOnClickLogOut}>로그아웃</LogOutButton>
-        </div>
-      </div>
+    <div className=" mx-auto w-full">
+      <UserMainInfoWrapper className="min-width-400">
+        <ProfileImage className="img-render" src={profileImage} />
+        <ProfileInfo>
+          <div style={{ fontWeight: 'bold', fontSize: '24px' }} className="text-aling-left">
+            {nickNameImage}
+          </div>
+          <div style={{ margin: '5px 0 0 0' }} className="text-aling-left">
+            {userDescription}
+          </div>
+        </ProfileInfo>
+      </UserMainInfoWrapper>
+      <div style={{ width: '100%', height: '12px', background: COLOR.GRAY1 }} />
+      <OptionsWrapper>
+        <OptionBox onClick={goUserEditPage}>정보 수정</OptionBox>
+        <OptionBox onClick={goMyRefrigeratorPage} className="">
+          냉장고
+        </OptionBox>
+        {/* <OptionBox className="">이건뭘까</OptionBox> */}
+      </OptionsWrapper>
+      <LogOutButton onClick={handleOnClickLogOut}>로그아웃</LogOutButton>
     </div>
   );
 }

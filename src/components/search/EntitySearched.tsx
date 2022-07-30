@@ -97,45 +97,41 @@ const EntitySearched = () => {
   return (
     <>
       <Suspense fallback={<div>로딩중입니다.</div>}>
-        <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
-          <div className="max-w-screen-md mx-auto">
-            <div className="mx-auto w-full">
-              <ContentTitle>
-                {searchQueryState.query === 'goodCount,desc' ? '인기 레시피' : '최신 레시피'}
+        <div className="mx-auto w-full">
+          <ContentTitle>
+            {searchQueryState.query === 'goodCount,desc' ? '인기 레시피' : '최신 레시피'}
 
-                <ContentTitleMain onClick={viewContentDetail}>
-                  메인보기
-                  <img src={RightArrow} />
-                </ContentTitleMain>
-              </ContentTitle>
-              <CardsContainer className="flex flex-row">
-                {data?.pages?.map((page, index) => (
-                  <React.Fragment key={index}>
-                    {page?.content?.map((content: any, subIndex: number) => (
-                      <Card
-                        cardTitle={content.title}
-                        key={content.boardId}
-                        cardImg={content.mainImg}
-                        styleCustom={{ width: '40%', margin: 'auto' }}
-                        onClick={(e) => viewRecipeDetail(content.boardId)}
-                        goodCount={content.goodCount}
-                      />
-                    ))}
-                  </React.Fragment>
+            <ContentTitleMain onClick={viewContentDetail}>
+              메인보기
+              <img src={RightArrow} />
+            </ContentTitleMain>
+          </ContentTitle>
+          <CardsContainer className="flex flex-row">
+            {data?.pages?.map((page, index) => (
+              <React.Fragment key={index}>
+                {page?.content?.map((content: any, subIndex: number) => (
+                  <Card
+                    cardTitle={content.title}
+                    key={content.boardId}
+                    cardImg={content.mainImg}
+                    styleCustom={{ width: '40%', margin: 'auto' }}
+                    onClick={(e) => viewRecipeDetail(content.boardId)}
+                    goodCount={content.goodCount}
+                  />
                 ))}
-              </CardsContainer>
-            </div>
-            {isFetchingNextPage ? (
-              <div className="py-3 text-center">로딩 중</div>
-            ) : hasNextPage ? (
-              <div ref={setTarget} className="py-3 text-center" />
-            ) : (
-              <></>
-            )}
-
-            <hr />
-          </div>
+              </React.Fragment>
+            ))}
+          </CardsContainer>
         </div>
+        {isFetchingNextPage ? (
+          <div className="py-3 text-center">로딩 중</div>
+        ) : hasNextPage ? (
+          <div ref={setTarget} className="py-3 text-center" />
+        ) : (
+          <></>
+        )}
+
+        <hr />
       </Suspense>
     </>
   );

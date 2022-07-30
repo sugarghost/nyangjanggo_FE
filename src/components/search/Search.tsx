@@ -233,31 +233,6 @@ const SearchedBox = styled.div`
 
   border-radius: 1rem;
 `;
-const TagBox = styled.div`
-  font-family: 'NEXON Lv2 Gothic';
-  font-style: normal;
-  border-radius: 1rem;
-  --tw-border-opacity: 1;
-  border-color: rgba(217, 217, 217, var(--tw-border-opacity));
-  border-width: 2px;
-  padding: 1rem;
-`;
-const WholeBox = styled.div`
-  padding: 1vw;
-  width: 90%;
-`;
-
-const InputBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 1vw;
-  z-index: 3;
-
-  &:focus-within {
-    box-shadow: 0 10px 10px rgb(0, 0, 0, 0.3);
-  }
-`;
-
 const Input = styled.input`
   flex: 1 0 0;
   margin: 0;
@@ -265,29 +240,4 @@ const Input = styled.input`
   border: none;
   outline: none;
   font-size: 16px;
-`;
-
-const DeleteButton = styled.div`
-  cursor: pointer;
-`;
-
-const DropDownBox = styled.ul`
-  display: block;
-  margin: 0 auto;
-  padding: 0.5vw 0;
-  background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  border-top: none;
-  border-radius: 0 0 16px 16px;
-  box-shadow: 0 10px 10px rgb(0, 0, 0, 0.3);
-  list-style-type: none;
-  z-index: 3;
-`;
-
-const DropDownItem = styled.li`
-  padding: 0 1vw;
-
-  &.selected {
-    background-color: lightgray;
-  }
 `;
