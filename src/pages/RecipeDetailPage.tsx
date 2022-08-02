@@ -151,9 +151,9 @@ const RecipeDetailPage = () => {
         )}
       </div>
       <img className="min-h-80 mb-4 w-full rounded-2xl image-render-auto bg-gray-100" src={recipe?.mainImg} alt="" />
-      <p className="text-gray-700 text-left text-4xl my-1 font-900">{recipe?.title}</p>
+      <p className="text-gray-700 text-left text-2xl my-1 font-900">{recipe?.title}</p>
       <textarea
-        className="text-left text-lg w-full my-1 font-300 border-gray-200 border-2 rounded-md min-h-30 p-2 focus:outline-none"
+        className="text-left text-lg w-full my-1 font-300 min-h-30 focus:outline-none"
         readOnly
         value={recipe?.content}
       />

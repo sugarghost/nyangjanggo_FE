@@ -13,7 +13,7 @@ export type UserForm = {
 };
 
 export const userValidationSchema = yup.object().shape({
-  nickname: yup.string().max(20, '* 닉네임을 20자 이내로 입력해 주세요').required('* 닉네임을 입력해 주세요'),
+  nickname: yup.string().max(10, '* 닉네임을 10자 이내로 입력해 주세요').required('* 닉네임을 입력해 주세요'),
   userDescription: yup
     .string()
     .max(1000, '* 자기소개를 1000자 이내로 입력해 주세요')

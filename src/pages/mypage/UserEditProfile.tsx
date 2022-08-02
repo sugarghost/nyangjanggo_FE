@@ -180,7 +180,7 @@ const UserEditProfile = () => {
           <NicknameInput
             placeholder="닉네임"
             validationCheck={!!errors.nickname}
-            {...register('nickname', { required: true, max: 20 })}
+            {...register('nickname', { required: true, max: 10 })}
             onChange={(e) => handleOnChangeNickname(e)}
           />
           <NicknameButton className="m-auto" type="button" onClick={checkNickname} value="중복 확인" />
