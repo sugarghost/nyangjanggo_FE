@@ -119,7 +119,7 @@ const TitleSearched = () => {
                     cardTitle={content.title}
                     key={content.boardId}
                     cardImg={content.mainImg}
-                    styleCustom={{ width: '40%', margin: '0.25rem' }}
+                    styleCustom={{ width: '45%', margin: 'auto' }}
                     onClick={(e) => viewRecipeDetail(content.boardId)}
                     goodCount={content.goodCount}
                     nickname={content.nickname}

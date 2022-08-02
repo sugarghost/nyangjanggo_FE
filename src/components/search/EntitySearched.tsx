@@ -106,7 +106,7 @@ const EntitySearched = () => {
               <img src={RightArrow} />
             </ContentTitleMain>
           </ContentTitle>
-          <CardsContainer className="flex flex-row grid grid-cols-2">
+          <CardsContainer className="flex flex-row">
             {data?.pages?.map((page, index) => (
               <React.Fragment key={index}>
                 {page?.content?.map((content: any, subIndex: number) => (
@@ -114,7 +114,7 @@ const EntitySearched = () => {
                     cardTitle={content.title}
                     key={content.boardId}
                     cardImg={content.mainImg}
-                    styleCustom={{ width: '40%', margin: 'auto' }}
+                    styleCustom={{ width: '45%', margin: 'auto' }}
                     onClick={(e) => viewRecipeDetail(content.boardId)}
                     goodCount={content.goodCount}
                     nickname={content.nickname}
