@@ -100,22 +100,6 @@ const CardUserImgWrapper = styled.img<any>`
   height: 30px;
   margin: auto;
 `;
-const RankWrapper = styled.div`
-  position: absolute;
-  top: 25px;
-  left: 10px;
-  width: 30px;
-  height: 30px;
-  background: #ffffff;
-  box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
-  text-align: center;
-  padding: 4px 0 0 0;
-  font-size: 15px;
-  color: #eb3120;
-  font-weight: bold;
-`;
-
 const CardContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -124,11 +108,6 @@ const CardContentWrapper = styled.div`
   position: relative;
 `;
 
-const CardContentLeft = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-const CardContentRight = styled.div``;
 const CardTitleWrapper = styled.div<any>`
   align-items: left;
   white-space: normal;
@@ -173,18 +152,6 @@ const CardGoodCountWrapper = styled.div<any>`
   margin: auto;
   float: right;
 `;
-const CardDescWrapper = styled.div<any>`
-  margin-top: 5px;
-  font-weight: 400;
-  display: flex;
-  letter-spacing: -0.02em;
-  width: auto;
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 14px;
-  color: #9a9a9a;
-`;
-
 const CardGoodCountIconWrapper = styled.div`
   border-radius: 1rem;
   position: absolute;
@@ -198,5 +165,3 @@ const CardGoodCountIconWrapper = styled.div`
   list-style: none;
   background-color: rgba(37, 37, 37, 0.8);
 `;
-
-// 내가 개인적으로 재정의 중
