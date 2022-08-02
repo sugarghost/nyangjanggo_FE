@@ -46,7 +46,7 @@ const MainSearched = () => {
   });
   // 상세 페이지 기능
   const viewRecipeDetail = (boardId: number) => {
-    navigate('/recipeDetailPage', { state: { boardId } });
+    navigate(`/recipeDetailPage/${boardId}`);
   };
   // 최신순이나 인기도 순 좀더 자세히 보는 용도
   const viewContentDetail = (type: string) => {
@@ -70,55 +70,55 @@ const MainSearched = () => {
   return (
     <>
       <Suspense fallback={<div>로딩중입니다.</div>}>
-        <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
-          <div className="max-w-screen-md mx-auto">
-            <div className="mx-auto w-full">
-              <ContentTitle>
-                최신순
-                <ContentTitleMore onClick={() => viewContentDetail('recent')}>
-                  더보기
-                  <img src={RightArrow} />
-                </ContentTitleMore>
-              </ContentTitle>
-              <ScrollMenuWrapper className="flex">
-                <ScrollMenu>
-                  {recentData?.data.map((content: any, index: number) => (
-                    <Card
-                      cardTitle={content.title}
-                      key={index}
-                      cardImg={content.mainImg}
-                      styleCustom={{ width: '40vw', margin: '0.25rem' }}
-                      onClick={(e) => viewRecipeDetail(content.boardId)}
-                      goodCount={content.goodCount}
-                    />
-                  ))}
-                </ScrollMenu>
-              </ScrollMenuWrapper>
-              <ContentTitle>
-                인기도
-                <ContentTitleMore onClick={() => viewContentDetail('like')}>
-                  더보기
-                  <img src={RightArrow} />
-                </ContentTitleMore>
-              </ContentTitle>
-              <ScrollMenuWrapper className="flex">
-                <ScrollMenu>
-                  {likeData?.data.map((content: any, index: number) => (
-                    <Card
-                      cardTitle={content.title}
-                      key={index}
-                      cardImg={content.mainImg}
-                      styleCustom={{ width: '40vw', margin: '0.25rem' }}
-                      onClick={(e) => viewRecipeDetail(content.boardId)}
-                      goodCount={content.goodCount}
-                    />
-                  ))}
-                </ScrollMenu>
-              </ScrollMenuWrapper>
-            </div>
-            <hr />
-          </div>
+        <div className="mx-auto w-full min-h-screen">
+          <ContentTitle>
+            최신순
+            <ContentTitleMore onClick={() => viewContentDetail('recent')}>
+              더보기
+              <img src={RightArrow} />
+            </ContentTitleMore>
+          </ContentTitle>
+          <ScrollMenuWrapper className="flex">
+            <ScrollMenu>
+              {recentData?.data.map((content: any, index: number) => (
+                <Card
+                  cardTitle={content.title}
+                  key={index}
+                  cardImg={content.mainImg}
+                  styleCustom={{ width: '250px', margin: '1rem' }}
+                  onClick={(e) => viewRecipeDetail(content.boardId)}
+                  goodCount={content.goodCount}
+                  nickname={content.nickname}
+                  userImg={content.userImg}
+                />
+              ))}
+            </ScrollMenu>
+          </ScrollMenuWrapper>
+          <ContentTitle>
+            인기도
+            <ContentTitleMore onClick={() => viewContentDetail('like')}>
+              더보기
+              <img src={RightArrow} />
+            </ContentTitleMore>
+          </ContentTitle>
+          <ScrollMenuWrapper className="flex">
+            <ScrollMenu>
+              {likeData?.data.map((content: any, index: number) => (
+                <Card
+                  cardTitle={content.title}
+                  key={index}
+                  cardImg={content.mainImg}
+                  styleCustom={{ width: '250px', margin: '1rem' }}
+                  onClick={(e) => viewRecipeDetail(content.boardId)}
+                  goodCount={content.goodCount}
+                  nickname={content.nickname}
+                  userImg={content.userImg}
+                />
+              ))}
+            </ScrollMenu>
+          </ScrollMenuWrapper>
         </div>
+        <hr />
       </Suspense>
     </>
   );
@@ -166,6 +166,7 @@ const ScrollMenuWrapper = styled.div`
   overflow-x: scroll;
   overflow-y: hidden;
   margin-top: 0.5rem;
+  width: 100%;
 
   @media screen and (max-width: 500px) {
     max-width: 410px;

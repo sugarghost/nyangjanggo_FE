@@ -115,7 +115,7 @@ const Step = ({ boardId, index, onDelete }: StepProps) => {
           alt=""
         />
 
-        <div className="flex flex-col w-60vw ml-1">
+        <div className="flex flex-col w-3/5 ml-1">
           <StepTextarea
             validationCheck={errors.recipeStepRequestDtoList?.[index]?.stepContent}
             placeholder="조리 과정을 알려주세요!"

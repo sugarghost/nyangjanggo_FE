@@ -1,11 +1,7 @@
 import { ReactComponent as HeartIcon } from '@icon/heart.svg';
+import Logo from '@images/nyang_logo.png';
 import React from 'react';
 import styled from 'styled-components';
-
-import { COLOR_V2 } from '../constants/ColorV2';
-import LikeIcon from '../images/like_icon.png';
-
-export type CardType = 'coupon' | 'normal';
 
 interface StyleCustom {
   width?: string;
@@ -26,45 +22,37 @@ interface StyleCustom {
 }
 
 interface IProps {
-  cardType?: CardType;
   cardTitle?: string;
-  subTitle?: string;
   cardImg?: string;
-  cardExpiration?: string;
   className?: string;
   backgroundColor?: string;
   onClick?: (e: React.MouseEvent) => void;
   disabled?: boolean;
   styleCustom?: StyleCustom;
-  cardPromotionValue?: string;
   goodCount?: number;
+  nickname?: string;
+  userImg?: string;
 }
 
 function Card(props: IProps) {
-  const { onClick, styleCustom, cardTitle, cardImg, className, goodCount }: IProps = props;
+  const { onClick, styleCustom, cardTitle, cardImg, className, goodCount, nickname, userImg }: IProps = props;
 
   return (
     <CardContainer onClick={onClick} styleCustom={styleCustom}>
       <div style={{ position: 'relative' }}>
-        <div style={{ position: 'relative' }}>
-          <CardImgWrapper
-            className={className}
-            styleCustom={styleCustom}
-            color={COLOR_V2.WHITE1}
-            hoverColor={COLOR_V2.PRIMARY5}
-            activeColor={COLOR_V2.PRIMARY_ACTIVE}
-            disabledColor={COLOR_V2.PRIMARY_DISABLED}
-            src={cardImg}
-          />
-          <CardGoodCountWrapper className="text-center p-1 justify-center">
-            <HeartIcon width="20" height="20" className="m-auto float-left" stroke="white" />
-            <span className="m-auto">{goodCount}</span>
-          </CardGoodCountWrapper>
-        </div>
-        <CardContentWrapper>
-          <CardTitleWrapper styleCustom={styleCustom}>{cardTitle}</CardTitleWrapper>
-        </CardContentWrapper>
+        <CardImgWrapper src={cardImg} />
       </div>
+      <CardContentWrapper>
+        <CardTitleWrapper styleCustom={styleCustom}>{cardTitle}</CardTitleWrapper>
+        <CardSubContentWrapper>
+          <CardUserImgWrapper src={userImg || Logo} />
+          <CardNicknameWrapper>by {nickname}</CardNicknameWrapper>
+          <CardGoodCountWrapper>
+            <HeartIcon width="20" height="20" className="m-auto float-left" fill="#EB3120" />
+            <span className="ml-1">{goodCount}</span>
+          </CardGoodCountWrapper>
+        </CardSubContentWrapper>
+      </CardContentWrapper>
     </CardContainer>
   );
 }
@@ -76,7 +64,7 @@ const CardContainer = styled.div<any>`
   color: ${(props) => props.styleCustom?.color ?? ''};
   border-radius: 8px;
   border: ${(props) => props.styleCustom?.border ?? ''};
-  padding: ${(props) => props.styleCustom?.padding ?? ''};
+  padding: 1rem;
   font-style: normal;
   font-weight: 600;
   font-size: ${(props) => props.styleCustom?.fontSize ?? '14px'};
@@ -89,27 +77,29 @@ const CardContainer = styled.div<any>`
   display: flex;
   flex-direction: column;
   max-width: ${(props) => props.styleCustom?.width ?? ''};
+
+  --tw-shadow-color: 0, 0, 0;
+  --tw-shadow: 0 4px 6px -1px rgba(var(--tw-shadow-color), 0.1), 0 2px 4px -1px rgba(var(--tw-shadow-color), 0.06);
+  -webkit-box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 `;
 
 const CardImgWrapper = styled.img<any>`
   border-radius: 8px;
-  //width: ${(props) => props.styleCustom?.width ?? ''};
-  height: ${(props) => props.styleCustom?.height ?? ''};
-  margin: ${(props) => props.styleCustom?.margin ?? ''};
   object-fit: cover;
   cursor: pointer;
-
-  @media screen and (max-width: 680px) {
-    width: 173px;
-    height: 173px;
-  }
-
-  @media screen and (min-width: 681px) and (max-width: 768px) {
-    width: 230px;
-    height: 230px;
-  }
+  width: 100%;
+  height: 230px;
 `;
 
+const CardUserImgWrapper = styled.img<any>`
+  border-radius: 9999px;
+  object-fit: cover;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  margin: auto;
+`;
 const RankWrapper = styled.div`
   position: absolute;
   top: 25px;
@@ -128,9 +118,10 @@ const RankWrapper = styled.div`
 
 const CardContentWrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   padding: 10px 0 0 0;
+  position: relative;
 `;
 
 const CardContentLeft = styled.div`
@@ -144,12 +135,43 @@ const CardTitleWrapper = styled.div<any>`
   line-height: 1.2;
   height: 2.4em;
   text-align: left;
-  color: #3f3f3f;
+  color: #000;
   word-wrap: break-word;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  margin-bottom: 10px;
+`;
+
+const CardSubContentWrapper = styled.div<any>`
+  position: relative;
+  display: flex;
+
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+`;
+const CardNicknameWrapper = styled.div<any>`
+  width: 60%;
+  align-items: left;
+  white-space: normal;
+  line-height: 1.2;
+  height: 2.4em;
+  text-align: left;
+  color: #787878;
+  word-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-left: 5px;
+`;
+const CardGoodCountWrapper = styled.div<any>`
+  width: 20%;
+  margin: auto;
+  float: right;
 `;
 const CardDescWrapper = styled.div<any>`
   margin-top: 5px;
@@ -163,14 +185,18 @@ const CardDescWrapper = styled.div<any>`
   color: #9a9a9a;
 `;
 
-const CardGoodCountWrapper = styled.div`
+const CardGoodCountIconWrapper = styled.div`
   border-radius: 1rem;
   position: absolute;
-  left: 0;
-  bottom: 0;
-  margin-bottom: 0.5rem;
-  margin-left: 0.5rem;
+  top: 0;
+  right: 0;
+  margin: 10px;
   width: 70px;
+  max-width: 100%;
   color: white;
+  display: block;
+  list-style: none;
   background-color: rgba(37, 37, 37, 0.8);
 `;
+
+// 내가 개인적으로 재정의 중

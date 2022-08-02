@@ -55,17 +55,17 @@ const UserEditProfile = () => {
     onSuccess: (res) => {
       if (res.data.check === 'true') {
         setNicnknameValidation(true);
+        setNicnknameValidationMessage('* 사용 가능한 닉네임 입니다!');
       } else {
         setNicnknameValidation(false);
-        setNicnknameValidationMessage('닉네임이 중복되었습니다!');
+        setNicnknameValidationMessage('* 닉네임이 중복되었습니다!');
       }
     },
   });
   // 유저 정보 변경
   const putUserMutation = useMutation((addData: FormData) => putUserApi(addData), {
     onSuccess: (res) => {
-      console.log('putUser :', res);
-      navigate('/');
+      navigate('/myPage');
     },
     onError: (e) => {
       ReactSwal.fire({
@@ -92,10 +92,12 @@ const UserEditProfile = () => {
     watch,
   } = userMethods;
 
-  const handleOnChangeNickname = async () => {
-    await setNickname(getValues('nickname'));
-    if (getValues('nickname') === nicknameOrigin) {
+  const handleOnChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // getValue, watch 등의 문제가 생겨서 일단 이벤트 타깃으로 가져옴
+    setNickname(e.target.value);
+    if (e.target.value === nicknameOrigin) {
       setNicnknameValidation(true);
+      setNicnknameValidationMessage('* 기존 닉네임 사용!');
     } else {
       setNicnknameValidation(false);
       setNicnknameValidationMessage('* 중복 체크를 해주세요!');
@@ -103,9 +105,10 @@ const UserEditProfile = () => {
   };
 
   const checkNickname = async () => {
-    await setNickname(getValues('nickname'));
-    if (getValues('nickname') === nicknameOrigin) {
+    await setNickname(watch('nickname'));
+    if (watch('nickname') === nicknameOrigin) {
       setNicnknameValidation(true);
+      setNicnknameValidationMessage('* 기존 닉네임 사용!');
     } else {
       refetch();
     }
@@ -140,11 +143,11 @@ const UserEditProfile = () => {
     putUserMutation.mutate(formData);
   };
 
-  const onErrorRecipe = (errors: any, e: any) => {
+  const onError = (errors: any, e: any) => {
     console.log(errors, e);
 
     ReactSwal.fire({
-      title: '<p>등록 정보가 유효하지 않습니다!</p>',
+      title: '<p>정보가 유효하지 않습니다!</p>',
       html: '<p>다시 시도해 주세요</p>',
       icon: 'error',
     });
@@ -170,43 +173,37 @@ const UserEditProfile = () => {
   }, [watchAll, nicnknameValidation]);
 
   return (
-    <div className="bg-secondary-1 min-h-screen bg-white dark:bg-gray-900" style={{ padding: '0px 10px' }}>
-      <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-        <div className="max-w-md mx-auto w-full">
-          <form onSubmit={handleSubmit(handleOnClickUserProfileEdit, onErrorRecipe)}>
-            <ProfileImageUploader setProfileImageFile={setProfileImageFile} userImgUrl={userImgUrl} />
-            <div className="flex mt-6">
-              <NicknameInput
-                placeholder="닉네임"
-                validationCheck={!!errors.nickname}
-                {...register('nickname', { required: true, max: 20 })}
-                onChange={handleOnChangeNickname}
-              />
-              <NicknameButton className="m-auto" type="button" onClick={checkNickname} value="중복 확인" />
-            </div>
-            {errors.nickname ? (
-              <ValidationMessage>{errors.nickname.message}</ValidationMessage>
-            ) : !nicnknameValidation ? (
-              <ValidationMessage>{nicnknameValidationMessage}</ValidationMessage>
-            ) : (
-              ''
-            )}
-
-            <ContentTextarea
-              placeholder="자기 소개를 입력해주세요!"
-              rows={6}
-              validationCheck={!!errors.userDescription}
-              ref={userDescriptionRef}
-              {...register('userDescription', { required: true, max: 1000 })}
-            />
-            {errors.userDescription && <ValidationMessage>{errors.userDescription.message}</ValidationMessage>}
-
-            <SaveButton type="submit" disabled={isDisabled}>
-              <div>등록하기</div>
-            </SaveButton>
-          </form>
+    <div className="mx-auto w-full min-h-screen">
+      <form onSubmit={handleSubmit(handleOnClickUserProfileEdit, onError)}>
+        <ProfileImageUploader setProfileImageFile={setProfileImageFile} userImgUrl={userImgUrl} />
+        <div className="flex mt-6">
+          <NicknameInput
+            placeholder="닉네임"
+            validationCheck={!!errors.nickname}
+            {...register('nickname', { required: true, max: 20 })}
+            onChange={(e) => handleOnChangeNickname(e)}
+          />
+          <NicknameButton className="m-auto" type="button" onClick={checkNickname} value="중복 확인" />
         </div>
-      </div>
+        {errors.nickname ? (
+          <ValidationMessage>{errors.nickname.message}</ValidationMessage>
+        ) : (
+          <ValidationMessage validationCheck={!nicnknameValidation}>{nicnknameValidationMessage}</ValidationMessage>
+        )}
+
+        <ContentTextarea
+          placeholder="자기 소개를 입력해주세요!"
+          rows={6}
+          validationCheck={!!errors.userDescription}
+          ref={userDescriptionRef}
+          {...register('userDescription', { required: true, max: 1000 })}
+        />
+        {errors.userDescription && <ValidationMessage>{errors.userDescription.message}</ValidationMessage>}
+
+        <SaveButton type="submit" disabled={isDisabled}>
+          <div>등록하기</div>
+        </SaveButton>
+      </form>
     </div>
   );
 };
@@ -229,10 +226,10 @@ const SaveButton = styled.button`
   }
 `;
 
-const ValidationMessage = styled.p`
+const ValidationMessage = styled.p<any>`
   text-align: left;
   font-size: 12px;
-  color: #eb3120;
+  color: ${(props) => (props.validationCheck ? '#EB3120' : '#00c742')};
   font-weight: normal;
   font-style: normal;
   font-variant: normal;

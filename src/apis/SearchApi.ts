@@ -70,7 +70,17 @@ export default {
 
   async getRecipeListByResource(payload: Pageable) {
     const query = {
-      _source: ['id', 'title', 'userNickname', 'goodCount', 'commentCount', 'mainImageLink', 'createdAt', 'modifiedAt'],
+      _source: [
+        'id',
+        'title',
+        'userNickname',
+        'goodCount',
+        'commentCount',
+        'mainImageLink',
+        'userImageLink',
+        'createdAt',
+        'modifiedAt',
+      ],
       query: {
         match: {
           'resourceInBoardList.resourceName': payload.query,
@@ -86,7 +96,17 @@ export default {
   },
   async getRecipeListByTitle(payload: Pageable) {
     const query = {
-      _source: ['id', 'title', 'userNickname', 'goodCount', 'commentCount', 'mainImageLink', 'createdAt', 'modifiedAt'],
+      _source: [
+        'id',
+        'title',
+        'userNickname',
+        'goodCount',
+        'commentCount',
+        'mainImageLink',
+        'userImageLink',
+        'createdAt',
+        'modifiedAt',
+      ],
       query: {
         match: {
           title: payload.query,
@@ -124,13 +144,6 @@ export default {
       size: 10,
       from: 0,
     };
-    /*
-    const query = {
-      query: {
-        match_all: {},
-      },
-    };
-    */
     const res = await elasticInstance.post(`${resourceKeyword}${search}`, query, {
       headers: { 'Content-Type': 'application/json' },
     });
@@ -138,7 +151,20 @@ export default {
   },
 
   async getTitleRecommend(titleWord: string) {
-    const res = await elasticInstance.get(`${board}${title}${recommend}?titleWords=${titleWord}`);
+    const query = {
+      _source: ['title'],
+      query: {
+        match: {
+          title: titleWord,
+        },
+      },
+      size: 5,
+      from: 0,
+    };
+
+    const res = await elasticInstance.post(`${board}${search}`, query, {
+      headers: { 'Content-Type': 'application/json' },
+    });
     return res;
   },
 };

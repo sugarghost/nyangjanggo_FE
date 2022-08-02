@@ -165,8 +165,6 @@ const RecipeRegisterPage = () => {
     refetchOnWindowFocus: false,
     enabled: !isModify,
     onSuccess: (res) => {
-      console.log('getRecipePosting', res);
-
       if (res.data) {
         setBoardId(res.data.boardId);
       }
@@ -412,83 +410,77 @@ const RecipeRegisterPage = () => {
     stepRemove(index);
   };
   return (
-    <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
-      <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto">
-        <div className="mx-auto w-90vw">
-          <FormProvider {...recipeMethods}>
-            <form onSubmit={recipeHandleSubmit(onSubmitRecipe, onErrorRecipe)}>
-              <MainImageTitle className="text-gray-700 text-left text-lg my-1 font-900">
-                요리 메인 이미지
-              </MainImageTitle>
-              <MainImage
-                className="w-full rounded-2xl image-render-auto bg-gray-100"
-                src={mainImageUrl}
-                onClick={mainImageClick}
-                alt=""
-              />
-              <input
-                type="file"
-                onChange={onSaveMainImageFile}
-                accept="image/jpg,impge/png,image/jpeg"
-                ref={mainImageRef}
-                hidden
-              />
-              <TitleInput
-                validationCheck={recipeError.title}
-                placeholder="요리 이름"
-                {...recipeRegister('title', { required: true, max: 255 })}
-              />
-              {recipeError.title && <ValidationMessage>{recipeError.title.message}</ValidationMessage>}
-              <ContentTextarea
-                validationCheck={recipeError.content}
-                placeholder="요리 설명"
-                rows={6}
-                {...recipeRegister('content', { required: true, max: 1000 })}
-              />
-              {recipeError.content && <ValidationMessage>{recipeError.content.message}</ValidationMessage>}
+    <div className="mx-auto w-9/10">
+      <FormProvider {...recipeMethods}>
+        <form onSubmit={recipeHandleSubmit(onSubmitRecipe, onErrorRecipe)}>
+          <MainImageTitle className="text-gray-700 text-left text-lg my-1 font-900">요리 메인 이미지</MainImageTitle>
+          <MainImage
+            className="w-full rounded-2xl image-render-auto bg-gray-100"
+            src={mainImageUrl}
+            onClick={mainImageClick}
+            alt=""
+          />
+          <input
+            type="file"
+            onChange={onSaveMainImageFile}
+            accept="image/jpg,impge/png,image/jpeg"
+            ref={mainImageRef}
+            hidden
+          />
+          <TitleInput
+            validationCheck={recipeError.title}
+            placeholder="요리 이름"
+            {...recipeRegister('title', { required: true, max: 255 })}
+          />
+          {recipeError.title && <ValidationMessage>{recipeError.title.message}</ValidationMessage>}
+          <ContentTextarea
+            validationCheck={recipeError.content}
+            placeholder="요리 설명"
+            rows={6}
+            {...recipeRegister('content', { required: true, max: 1000 })}
+          />
+          {recipeError.content && <ValidationMessage>{recipeError.content.message}</ValidationMessage>}
 
-              <span className="text-gray-700 text-left float-left text-lg my-1 font-900">재료 분류</span>
-              <span
-                className="m-auto float-right"
-                onClick={() =>
-                  resourceAppend({
-                    category: '',
-                    resources: [{ resourceName: '', amount: '' }],
-                  })
-                }
-              >
-                <PlusIcon stroke="grey" />
-              </span>
-              {resourceFields.map((item, index) => (
-                <div key={index}>
-                  <Category name={item.category} index={index} onDelete={() => resourceRemove(index)} />
-                </div>
-              ))}
-              <div className="w-full my-3">
-                <span className="text-gray-700 text-left float-left text-lg my-3 font-900">조리 과정</span>
-                <span className="m-auto float-right my-3" onClick={() => stepAppend({})}>
-                  <PlusIcon stroke="grey" />
-                </span>
+          <span className="text-gray-700 text-left float-left text-lg my-1 font-900">재료 분류</span>
+          <span
+            className="m-auto float-right"
+            onClick={() =>
+              resourceAppend({
+                category: '',
+                resources: [{ resourceName: '', amount: '' }],
+              })
+            }
+          >
+            <PlusIcon stroke="grey" />
+          </span>
+          {resourceFields.map((item, index) => (
+            <div key={index}>
+              <Category name={item.category} index={index} onDelete={() => resourceRemove(index)} />
+            </div>
+          ))}
+          <div className="w-full my-3">
+            <span className="text-gray-700 text-left float-left text-lg my-3 font-900">조리 과정</span>
+            <span className="m-auto float-right my-3" onClick={() => stepAppend({})}>
+              <PlusIcon stroke="grey" />
+            </span>
+          </div>
+          <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
+            {stepFields.map((item, index) => (
+              <div key={index}>
+                <Step index={index} boardId={boardId} onDelete={() => stepDelete(index)} />
               </div>
-              <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
-                {stepFields.map((item, index) => (
-                  <div key={index}>
-                    <Step index={index} boardId={boardId} onDelete={() => stepDelete(index)} />
-                  </div>
-                ))}
-              </div>
+            ))}
+          </div>
 
-              {/* 모바일에서 동작시 css가 망가져서 복구 */}
-              <SaveButton type="submit" disabled={isDisabled}>
-                등록하기
-              </SaveButton>
-              {/* <SaveButton type="submit" disabled={isDisabled}>
+          {/* 모바일에서 동작시 css가 망가져서 복구 */}
+          <SaveButton type="submit" disabled={isDisabled}>
+            등록하기
+          </SaveButton>
+          {/* <SaveButton type="submit" disabled={isDisabled}>
                   등록하기
                 </SaveButton> */}
-            </form>
-          </FormProvider>
-        </div>
-      </div>
+        </form>
+      </FormProvider>
     </div>
   );
 };

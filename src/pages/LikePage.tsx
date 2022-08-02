@@ -21,29 +21,26 @@ const LikePage = () => {
 
   // 상세 페이지 기능
   const viewRecipeDetail = (boardId: number) => {
-    navigate('/recipeDetailPage', { state: { boardId } });
+    navigate(`/recipeDetailPage/${boardId}`);
   };
 
   return (
     <>
       <Suspense fallback={<div>로딩중입니다.</div>}>
-        <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
-          <div className="max-w-screen-md mx-auto">
-            <div className="mx-auto w-full">
-              <CardsContainer className="flex flex-row">
-                {likeList.map((content: any) => (
-                  <Card
-                    cardTitle={content.title}
-                    key={content.boardId}
-                    cardImg={content.mainImg}
-                    styleCustom={{ width: '50%', margin: '16px 0 0 0' }}
-                    onClick={(e) => viewRecipeDetail(content.boardId)}
-                    goodCount={content.goodCount}
-                  />
-                ))}
-              </CardsContainer>
-            </div>
-          </div>
+        <div className="mx-auto w-full min-h-screen">
+          <CardsContainer className="flex flex-row">
+            {likeList.map((content: any) => (
+              <Card
+                cardTitle={content.title}
+                key={content.boardId}
+                cardImg={content.mainImg}
+                styleCustom={{ width: '50%', margin: '16px 0 0 0' }}
+                onClick={(e) => viewRecipeDetail(content.boardId)}
+                goodCount={content.goodCount}
+                nickname={content.nickname}
+              />
+            ))}
+          </CardsContainer>
         </div>
       </Suspense>
     </>

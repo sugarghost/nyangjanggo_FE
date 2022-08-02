@@ -68,7 +68,7 @@ function App() {
               />
               <Route path="/signInPage" element={<SignInPage />} />
               <Route path="/signUpPage" element={<SignUpPage />} />
-              <Route path="/recipeDetailPage" element={<RecipeDetailPage />} />
+              <Route path="/recipeDetailPage/:boardIdParams" element={<RecipeDetailPage />} />
               {/* 로그인이 필요한 페이지는 코드 스플리팅을 진행 */}
               <Route element={<PrivateRoutes authentication />}>
                 <Route
@@ -125,11 +125,8 @@ function App() {
 }
 export const MainPageWrapper = styled.div`
   max-width: 768px;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow-x: hidden;
   margin: auto;
+  background-color: white;
 `;
 
 export default App;

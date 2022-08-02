@@ -89,7 +89,7 @@ const TitleSearched = () => {
 
   // 상세 페이지 기능
   const viewRecipeDetail = (boardId: number) => {
-    navigate('/recipeDetailPage', { state: { boardId } });
+    navigate(`/recipeDetailPage/${boardId}`);
   };
 
   // 메인 페이지로 돌아가는 용도
@@ -104,43 +104,41 @@ const TitleSearched = () => {
   return (
     <>
       <Suspense fallback={<div>로딩중입니다.</div>}>
-        <div className="bg-secondary-1 flex min-h-screen bg-white dark:bg-gray-900">
-          <div className="max-w-screen-md mx-auto">
-            <div className="mx-auto w-full">
-              <ContentTitle>
-                요리이름 검색결과
-                <ContentTitleMain onClick={viewContentDetail}>
-                  메인보기 <img src={RightArrow} />
-                </ContentTitleMain>
-              </ContentTitle>
-              <CardsContainer className="flex flex-row">
-                {data?.pages?.map((page, index) => (
-                  <React.Fragment key={index}>
-                    {page?.content?.map((content: SearchContent, subIndex: number) => (
-                      <Card
-                        cardTitle={content.title}
-                        key={content.boardId}
-                        cardImg={content.mainImg}
-                        styleCustom={{ width: '40vw', margin: '0.25rem' }}
-                        onClick={(e) => viewRecipeDetail(content.boardId)}
-                        goodCount={content.goodCount}
-                      />
-                    ))}
-                  </React.Fragment>
+        <div className="mx-auto w-full min-h-screen">
+          <ContentTitle>
+            요리이름 검색결과
+            <ContentTitleMain onClick={viewContentDetail}>
+              메인보기 <img src={RightArrow} />
+            </ContentTitleMain>
+          </ContentTitle>
+          <CardsContainer className="flex flex-row">
+            {data?.pages?.map((page, index) => (
+              <React.Fragment key={index}>
+                {page?.content?.map((content: SearchContent, subIndex: number) => (
+                  <Card
+                    cardTitle={content.title}
+                    key={content.boardId}
+                    cardImg={content.mainImg}
+                    styleCustom={{ width: '40%', margin: '0.25rem' }}
+                    onClick={(e) => viewRecipeDetail(content.boardId)}
+                    goodCount={content.goodCount}
+                    nickname={content.nickname}
+                    userImg={content.userImg}
+                  />
                 ))}
-              </CardsContainer>
-            </div>
-            {isFetchingNextPage ? (
-              <div className="py-3 text-center">로딩 중</div>
-            ) : hasNextPage ? (
-              <div ref={setTarget} className="py-3 text-center" />
-            ) : (
-              <></>
-            )}
-
-            <hr />
-          </div>
+              </React.Fragment>
+            ))}
+          </CardsContainer>
         </div>
+        {isFetchingNextPage ? (
+          <div className="py-3 text-center">로딩 중</div>
+        ) : hasNextPage ? (
+          <div ref={setTarget} className="py-3 text-center" />
+        ) : (
+          <></>
+        )}
+
+        <hr />
       </Suspense>
     </>
   );
