@@ -118,6 +118,7 @@ const EntitySearched = () => {
                     onClick={(e) => viewRecipeDetail(content.boardId)}
                     goodCount={content.goodCount}
                     nickname={content.nickname}
+                    userImg={content.userImg}
                   />
                 ))}
               </React.Fragment>

@@ -70,7 +70,17 @@ export default {
 
   async getRecipeListByResource(payload: Pageable) {
     const query = {
-      _source: ['id', 'title', 'userNickname', 'goodCount', 'commentCount', 'mainImageLink', 'createdAt', 'modifiedAt'],
+      _source: [
+        'id',
+        'title',
+        'userNickname',
+        'goodCount',
+        'commentCount',
+        'mainImageLink',
+        'userImageLink',
+        'createdAt',
+        'modifiedAt',
+      ],
       query: {
         match: {
           'resourceInBoardList.resourceName': payload.query,
@@ -86,7 +96,17 @@ export default {
   },
   async getRecipeListByTitle(payload: Pageable) {
     const query = {
-      _source: ['id', 'title', 'userNickname', 'goodCount', 'commentCount', 'mainImageLink', 'createdAt', 'modifiedAt'],
+      _source: [
+        'id',
+        'title',
+        'userNickname',
+        'goodCount',
+        'commentCount',
+        'mainImageLink',
+        'userImageLink',
+        'createdAt',
+        'modifiedAt',
+      ],
       query: {
         match: {
           title: payload.query,

@@ -89,6 +89,7 @@ const MainSearched = () => {
                   onClick={(e) => viewRecipeDetail(content.boardId)}
                   goodCount={content.goodCount}
                   nickname={content.nickname}
+                  userImg={content.userImg}
                 />
               ))}
             </ScrollMenu>
@@ -111,6 +112,7 @@ const MainSearched = () => {
                   onClick={(e) => viewRecipeDetail(content.boardId)}
                   goodCount={content.goodCount}
                   nickname={content.nickname}
+                  userImg={content.userImg}
                 />
               ))}
             </ScrollMenu>

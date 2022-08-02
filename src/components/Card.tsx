@@ -1,4 +1,5 @@
 import { ReactComponent as HeartIcon } from '@icon/heart.svg';
+import Logo from '@images/nyang_logo.png';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -30,19 +31,21 @@ interface IProps {
   styleCustom?: StyleCustom;
   goodCount?: number;
   nickname?: string;
+  userImg?: string;
 }
 
 function Card(props: IProps) {
-  const { onClick, styleCustom, cardTitle, cardImg, className, goodCount, nickname }: IProps = props;
+  const { onClick, styleCustom, cardTitle, cardImg, className, goodCount, nickname, userImg }: IProps = props;
 
   return (
     <CardContainer onClick={onClick} styleCustom={styleCustom}>
       <div style={{ position: 'relative' }}>
-        <CardImgWrapper className={className} styleCustom={styleCustom} src={cardImg} />
+        <CardImgWrapper src={cardImg} />
       </div>
       <CardContentWrapper>
         <CardTitleWrapper styleCustom={styleCustom}>{cardTitle}</CardTitleWrapper>
         <CardSubContentWrapper>
+          <CardUserImgWrapper src={userImg || Logo} />
           <CardNicknameWrapper>by {nickname}</CardNicknameWrapper>
           <CardGoodCountWrapper>
             <HeartIcon width="20" height="20" className="m-auto float-left" fill="#EB3120" />
@@ -90,11 +93,12 @@ const CardImgWrapper = styled.img<any>`
 `;
 
 const CardUserImgWrapper = styled.img<any>`
-  border-radius: 8px;
+  border-radius: 9999px;
   object-fit: cover;
   cursor: pointer;
-  width: 100%;
-  height: 230px;
+  width: 30px;
+  height: 30px;
+  margin: auto;
 `;
 const RankWrapper = styled.div`
   position: absolute;
@@ -143,9 +147,14 @@ const CardTitleWrapper = styled.div<any>`
 const CardSubContentWrapper = styled.div<any>`
   position: relative;
   display: flex;
+
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
 `;
 const CardNicknameWrapper = styled.div<any>`
-  width: 80%;
+  width: 60%;
   align-items: left;
   white-space: normal;
   line-height: 1.2;
@@ -157,9 +166,11 @@ const CardNicknameWrapper = styled.div<any>`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  margin-left: 5px;
 `;
 const CardGoodCountWrapper = styled.div<any>`
   width: 20%;
+  margin: auto;
   float: right;
 `;
 const CardDescWrapper = styled.div<any>`
