@@ -29,6 +29,12 @@ const Search = () => {
   // 1: 재료 검색, 0: 요리 이름 검색
   const [searchType, setSearchType] = useState(1);
 
+  // 요리이름 검색된 결과들 리스트
+  const [searchedList, setSearchedList] = useState([]);
+  // 검색 자동완성 보여주는지 여부
+  const [showSearchedList, setShowSearchedList] = useState(false);
+  const [searchedItemIndex, setSearchedItemIndex] = useState(-1);
+
   // 검색 이벤트 발생 시 컴포넌트간 검색 방식을 교환하기 위한 recoil
   const [searchQueryState, setSearchQueryState] = useRecoilState(searchQueryAtom);
   const [searchTypeState, setSearchTypeState] = useRecoilState(searchTypeAtom);
@@ -52,6 +58,22 @@ const Search = () => {
           resourceList.push(hit._source.resourceName);
         });
         setSearchedTagList(resourceList);
+      },
+    },
+  );
+
+  const { data: titleRecommendData, refetch: titleRecommendRefetch } = useQuery(
+    ['getTitleRecommend'],
+    async () => searchApi.getTitleRecommend(searchValue),
+    {
+      refetchOnWindowFocus: false,
+      enabled: false,
+      onSuccess: (res) => {
+        const titleList = [];
+        res.data.hits?.hits.map((hit) => {
+          titleList.push(hit._source.title);
+        });
+        setSearchedList(titleList);
       },
     },
   );
@@ -83,8 +105,12 @@ const Search = () => {
     } else if (searchType === 0) {
       if (event.target.value.length === 0) {
         setIsSearchedValue(false);
+        setShowSearchedList(false);
       } else {
         setIsSearchedValue(true);
+        setShowSearchedList(true);
+        // 검색어가 변화하면 요리 추천 목록을 가져와 searchedList에 넣어줌
+        await titleRecommendRefetch();
       }
     }
   };
@@ -143,6 +169,22 @@ const Search = () => {
     } else if (searchType === 0) {
       setIsSearchedValue(false);
     }
+  };
+
+  const onShowSearchedList = () => {
+    if (searchValue === '') {
+      setIsSearchedValue(false);
+      setSearchedList([]);
+    } else {
+      const choosenTextList = searchedTagList.filter((textItem) => textItem.includes(searchValue));
+      setSearchedList(choosenTextList);
+    }
+  };
+
+  const clickDropDownItem = (clickedItem: any) => {
+    setSearchValue(clickedItem);
+    setIsSearchedValue(true);
+    setShowSearchedList(false);
   };
 
   const addTags = (tag: string) => {
@@ -215,13 +257,31 @@ const Search = () => {
       ) : (
         <div className="p-4 top-0 w-full z-100">
           <div className="flex flex-row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-            <div className="rounded-md flex flex-row pl-6" style={{ background: '#EFEFF0', width: '88%' }}>
+            <div className="rounded-md flex flex-row pl-6 relative" style={{ background: '#EFEFF0', width: '88%' }}>
               <Input type="text" value={searchValue} onChange={changeSearchValue} onKeyUp={handleDropDownKey} />
               <ResourceSearchButtonInBar className={!isSearchedValue ? 'bg-empty' : 'bg-main'} onClick={onSearchTitle}>
                 <IconwWrapper>
                   <SearchIcon className="m-1" fill="white" />
                 </IconwWrapper>
               </ResourceSearchButtonInBar>
+
+              {showSearchedList && (
+                <DropDownBox>
+                  {searchedList.length === 0 && <DropDownItem>검색 결과가 없습니다</DropDownItem>}
+                  {searchedList.map((searchedItem, searchedIndex) => (
+                    <React.Fragment key={searchedIndex}>
+                      <DropDownItem
+                        onClick={() => clickDropDownItem(searchedItem)}
+                        onMouseOver={() => setSearchedItemIndex(searchedIndex)}
+                        className={searchedItemIndex === searchedIndex ? 'selected' : ''}
+                      >
+                        {searchedItem}
+                      </DropDownItem>
+                      <hr />
+                    </React.Fragment>
+                  ))}
+                </DropDownBox>
+              )}
             </div>
             <div className="flex flex-col justify-center" onClick={switchSearchType}>
               <RecipeSearchIconWrapper src={RecipeSearchIcon} className="img-render" />
@@ -315,4 +375,33 @@ const Input = styled.input`
 
 const IconwWrapper = styled.div`
   margin: auto;
+`;
+
+const DropDownBox = styled.ul`
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 100%;
+  max-width: 650px;
+  display: block;
+  margin: 0 auto;
+  padding: 0.5vw 0;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 10px 10px rgb(0, 0, 0, 0.3);
+  list-style-type: none;
+  z-index: 3;
+`;
+const DropDownItem = styled.li`
+  padding: 0 1vw;
+  &.selected {
+    background-color: lightgray;
+  }
+  word-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
