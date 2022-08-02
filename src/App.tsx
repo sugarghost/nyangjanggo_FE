@@ -126,6 +126,7 @@ function App() {
 export const MainPageWrapper = styled.div`
   max-width: 768px;
   margin: auto;
+  background-color: white;
 `;
 
 export default App;

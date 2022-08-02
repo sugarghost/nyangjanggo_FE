@@ -122,6 +122,7 @@ const TitleSearched = () => {
                     styleCustom={{ width: '40%', margin: '0.25rem' }}
                     onClick={(e) => viewRecipeDetail(content.boardId)}
                     goodCount={content.goodCount}
+                    nickname={content.nickname}
                   />
                 ))}
               </React.Fragment>

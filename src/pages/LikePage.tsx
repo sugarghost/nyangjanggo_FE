@@ -37,6 +37,7 @@ const LikePage = () => {
                 styleCustom={{ width: '50%', margin: '16px 0 0 0' }}
                 onClick={(e) => viewRecipeDetail(content.boardId)}
                 goodCount={content.goodCount}
+                nickname={content.nickname}
               />
             ))}
           </CardsContainer>
