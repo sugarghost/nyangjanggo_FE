@@ -124,13 +124,6 @@ export default {
       size: 10,
       from: 0,
     };
-    /*
-    const query = {
-      query: {
-        match_all: {},
-      },
-    };
-    */
     const res = await elasticInstance.post(`${resourceKeyword}${search}`, query, {
       headers: { 'Content-Type': 'application/json' },
     });
@@ -138,7 +131,20 @@ export default {
   },
 
   async getTitleRecommend(titleWord: string) {
-    const res = await elasticInstance.get(`${board}${title}${recommend}?titleWords=${titleWord}`);
+    const query = {
+      _source: ['title'],
+      query: {
+        match: {
+          title: titleWord,
+        },
+      },
+      size: 5,
+      from: 0,
+    };
+
+    const res = await elasticInstance.post(`${board}${search}`, query, {
+      headers: { 'Content-Type': 'application/json' },
+    });
     return res;
   },
 };
