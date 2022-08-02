@@ -18,7 +18,6 @@ interface StyleCustom {
   titleColor?: string;
   descColor?: string;
   expirationColor?: string;
-  goodCount?: number;
 }
 
 interface IProps {
@@ -39,9 +38,9 @@ function Card(props: IProps) {
 
   return (
     <CardContainer onClick={onClick} styleCustom={styleCustom}>
-      <div style={{ position: 'relative' }}>
+      <CardHeaderWrapper>
         <CardImgWrapper src={cardImg} />
-      </div>
+      </CardHeaderWrapper>
       <CardContentWrapper>
         <CardTitleWrapper styleCustom={styleCustom}>{cardTitle}</CardTitleWrapper>
         <CardSubContentWrapper>
@@ -64,7 +63,7 @@ const CardContainer = styled.div<any>`
   color: ${(props) => props.styleCustom?.color ?? ''};
   border-radius: 8px;
   border: ${(props) => props.styleCustom?.border ?? ''};
-  padding: 1rem;
+  border: ${(props) => props.styleCustom?.padding ?? ''};
   font-style: normal;
   font-weight: 600;
   font-size: ${(props) => props.styleCustom?.fontSize ?? '14px'};
@@ -82,14 +81,21 @@ const CardContainer = styled.div<any>`
   --tw-shadow: 0 4px 6px -1px rgba(var(--tw-shadow-color), 0.1), 0 2px 4px -1px rgba(var(--tw-shadow-color), 0.06);
   -webkit-box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  margin-bottom: 20px;
 `;
 
 const CardImgWrapper = styled.img<any>`
+  width: 100%;
   border-radius: 8px;
   object-fit: cover;
   cursor: pointer;
-  width: 100%;
-  height: 230px;
+
+  @media screen and (max-width: 680px) {
+    height: 175px;
+  }
+  @media screen and (min-width: 681px) and (max-width: 768px) {
+    height: 230px;
+  }
 `;
 
 const CardUserImgWrapper = styled.img<any>`
@@ -100,12 +106,17 @@ const CardUserImgWrapper = styled.img<any>`
   height: 30px;
   margin: auto;
 `;
+
+const CardHeaderWrapper = styled.div`
+  position: relative;
+`;
 const CardContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 10px 0 0 0;
+  padding-top: 10px;
   position: relative;
+  margin-bottom: 10px;
 `;
 
 const CardTitleWrapper = styled.div<any>`
@@ -121,6 +132,7 @@ const CardTitleWrapper = styled.div<any>`
   -webkit-box-orient: vertical;
   overflow: hidden;
   margin-bottom: 10px;
+  padding-left: 10px;
 `;
 
 const CardSubContentWrapper = styled.div<any>`
