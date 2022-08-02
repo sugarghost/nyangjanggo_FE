@@ -95,7 +95,6 @@ const UserEditProfile = () => {
   const handleOnChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     // getValue, watch 등의 문제가 생겨서 일단 이벤트 타깃으로 가져옴
     setNickname(e.target.value);
-    console.log('handleOnChangeNickname: ', e.target.value, nicknameOrigin);
     if (e.target.value === nicknameOrigin) {
       setNicnknameValidation(true);
       setNicnknameValidationMessage('* 기존 닉네임 사용!');
@@ -107,7 +106,6 @@ const UserEditProfile = () => {
 
   const checkNickname = async () => {
     await setNickname(watch('nickname'));
-    console.log('checkNickName: ', watch('nickname'), nicknameOrigin);
     if (watch('nickname') === nicknameOrigin) {
       setNicnknameValidation(true);
       setNicnknameValidationMessage('* 기존 닉네임 사용!');

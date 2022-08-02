@@ -70,9 +70,7 @@ const ResourceSearched = () => {
         if (!lastPage.last) return lastPage.nextPage;
         return undefined;
       },
-      onSuccess(data) {
-        console.log('onSuccess :', data);
-      },
+      onSuccess(data) {},
 
       onError(data) {
         console.log('onError :', data);
