@@ -11,7 +11,6 @@ import { useInfiniteQuery } from 'react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-
 import RightArrow from '../../images/right_arrow.png';
 
 export type PostContent = {

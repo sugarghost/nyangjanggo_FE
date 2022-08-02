@@ -120,11 +120,7 @@ const CardContentWrapper = styled.div`
   padding: 10px 0 0 0;
 `;
 
-const CardContentLeft = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-const CardContentRight = styled.div``;
+
 const CardTitleWrapper = styled.div<any>`
   align-items: left;
   white-space: normal;
