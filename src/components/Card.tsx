@@ -48,7 +48,7 @@ function Card(props: IProps) {
           <CardNicknameWrapper>by {nickname}</CardNicknameWrapper>
           <CardGoodCountWrapper>
             <HeartIcon width="20" height="20" className="m-auto float-left" fill="#EB3120" />
-            <span className="ml-1">{goodCount}</span>
+            <span className="mx-1 ">{goodCount}</span>
           </CardGoodCountWrapper>
         </CardSubContentWrapper>
       </CardContentWrapper>
