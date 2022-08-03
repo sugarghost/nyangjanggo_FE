@@ -132,20 +132,20 @@ const RecipeDetailPage = () => {
 
   return (
     <div className="mx-auto w-9/10 min-h-screen">
-      <div className="float-right">
+      <div className="float-right my-3">
         {recipe?.nickname === userInfomation?.nickname && (
           <>
-            <IconButton onClick={modifyRecipeDetail}>
+            <IconButton onClick={modifyRecipeDetail} bgColor="#EB3120">
               <EditIcon className="m-auto" stroke="white" />
             </IconButton>
-            <IconButton onClick={deleteRecipeDetail}>
+            <IconButton onClick={deleteRecipeDetail} bgColor="#EB3120">
               <TrashIcon className="m-auto" stroke="white" />
             </IconButton>
           </>
         )}
         {userInfomation?.nickname && (
-          <IconButton onClick={likeRecipeDetail}>
-            <HeartIcon className="m-auto" stroke={isLike ? '#EB3120' : 'white'} />
+          <IconButton onClick={likeRecipeDetail} bgColor={isLike ? '#EB3120' : '#dedede'}>
+            <HeartIcon width="20px" height="20px" stroke="white" fill="white" />
           </IconButton>
         )}
       </div>
@@ -174,18 +174,17 @@ const RecipeDetailPage = () => {
       <hr />
       {ResourceForm.length !== 0 ? (
         <>
-          <p className="text-gray-700 text-left text-lg my-1 font-900">재료 분류</p>
+          <p className="text-gray-700 text-left text-lg my-1 font-900 text-main">재료 분류</p>
           {ResourceForm.map((categorys, index) => (
             <div key={categorys.category}>
               <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
-                <p className="text-lg my-1 font-500 text-left">{categorys.category}</p>
+                <p className="text-lg my-1 font-700 text-left text-title">{categorys.category}</p>
                 {categorys.resources.map((resource, subIndex) => (
                   <div key={`${categorys.category}_${resource.resourceName}`}>
-                    <div className="flex justify-between w-full mb-4">
+                    <div className="flex justify-between w-full mb-4 text-context">
                       <span className="float-left text-left text-base w-2/3 my-1 font-400">
                         {resource.resourceName}
                       </span>
-                      <span className="text-base my-1 font-400">:</span>
                       <span className="float-right text-right text-base w-1/3 my-1 font-400">{resource.amount}</span>
                     </div>
                   </div>
@@ -200,15 +199,16 @@ const RecipeDetailPage = () => {
       )}
       {StepForm.length !== 0 ? (
         <>
-          <p className="text-gray-700 text-left text-lg my-1 font-900">조리 과정</p>
+          <p className="text-gray-700 text-left text-lg my-1 font-900 text-main">조리 과정</p>
           <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
             {StepForm.map((field, index) => (
               <div key={index}>
-                <p className="text-lg my-1 font-500 text-left">조리과정 {index + 1}</p>
+                {index !== 0 ? <hr /> : ''}
+                <p className="text-lg my-1 font-700 text-left text-title">Step {index + 1}</p>
                 <RecipeInfoWrapper>
                   <div className="flex justify-between w-full mb-4">
                     <img src={field.imageLink} className="img-render w-2/6 rounded-lg" alt="" />
-                    <div className="w-4/6 ml-4 text-left border-gray-200 border-2 rounded-md p-1">
+                    <div className="w-4/6 ml-4 text-left text-context border-gray-200 border-2 rounded-md p-1">
                       {field.stepContent}
                     </div>
                   </div>
@@ -226,9 +226,9 @@ const RecipeDetailPage = () => {
 };
 
 export default RecipeDetailPage;
-const IconButton = styled.button`
+const IconButton = styled.button<any>`
   margin: 0.25rem;
-  background-color: #dedede;
+  background-color: ${(props) => props.bgColor ?? '#dedede'};
   vertical-align: middle;
   width: 2.5rem;
   height: 2.5rem;
