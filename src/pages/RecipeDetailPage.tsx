@@ -3,14 +3,13 @@ import CommentsPage from '@components/comment/CommentsPage';
 import { ReactComponent as EditIcon } from '@icon/edit.svg';
 import { ReactComponent as HeartIcon } from '@icon/heart.svg';
 import { ReactComponent as TrashIcon } from '@icon/x.svg';
-import userToken from '@recoil/userAtom';
+import Logo from '@images/nyang_logo.png';
 import { userSelector } from '@recoil/userSelector';
 import { RecipeDetail, ResourceForm, StepForm } from '@type/recipeType';
-import { getToken, getNickname } from '@utils/jwt';
-import React, { Suspense, useEffect, useState, useRef } from 'react';
-import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
+import React, { useState } from 'react';
+import { useMutation, useQuery } from 'react-query';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 const RecipeDetailPage = () => {
@@ -132,7 +131,7 @@ const RecipeDetailPage = () => {
   };
 
   return (
-    <div className="mx-auto w-9/10">
+    <div className="mx-auto w-9/10 min-h-screen">
       <div className="float-right">
         {recipe?.nickname === userInfomation?.nickname && (
           <>
@@ -150,13 +149,27 @@ const RecipeDetailPage = () => {
           </IconButton>
         )}
       </div>
-      <img className="min-h-80 mb-4 w-full rounded-2xl image-render-auto bg-gray-100" src={recipe?.mainImg} alt="" />
+      <div>
+        <img className="mb-4 w-full rounded-2xl image-render-auto bg-gray-100" src={recipe?.mainImg} alt="" />
+      </div>
       <p className="text-gray-700 text-left text-2xl my-1 font-900">{recipe?.title}</p>
       <textarea
-        className="text-left text-lg w-full my-1 font-300 min-h-30 focus:outline-none"
+        className="text-left text-lg w-full my-1 font-300 min-h-30 focus:outline-none pointer-events-none"
         readOnly
         value={recipe?.content}
       />
+      <div className="relative block h-120px">
+        <div className="float-left mx-5 my-auto">
+          <img
+            className="rounded-xl w-100px h-100px object-cover cursor-pointer m-auto"
+            src={recipe?.userImg || Logo}
+            alt=""
+          />
+        </div>
+        <div className="text-left whitespace-normal leading-1.2em h-2.4em text-context break-words line-clamp-2 p-2">
+          by <span>{recipe?.nickname}</span>
+        </div>
+      </div>
 
       <hr />
       {ResourceForm.length !== 0 ? (
