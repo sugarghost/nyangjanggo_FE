@@ -7,8 +7,6 @@ import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
-import { COLOR } from '../../constants';
-
 function MyPage() {
   const navigate = useNavigate();
 
@@ -58,7 +56,7 @@ function MyPage() {
           </div>
         </ProfileInfo>
       </UserMainInfoWrapper>
-      <div style={{ width: '100%', height: '12px', background: COLOR.GRAY1 }} />
+      <div style={{ width: '100%', height: '12px', background: '#E2E2E2' }} />
       <OptionsWrapper>
         <OptionBox onClick={goUserEditPage}>정보 수정</OptionBox>
         <OptionBox onClick={goMyRefrigeratorPage} className="">
@@ -102,7 +100,7 @@ const OptionBox = styled.div`
   justify-content: space-between;
   width: 100%;
   padding: 12px 20px;
-  border: 1px solid ${COLOR.GRAY1};
+  border: 1px solid #e2e2e2;
   cursor: pointer;
   font-size: 15px;
 `;

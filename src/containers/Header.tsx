@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { COLOR } from '../constants';
 import BackArrow from '../images/back_arrow.png';
 import UserIcon from '../images/user_icon.png';
 
@@ -125,7 +124,7 @@ const MobileHeader = styled.header`
   font-weight: bold;
   item-align: center;
   padding: 12px 10px;
-  border-bottom: 1px solid ${COLOR.GRAY1};
+  border-bottom: 1px solid #e2e2e2;
 `;
 
 const BackButton = styled.div`

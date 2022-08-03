@@ -12,10 +12,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 import { authInstance } from '../../apis/axiosInstance';
-import Button from '../../components/Botton';
-import InputV2 from '../../components/InputV2';
 import ProfileImageUploader from '../../components/mypage/ProfileImageUploader';
-import { COLOR } from '../../constants';
 
 const UserEditProfile = () => {
   const [nickname, setNickname] = useState('');

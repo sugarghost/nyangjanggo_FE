@@ -2,7 +2,6 @@ import Logo from '@images/nyang_logo.png';
 import React from 'react';
 import styled from 'styled-components';
 
-import SignTitle from '../components/sign/SignTitle';
 import KakaoButton from '../images/kakao_button.png';
 import NaverButton from '../images/naver_button.png';
 

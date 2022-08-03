@@ -8,7 +8,6 @@ import Footer from './containers/Footer';
 import Header from './containers/Header';
 import MainPage from './pages/MainPage';
 import RecipeDetailPage from './pages/RecipeDetailPage';
-import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
 import PrivateRoutes from './utils/privateRoutes';
 
@@ -16,8 +15,6 @@ const queryClient = new QueryClient();
 
 function App() {
   // 페이지 코드 스플리팅
-  // 테스트 페이지는 애초에 접근할 이유가 없으니 스플리팅
-  const TestPage = React.lazy(() => import('@pages/TestPage'));
   // 주로 View 사용이 크며 등록은 선택이니 스플리팅
   const RecipeRegisterPage = React.lazy(() => import('@pages/RecipeRegisterPage'));
   // 마이페이지 접속을 안할 가능성이 크니 스플리팅
@@ -58,15 +55,6 @@ function App() {
             <Header />
             <Routes>
               <Route path="/" element={<MainPage />} />
-              <Route
-                path="/test"
-                element={
-                  <Suspense>
-                    <TestPage />
-                  </Suspense>
-                }
-              />
-              <Route path="/signInPage" element={<SignInPage />} />
               <Route path="/signUpPage" element={<SignUpPage />} />
               <Route path="/recipeDetailPage/:boardIdParams" element={<RecipeDetailPage />} />
               {/* 로그인이 필요한 페이지는 코드 스플리팅을 진행 */}
