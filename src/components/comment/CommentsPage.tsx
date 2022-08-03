@@ -11,6 +11,7 @@ type CommentsPageProps = {
   boardId: number;
 };
 const CommentsPage = ({ boardId }: CommentsPageProps) => {
+  const [commentCount, setCommentCount] = useState<number>(0);
   const userInfomation = useRecoilValue(userSelector);
   const postCommentApi = commentApi.postComment;
   const getCommentApi = commentApi.getComment;
@@ -35,6 +36,7 @@ const CommentsPage = ({ boardId }: CommentsPageProps) => {
     };
     const res = await getCommentApi(paramTemplate);
     const { content, last } = res.data;
+    setCommentCount(res.data?.totalElements || 0);
     // 페이지 번호를 증가시키는 용도로 사용 될 nextPage는 기존 pageParam(페이지 넘버)에 +1을 해줌
     return { content, nextPage: pageParam + 1, last: last === undefined || last === true };
   };
@@ -116,7 +118,7 @@ const CommentsPage = ({ boardId }: CommentsPageProps) => {
           <CommentRegister onClick={onCommentRegister}>등록</CommentRegister>
         </CommentInputWrapper>
       )}
-      <p className="text-gray-700 text-lg my-1 font-900 text-left">코멘트</p>
+      <p className="text-gray-700 text-lg my-1 font-900 text-left text-main">코멘트 {commentCount}개</p>
       <hr />
       {commentListData?.pages?.map((page, index) => (
         <React.Fragment key={index}>

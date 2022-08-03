@@ -1,8 +1,8 @@
+import { ReactComponent as BackIcon } from '@icon/back.svg';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { COLOR } from '../constants';
 import BackArrow from '../images/back_arrow.png';
 import UserIcon from '../images/user_icon.png';
 
@@ -59,7 +59,7 @@ const Header = () => {
     if (pathName === '/signUpPage') {
       return '';
     }
-    if (pathName === '/recipeDetailPage') {
+    if (pathName.startsWith('/recipeDetailPage')) {
       return '상세보기';
     }
     if (pathName === '/recipeRegisterPage') {
@@ -104,7 +104,9 @@ const Header = () => {
             onClick={() => {
               navigate(-1);
             }}
-          />
+          >
+            <BackIcon />
+          </BackButton>
           <MobileHeaderTitle>{pageTitle}</MobileHeaderTitle>
         </MobileHeader>
       ) : (
@@ -123,13 +125,12 @@ const LogoWrapper = styled.div`
 const MobileHeader = styled.header`
   width: 100%;
   font-weight: bold;
-  item-align: center;
+  align-items: center;
   padding: 12px 10px;
-  border-bottom: 1px solid ${COLOR.GRAY1};
+  border-bottom: 1px solid #e2e2e2;
 `;
 
 const BackButton = styled.div`
-  background: url(${BackArrow});
   width: 30px;
   height: 30px;
   background-size: cover;

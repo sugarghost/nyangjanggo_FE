@@ -1,9 +1,10 @@
 const colors = require('windicss/colors');
+const lineClamp = require('windicss/plugin/line-clamp');
 const typography = require('windicss/plugin/typography');
 
 module.exports = {
   darkMode: 'class',
-  plugins: [typography],
+  plugins: [typography, lineClamp],
   theme: {
     extend: {
       colors: {

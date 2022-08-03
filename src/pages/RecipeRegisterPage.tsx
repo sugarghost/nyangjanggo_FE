@@ -1,4 +1,3 @@
-import BottomFloat from '@components/BottomFloat';
 import { COLOR } from '@constants/Color';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -15,7 +14,6 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 import recipeApi from '../apis/RecipeApi';
-import Button from '../components/Botton';
 import Category from '../components/recipe/Category';
 import Step from '../components/recipe/Step';
 import {
@@ -410,7 +408,7 @@ const RecipeRegisterPage = () => {
     stepRemove(index);
   };
   return (
-    <div className="mx-auto w-9/10">
+    <div className="mx-auto w-9/10 min-h-screen">
       <FormProvider {...recipeMethods}>
         <form onSubmit={recipeHandleSubmit(onSubmitRecipe, onErrorRecipe)}>
           <MainImageTitle className="text-gray-700 text-left text-lg my-1 font-900">요리 메인 이미지</MainImageTitle>
@@ -441,18 +439,20 @@ const RecipeRegisterPage = () => {
           />
           {recipeError.content && <ValidationMessage>{recipeError.content.message}</ValidationMessage>}
 
-          <span className="text-gray-700 text-left float-left text-lg my-1 font-900">재료 분류</span>
-          <span
-            className="m-auto float-right"
-            onClick={() =>
-              resourceAppend({
-                category: '',
-                resources: [{ resourceName: '', amount: '' }],
-              })
-            }
-          >
-            <PlusIcon stroke="grey" />
-          </span>
+          <div className="w-full my-3">
+            <span className="text-gray-700 text-left float-left text-lg my-1 font-900">재료 분류</span>
+            <span
+              className="m-auto float-right"
+              onClick={() =>
+                resourceAppend({
+                  category: '',
+                  resources: [{ resourceName: '', amount: '' }],
+                })
+              }
+            >
+              <PlusIcon stroke="grey" />
+            </span>
+          </div>
           {resourceFields.map((item, index) => (
             <div key={index}>
               <Category name={item.category} index={index} onDelete={() => resourceRemove(index)} />

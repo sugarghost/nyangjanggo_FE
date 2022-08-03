@@ -34,7 +34,7 @@ const LikePage = () => {
                 cardTitle={content.title}
                 key={content.boardId}
                 cardImg={content.mainImg}
-                styleCustom={{ width: '50%', margin: '16px 0 0 0' }}
+                styleCustom={{ width: '45%', margin: 'auto' }}
                 onClick={(e) => viewRecipeDetail(content.boardId)}
                 goodCount={content.goodCount}
                 nickname={content.nickname}

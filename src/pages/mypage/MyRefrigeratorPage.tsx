@@ -10,9 +10,7 @@ import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 import { authInstance } from '../../apis/axiosInstance';
-import BottomFloat from '../../components/BottomFloat';
 import Calendar from '../../components/mypage/Calendar';
-import { COLOR } from '../../constants';
 
 const MyRefrigeratorPage = () => {
   const [profileImage, setProfileImage] = useState('https://src.hidoc.co.kr/image/lib/2020/6/17/1592363657269_0.jpg');
@@ -189,10 +187,10 @@ const MyRefrigeratorPage = () => {
         <IngredientAddBtnWrapper>
           {showRegisterIngredient ? (
             <IngredientAddBtn style={{ userSelect: 'none' }} onPointerDown={handleOnClcikAddButton}>
-              ←
+              목록보기
             </IngredientAddBtn>
           ) : (
-            <IngredientAddBtn onPointerDown={handleOnClcikAddButton}>+</IngredientAddBtn>
+            <IngredientAddBtn onPointerDown={handleOnClcikAddButton}>추가</IngredientAddBtn>
           )}
         </IngredientAddBtnWrapper>
         {showRegisterIngredient ? (
@@ -344,8 +342,10 @@ const IngredientAddBtnWrapper = styled.div`
 `;
 
 const IngredientAddBtn = styled.button`
-  font-weight: 500;
-  font-size: 30px;
+  font-weight: 700;
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.75rem; /* 28px */
+  color: #eb3120;
 `;
 
 const IngredientRegisterTitleInput = styled.input`
@@ -393,7 +393,7 @@ const DatePickerWrapper = styled.div`
 
 const RegisterButton = styled.button`
   width: 100%;
-  background: ${COLOR.MAIN};
+  background: #eb3120;
   margin: 0px auto;
   padding: 16px;
   color: white;

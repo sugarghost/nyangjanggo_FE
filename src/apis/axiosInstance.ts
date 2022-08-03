@@ -2,29 +2,28 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
-import { PRODUCTION } from '../constants';
 import { getToken } from '../utils/jwt';
 
 export const axiosInstance = axios.create();
 
 axiosInstance.defaults.validateStatus = (status) => status < 400;
-axiosInstance.defaults.baseURL = PRODUCTION ? 'https://gyuni.shop/api' : 'https://gyuni.shop/api';
+axiosInstance.defaults.baseURL = import.meta.env.VITE_SERVER;
 axiosInstance.defaults.timeout = 30000;
 
 export const elasticInstance = axios.create();
 
 elasticInstance.defaults.validateStatus = (status) => status < 400;
-elasticInstance.defaults.baseURL = 'https://gyuni.shop:9200';
+elasticInstance.defaults.baseURL = import.meta.env.VITE_ELASTIC_SERVER;
 elasticInstance.defaults.timeout = 30000;
 elasticInstance.defaults.auth = {
-  username: 'elastic',
-  password: 'HangHaeNyang',
+  username: import.meta.env.VITE_ELASTIC_ID,
+  password: import.meta.env.VITE_ELASTIC_PASSWORD,
 };
 
 export const authInstance = axios.create();
 
 authInstance.defaults.validateStatus = (status) => status < 400;
-authInstance.defaults.baseURL = PRODUCTION ? 'https://gyuni.shop/api' : 'https://gyuni.shop/api';
+authInstance.defaults.baseURL = import.meta.env.VITE_SERVER;
 authInstance.defaults.timeout = 30000;
 authInstance.defaults.withCredentials = true;
 
