@@ -1,5 +1,9 @@
-/* eslint-disable @typescript-eslint/tslint/config */
 export const COLOR = {
-  MAIN: '#EB3120',
-  GRAY1: '#E2E2E2',
+  MAIN: '#EB3120', // 235,49,32
+  GRAY: '#E2E2E2', // 226,226,226
+  TITLE: '#3F3F3F', // 63,63,63
+  CONTEXT: '#676767', // 03,103,103
+  SUBCONTEXT: '#9A9A9A', // 154,154,154
+  BOX: '#EFEFF0', // 239,239,240
+  EMPTY: '#CCCCCC', // 217,217,217
 };

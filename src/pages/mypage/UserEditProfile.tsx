@@ -12,10 +12,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 import { authInstance } from '../../apis/axiosInstance';
-import Button from '../../components/Botton';
-import InputV2 from '../../components/InputV2';
 import ProfileImageUploader from '../../components/mypage/ProfileImageUploader';
-import { COLOR } from '../../constants';
 
 const UserEditProfile = () => {
   const [nickname, setNickname] = useState('');
@@ -180,7 +177,7 @@ const UserEditProfile = () => {
           <NicknameInput
             placeholder="닉네임"
             validationCheck={!!errors.nickname}
-            {...register('nickname', { required: true, max: 20 })}
+            {...register('nickname', { required: true, max: 10 })}
             onChange={(e) => handleOnChangeNickname(e)}
           />
           <NicknameButton className="m-auto" type="button" onClick={checkNickname} value="중복 확인" />

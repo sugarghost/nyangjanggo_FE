@@ -18,7 +18,6 @@ interface StyleCustom {
   titleColor?: string;
   descColor?: string;
   expirationColor?: string;
-  goodCount?: number;
 }
 
 interface IProps {
@@ -39,9 +38,9 @@ function Card(props: IProps) {
 
   return (
     <CardContainer onClick={onClick} styleCustom={styleCustom}>
-      <div style={{ position: 'relative' }}>
+      <CardHeaderWrapper>
         <CardImgWrapper src={cardImg} />
-      </div>
+      </CardHeaderWrapper>
       <CardContentWrapper>
         <CardTitleWrapper styleCustom={styleCustom}>{cardTitle}</CardTitleWrapper>
         <CardSubContentWrapper>
@@ -49,7 +48,7 @@ function Card(props: IProps) {
           <CardNicknameWrapper>by {nickname}</CardNicknameWrapper>
           <CardGoodCountWrapper>
             <HeartIcon width="20" height="20" className="m-auto float-left" fill="#EB3120" />
-            <span className="ml-1">{goodCount}</span>
+            <span className="mx-1 ">{goodCount}</span>
           </CardGoodCountWrapper>
         </CardSubContentWrapper>
       </CardContentWrapper>
@@ -64,7 +63,7 @@ const CardContainer = styled.div<any>`
   color: ${(props) => props.styleCustom?.color ?? ''};
   border-radius: 8px;
   border: ${(props) => props.styleCustom?.border ?? ''};
-  padding: 1rem;
+  border: ${(props) => props.styleCustom?.padding ?? ''};
   font-style: normal;
   font-weight: 600;
   font-size: ${(props) => props.styleCustom?.fontSize ?? '14px'};
@@ -82,14 +81,21 @@ const CardContainer = styled.div<any>`
   --tw-shadow: 0 4px 6px -1px rgba(var(--tw-shadow-color), 0.1), 0 2px 4px -1px rgba(var(--tw-shadow-color), 0.06);
   -webkit-box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  margin-bottom: 20px;
 `;
 
 const CardImgWrapper = styled.img<any>`
+  width: 100%;
   border-radius: 8px;
   object-fit: cover;
   cursor: pointer;
-  width: 100%;
-  height: 230px;
+
+  @media screen and (max-width: 680px) {
+    height: 175px;
+  }
+  @media screen and (min-width: 681px) {
+    height: 230px;
+  }
 `;
 
 const CardUserImgWrapper = styled.img<any>`
@@ -100,35 +106,19 @@ const CardUserImgWrapper = styled.img<any>`
   height: 30px;
   margin: auto;
 `;
-const RankWrapper = styled.div`
-  position: absolute;
-  top: 25px;
-  left: 10px;
-  width: 30px;
-  height: 30px;
-  background: #ffffff;
-  box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
-  text-align: center;
-  padding: 4px 0 0 0;
-  font-size: 15px;
-  color: #eb3120;
-  font-weight: bold;
-`;
 
+const CardHeaderWrapper = styled.div`
+  position: relative;
+`;
 const CardContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 10px 0 0 0;
+  padding-top: 10px;
   position: relative;
+  margin-bottom: 10px;
 `;
 
-const CardContentLeft = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-const CardContentRight = styled.div``;
 const CardTitleWrapper = styled.div<any>`
   align-items: left;
   white-space: normal;
@@ -142,6 +132,7 @@ const CardTitleWrapper = styled.div<any>`
   -webkit-box-orient: vertical;
   overflow: hidden;
   margin-bottom: 10px;
+  padding-left: 10px;
 `;
 
 const CardSubContentWrapper = styled.div<any>`
@@ -173,18 +164,6 @@ const CardGoodCountWrapper = styled.div<any>`
   margin: auto;
   float: right;
 `;
-const CardDescWrapper = styled.div<any>`
-  margin-top: 5px;
-  font-weight: 400;
-  display: flex;
-  letter-spacing: -0.02em;
-  width: auto;
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 14px;
-  color: #9a9a9a;
-`;
-
 const CardGoodCountIconWrapper = styled.div`
   border-radius: 1rem;
   position: absolute;
@@ -198,5 +177,3 @@ const CardGoodCountIconWrapper = styled.div`
   list-style: none;
   background-color: rgba(37, 37, 37, 0.8);
 `;
-
-// 내가 개인적으로 재정의 중
