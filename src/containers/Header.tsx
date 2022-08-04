@@ -105,7 +105,7 @@ const Header = () => {
               navigate(-1);
             }}
           >
-            <BackIcon />
+            <BackIcon fill="#676767" />
           </BackButton>
           <MobileHeaderTitle>{pageTitle}</MobileHeaderTitle>
         </MobileHeader>

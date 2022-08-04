@@ -1,4 +1,5 @@
 import recipeApi from '@apis/RecipeApi';
+import ImageModal from '@components/ImageModal';
 import CommentsPage from '@components/comment/CommentsPage';
 import { ReactComponent as EditIcon } from '@icon/edit.svg';
 import { ReactComponent as HeartIcon } from '@icon/heart.svg';
@@ -30,6 +31,10 @@ const RecipeDetailPage = () => {
   const [isLike, setIsLike] = useState(false);
   const deleteRecipeApi = recipeApi.deleteRecipe;
   const likeRecipeApi = recipeApi.likeRecipe;
+
+  // Step 이미지 클릭시 표시되는 크게보기 모달 창 관련요소
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [modalIndex, setModalIndex] = useState(0);
 
   // 넘겨 받은 boardId를 이용해 해당 레시피의 상세 정보를 받아옴
   const { isLoading, data } = useQuery(['postDetail', boardId], async () => recipeApi.getRecipeDetail(boardId), {
@@ -129,6 +134,16 @@ const RecipeDetailPage = () => {
   const likeRecipeDetail = () => {
     likeRecipeMutation.mutate(boardId);
   };
+  // step 이미지 클릭시 보여줄 모달
+  const showImageModal = (index: number) => {
+    if (!isShowModal) setIsShowModal(true);
+    setModalIndex(index);
+  };
+
+  // 모달창 닫기
+  const modalClose = () => {
+    setIsShowModal(false);
+  };
 
   return (
     <div className="mx-auto w-9/10 min-h-screen">
@@ -197,7 +212,7 @@ const RecipeDetailPage = () => {
       ) : (
         <></>
       )}
-      {StepForm.length !== 0 ? (
+      {StepForm.length !== 0 && (
         <>
           <p className="text-gray-700 text-left text-lg my-1 font-900 text-main">조리 과정</p>
           <div className="shadow-md p-4 flex flex-col w-full h-auto rounded-lg">
@@ -207,7 +222,12 @@ const RecipeDetailPage = () => {
                 <p className="text-lg my-1 font-700 text-left text-title">Step {index + 1}</p>
                 <RecipeInfoWrapper>
                   <div className="flex justify-between w-full mb-4">
-                    <img src={field.imageLink} className="img-render w-2/6 rounded-lg" alt="" />
+                    <img
+                      src={field.imageLink}
+                      className="img-render w-2/6 rounded-lg"
+                      alt=""
+                      onClick={() => showImageModal(index)}
+                    />
                     <div className="w-4/6 ml-4 text-left text-context border-gray-200 border-2 rounded-md p-1">
                       {field.stepContent}
                     </div>
@@ -216,10 +236,10 @@ const RecipeDetailPage = () => {
               </div>
             ))}
           </div>
+          {isShowModal && <ImageModal content={StepForm} currentIndex={modalIndex} modalClose={modalClose} />}
         </>
-      ) : (
-        <></>
       )}
+
       <CommentsPage boardId={boardId} />
     </div>
   );
