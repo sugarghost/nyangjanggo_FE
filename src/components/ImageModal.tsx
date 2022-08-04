@@ -49,6 +49,7 @@ const ModalBackground = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+  margin: auto;
 `;
 
 const ModalCloseWrapper = styled.div`
@@ -86,26 +87,45 @@ const ModalMoveWrapperRight = styled.div<any>`
   justify-content: center;
 `;
 const ImageModalContent = styled.div`
+  position: relative;
   padding-top: 30px;
   border-radius: 1rem;
   background-color: white;
   width: 90%;
   height: 50%;
+  max-width: 768px;
+  margin: auto;
+  @media screen and (min-width: 681px) {
+    height: 70%;
+  }
+
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  -webkit-flex-direction: column;
+  flex-direction: column;
 `;
 
 const ImageViewer = styled.div`
+  max-width: 768px;
   position: relative;
   text-align: center;
-  margin: 0;
-  height: 50%;
 `;
 
-const ModalImage = styled.img``;
+const ModalImage = styled.img`
+  width: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  margin: auto;
+`;
 
 const ModalContent = styled.div`
   margin: 15px;
   text-align: center;
-  height: 45%;
   overflow-y: scroll;
 `;
 
