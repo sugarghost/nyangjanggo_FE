@@ -154,7 +154,7 @@ const RecipeDetailPage = () => {
       </div>
       <p className="text-gray-700 text-left text-2xl my-1 font-900">{recipe?.title}</p>
       <textarea
-        className="text-left text-lg w-full my-1 font-300 min-h-30 focus:outline-none pointer-events-none"
+        className="text-left text-lg w-full my-1 font-300 min-h-30 focus:outline-none "
         readOnly
         value={recipe?.content}
       />
