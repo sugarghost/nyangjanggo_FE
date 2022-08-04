@@ -81,6 +81,7 @@ const Header = () => {
   const [pageTitle, setPageTitle] = useState<RouterPageNames>('');
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const currentPathName = window.location.pathname as RouterPages;
 
     setPageTitle(returnPageTitle(currentPathName));
@@ -105,7 +106,7 @@ const Header = () => {
               navigate(-1);
             }}
           >
-            <BackIcon />
+            <BackIcon fill="#676767" />
           </BackButton>
           <MobileHeaderTitle>{pageTitle}</MobileHeaderTitle>
         </MobileHeader>

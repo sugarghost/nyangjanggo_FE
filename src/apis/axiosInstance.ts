@@ -7,23 +7,23 @@ import { getToken } from '../utils/jwt';
 export const axiosInstance = axios.create();
 
 axiosInstance.defaults.validateStatus = (status) => status < 400;
-axiosInstance.defaults.baseURL = import.meta.env.VITE_SERVER;
+axiosInstance.defaults.baseURL = 'https://gyuni.shop/api';
 axiosInstance.defaults.timeout = 30000;
 
 export const elasticInstance = axios.create();
 
 elasticInstance.defaults.validateStatus = (status) => status < 400;
-elasticInstance.defaults.baseURL = import.meta.env.VITE_ELASTIC_SERVER;
+elasticInstance.defaults.baseURL = 'https://gyuni.shop:9200';
 elasticInstance.defaults.timeout = 30000;
 elasticInstance.defaults.auth = {
-  username: import.meta.env.VITE_ELASTIC_ID,
-  password: import.meta.env.VITE_ELASTIC_PASSWORD,
+  username: 'elastic',
+  password: 'HangHaeNyang',
 };
 
 export const authInstance = axios.create();
 
 authInstance.defaults.validateStatus = (status) => status < 400;
-authInstance.defaults.baseURL = import.meta.env.VITE_SERVER;
+authInstance.defaults.baseURL = 'https://gyuni.shop/api';
 authInstance.defaults.timeout = 30000;
 authInstance.defaults.withCredentials = true;
 

@@ -472,13 +472,9 @@ const RecipeRegisterPage = () => {
             ))}
           </div>
 
-          {/* 모바일에서 동작시 css가 망가져서 복구 */}
           <SaveButton type="submit" disabled={isDisabled}>
             등록하기
           </SaveButton>
-          {/* <SaveButton type="submit" disabled={isDisabled}>
-                  등록하기
-                </SaveButton> */}
         </form>
       </FormProvider>
     </div>
