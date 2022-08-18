@@ -19,6 +19,7 @@
 
 #### 냥장고 서비스영상 ▼
 [냥장고(Nyangjanggo) **오늘 뭐 먹을지 고민하지 말자!**](https://youtu.be/i9tMu93nP-I)<br>
+* 현재 서비스는 엘라스틱 서치 서버의 동작 비용으로 인해 비용문제 개선전까지 동작이 중단되었습니다.
 #### 개발팀 노션 ▼
 [팀 노션](https://frill-deposit-ff6.notion.site/Nyangjanggo-f7bdd5ad1aac4ffcba2dde4917823411)
 
