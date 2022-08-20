@@ -1,6 +1,6 @@
-import React, { Suspense, useLayoutEffect } from 'react';
+import React, { Suspense, useEffect, useLayoutEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import './App.css';
@@ -14,6 +14,8 @@ import PrivateRoutes from './utils/privateRoutes';
 const queryClient = new QueryClient();
 
 function App() {
+  const navigate = useNavigate();
+
   // 페이지 코드 스플리팅
   // 주로 View 사용이 크며 등록은 선택이니 스플리팅
   const RecipeRegisterPage = React.lazy(() => import('@pages/RecipeRegisterPage'));
@@ -26,10 +28,10 @@ function App() {
   // 좋아요 안쓰는 경우가 있으니 스플리팅
   const LikePage = React.lazy(() => import('@pages/LikePage'));
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const userInfoArr = window.location.href.split('&');
 
-    // console.log(access_token)
+    // Spring 요구사항으로 토큰 처리를 Spring에 일임하고 리다이렉트되면서 정보로 / 에서 토큰 저장 처리
     if (userInfoArr.length > 2) {
       const accessToken = userInfoArr[0].split('?')[1].replace('Access-Token=', '');
       const expireDate = userInfoArr[1].replace('expireDate=', '');
@@ -41,9 +43,9 @@ function App() {
 
       // axiosInstance.defaults.headers.common["accessToken"] = accessToken;
       if (isNew === 'true') {
-        window.location.replace('/myPage/userEditPage');
+        navigate('/myPage/userEditPage');
       }
-      window.location.replace('/');
+      navigate('/');
     }
   }, []);
 
